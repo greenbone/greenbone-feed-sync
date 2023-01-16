@@ -20,7 +20,7 @@ import os
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
-from typing import NoReturn
+from typing import NoReturn, Optional
 
 from greenbone.feed.sync.errors import GreenboneFeedSyncError
 from greenbone.feed.sync.helper import flock, ospd_openvas_feed_version
@@ -122,6 +122,21 @@ def is_root() -> bool:
     return os.geteuid() == 0
 
 
+def create_rsync_task(
+    rsync: Rsync,
+    rsync_url: str,
+    data_path: Path,
+    destination: str,
+    full_url: Optional[str] = None,
+) -> asyncio.Task:
+    if full_url:
+        url = full_url
+    else:
+        url = f"{rsync_url}:{data_path}"
+
+    return asyncio.create_task(rsync.sync(url=url, destination=destination))
+
+
 async def feed_sync() -> None:
     """
     Sync the feeds
@@ -150,27 +165,25 @@ async def feed_sync() -> None:
     with flock(args.lock_file):
         tasks = []
         if args.type in ("notus", "all"):
-            if args.notus_url:
-                url = args.notus_url
-            else:
-                notus_data_path = f"{data_base_path}/vt-data/notus/"
-                url = f"{args.rsync_url}:{notus_data_path}"
-
+            notus_data_path = f"{data_base_path}/vt-data/notus/"
             tasks.append(
-                asyncio.create_task(
-                    rsync.sync(url=url, destination=args.notus_destination)
+                create_rsync_task(
+                    rsync,
+                    args.rsync_url,
+                    notus_data_path,
+                    args.notus_destination,
+                    args.notus_url,
                 )
             )
         if args.type in ("nasl", "all"):
-            if args.nasl_url:
-                url = args.nasl_url
-            else:
-                nasl_data_path = f"{data_base_path}/vt-data/nasl/"
-                url = f"{args.rsync_url}:{nasl_data_path}"
-
+            nasl_data_path = f"{data_base_path}/vt-data/nasl/"
             tasks.append(
-                asyncio.create_task(
-                    rsync.sync(url=url, destination=args.nasl_destination)
+                create_rsync_task(
+                    rsync,
+                    args.rsync_url,
+                    nasl_data_path,
+                    args.nasl_destination,
+                    args.nasl_url,
                 )
             )
 
