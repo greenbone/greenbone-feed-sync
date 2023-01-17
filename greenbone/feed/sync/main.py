@@ -18,101 +18,15 @@
 import asyncio
 import os
 import sys
-from argparse import ArgumentParser
-from pathlib import Path
-from typing import NoReturn, Optional
+from dataclasses import dataclass
+from typing import NoReturn
 
-from greenbone.feed.sync.errors import GreenboneFeedSyncError
-from greenbone.feed.sync.helper import flock, ospd_openvas_feed_version
-from greenbone.feed.sync.rsync import (
-    DEFAULT_NASL_PATH,
-    DEFAULT_NOTUS_PATH,
-    DEFAULT_RSYNC_COMPRESSION_LEVEL,
-    DEFAULT_RSYNC_URL,
-    Rsync,
-)
+from greenbone.feed.sync.errors import GreenboneFeedSyncError, RsyncError
+from greenbone.feed.sync.helper import flock_wait
+from greenbone.feed.sync.parser import CliParser
+from greenbone.feed.sync.rsync import Rsync
 
 __all__ = ("main",)
-
-
-def to_lower(value: str) -> str:
-    """
-    Convert a string argparser value to lower case
-    """
-    return value.lower()
-
-
-def create_parser() -> ArgumentParser:
-    """
-    Create an ArgumentParser for the feed sync CLI
-    """
-    parser = ArgumentParser()
-    parser.add_argument("--verbose", action="store_true")
-    parser.add_argument(
-        "--private-directory",
-        help="(Sub-)Directory to exclude from the sync which will never get "
-        "deleted automatically.",
-        type=Path,
-    )
-    parser.add_argument(
-        "--feed-version",
-        choices=[
-            "21.04",
-            "22.04",
-        ],
-        help="Feed version to sync. If not provided ospd-openvas must be "
-        "installed and the feed version will be derived from the installed "
-        "ospd-openvas version.",
-    )
-    parser.add_argument(
-        "--compression-level",
-        type=int,
-        choices=range(0, 10),
-        default=DEFAULT_RSYNC_COMPRESSION_LEVEL,
-        help="Compression level (0-9). Default: %(default)s",
-    )
-    parser.add_argument(
-        "--type",
-        choices=["notus", "nasl", "all"],
-        default="all",
-        type=to_lower,
-        help="Default: %(default)s",
-    )
-    parser.add_argument(
-        "--rsync-url",
-        default=DEFAULT_RSYNC_URL,
-        help="Default: %(default)s",
-    )
-    parser.add_argument(
-        "--notus-destination",
-        type=Path,
-        default=DEFAULT_NOTUS_PATH,
-        help="Default: %(default)s",
-    )
-    parser.add_argument(
-        "--notus-url",
-        help="Default: $RSYNC_URL:/community/vulnerability-feed/$FEED_VERSION/"
-        "vt-data/notus",
-    )
-    parser.add_argument(
-        "--nasl-destination",
-        type=Path,
-        default=DEFAULT_NASL_PATH,
-        help="Default: %(default)s",
-    )
-    parser.add_argument(
-        "--nasl-url",
-        help="Default: $RSYNC_URL:/community/vulnerability-feed/$FEED_VERSION/"
-        "vt-data/nasl",
-    )
-    parser.add_argument(
-        "--lock-file",
-        "--lockfile",
-        type=Path,
-        default="/var/lib/openvas/feed-update.lock",
-        help="Default: %(default)s",
-    )
-    return parser
 
 
 def is_root() -> bool:
@@ -122,22 +36,19 @@ def is_root() -> bool:
     return os.geteuid() == 0
 
 
-def create_rsync_task(
-    rsync: Rsync,
-    rsync_url: str,
-    data_path: Path,
-    destination: str,
-    full_url: Optional[str] = None,
-) -> asyncio.Task:
-    if full_url:
-        url = full_url
-    else:
-        url = f"{rsync_url}:{data_path}"
+@dataclass
+class Sync:
+    """
+    Class to store sync information
+    """
 
-    return asyncio.create_task(rsync.sync(url=url, destination=destination))
+    name: str
+    types: list[str]
+    url: str
+    destination: str
 
 
-async def feed_sync() -> None:
+async def feed_sync() -> int:
     """
     Sync the feeds
     """
@@ -147,48 +58,82 @@ async def feed_sync() -> None:
             "root may cause several hard to find permissions issues."
         )
 
-    parser = create_parser()
-    args = parser.parse_args()
-
-    feed_version = args.feed_version
-    if not feed_version:
-        feed_version = ospd_openvas_feed_version()
+    parser = CliParser()
+    args = parser.parse_arguments()
 
     rsync = Rsync(
         private_subdir=args.private_directory,
-        verbose=args.verbose,
+        verbose=args.verbose >= 3,
         compression_level=args.compression_level,
     )
 
-    data_base_path = f"/community/vulnerability-feed/{feed_version}"
+    syncs = (
+        Sync(
+            name="Notus files",
+            types=("notus", "nvt", "all"),
+            url=args.notus_url,
+            destination=args.notus_destination,
+        ),
+        Sync(
+            name="NASL files",
+            types=("nasl", "nvt", "all"),
+            url=args.nasl_url,
+            destination=args.nasl_destination,
+        ),
+        Sync(
+            name="SCAP data",
+            types=("scap", "all"),
+            url=args.scap_data_url,
+            destination=args.scap_data_destination,
+        ),
+        Sync(
+            name="CERT-Bund data",
+            types=("cert", "all"),
+            url=args.cert_data_url,
+            destination=args.cert_data_destination,
+        ),
+        Sync(
+            name="report formats",
+            types=("report-formats", "gvmd-data", "all"),
+            url=args.report_formats_url,
+            destination=args.report_formats_destination,
+        ),
+        Sync(
+            name="scan configs",
+            types=("scan-configs", "gvmd-data", "all"),
+            url=args.scan_configs_url,
+            destination=args.scan_configs_destination,
+        ),
+        Sync(
+            name="port lists",
+            types=("port-lists", "gvmd-data", "all"),
+            url=args.port_lists_url,
+            destination=args.port_lists_destination,
+        ),
+    )
 
-    with flock(args.lock_file):
-        tasks = []
-        if args.type in ("notus", "all"):
-            notus_data_path = f"{data_base_path}/vt-data/notus/"
-            tasks.append(
-                create_rsync_task(
-                    rsync,
-                    args.rsync_url,
-                    notus_data_path,
-                    args.notus_destination,
-                    args.notus_url,
-                )
-            )
-        if args.type in ("nasl", "all"):
-            nasl_data_path = f"{data_base_path}/vt-data/nasl/"
-            tasks.append(
-                create_rsync_task(
-                    rsync,
-                    args.rsync_url,
-                    nasl_data_path,
-                    args.nasl_destination,
-                    args.nasl_url,
-                )
-            )
+    has_error = False
+    wait_interval = None if args.no_wait else args.wait_interval
 
-        for task in asyncio.as_completed(tasks):
-            await task
+    async with flock_wait(
+        args.lock_file, verbose=args.verbose >= 2, wait_interval=wait_interval
+    ):
+        for sync in syncs:
+            if args.type in sync.types:
+                try:
+                    if args.verbose >= 1:
+                        print(
+                            f"Downloading {sync.name} from {sync.url} to "
+                            f"{sync.destination}"
+                        )
+                    await rsync.sync(url=sync.url, destination=sync.destination)
+                except RsyncError as e:
+                    print(e.stderr, file=sys.stderr)
+                    if args.failfast:
+                        return 1
+                    has_error = True
+
+        return 1 if has_error else 0
 
 
 def main() -> NoReturn:
@@ -196,8 +141,7 @@ def main() -> NoReturn:
     Main CLI function
     """
     try:
-        asyncio.run(feed_sync())
-        sys.exit(0)
+        sys.exit(asyncio.run(feed_sync()))
     except GreenboneFeedSyncError as e:
         print(str(e), file=sys.stderr)
         sys.exit(1)
