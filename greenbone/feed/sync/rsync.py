@@ -96,7 +96,7 @@ class Rsync:
         ]
 
         if self.private_subdir:
-            rsync_delete.append(f"--exclude {self.private_subdir}/")
+            rsync_delete.extend(["--exclude", self.private_subdir])
 
         rsync_verbose = ["-v"] if self.verbose else ["-q"]
 
