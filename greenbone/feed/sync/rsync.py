@@ -38,9 +38,7 @@ async def exec_rsync(*args: Iterable[str]) -> None:
         raise RsyncError(returncode, args, stderr=stderr)
 
 
-DEFAULT_RSYNC_URL = "rsync://feed.community.greenbone.net"
-DEFAULT_NASL_PATH = "/var/lib/openvas/plugins"
-DEFAULT_NOTUS_PATH = "/var/lib/notus"
+DEFAULT_RSYNC_URL = "rsync://feed.community.greenbone.net/community"
 DEFAULT_RSYNC_COMPRESSION_LEVEL = 9
 
 
