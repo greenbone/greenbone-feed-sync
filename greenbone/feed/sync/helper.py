@@ -22,11 +22,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Generator, Iterable, Union
 
-from greenbone.feed.sync.errors import (
-    ExecProcessError,
-    FileLockingError,
-    GreenboneFeedSyncError,
-)
+from greenbone.feed.sync.errors import ExecProcessError, FileLockingError
 
 
 async def exec_command(
@@ -49,37 +45,7 @@ async def exec_command(
         raise ExecProcessError(returncode, cmd, stdout=stdout, stderr=stderr)
 
 
-def ospd_openvas_version() -> str:
     """
-    Get the version string from ospd-openvas
-    """
-    try:
-        # pylint: disable=import-outside-toplevel
-        from ospd_openvas import __version__ as version
-
-        return version
-    except ImportError:
-        raise GreenboneFeedSyncError(
-            "Could not determine version of ospd-openvas. "
-            "Unable to load ospd_openvas Python module. "
-            "Please ensure that ospd-openvas is installed or set a feed "
-            "version explicitly."
-        ) from None
-
-
-def ospd_openvas_feed_version() -> str:
-    """
-    Derive the feed version from the ospd-openvas version
-    """
-    version = ospd_openvas_version()
-    versions = version.split(".", 2)
-
-    major, minor = versions[0:2]
-    if len(minor) == 1:
-        minor = f"0{minor}"
-    return f"{major}.{minor}"
-
-
 @contextmanager
 def flock(path: Union[str, Path]) -> Generator[None, None, None]:
     """
