@@ -18,11 +18,13 @@
 import asyncio
 import errno
 import fcntl
-from contextlib import contextmanager
+from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Generator, Iterable, Union
+from typing import AsyncGenerator, Iterable, Optional, Union
 
 from greenbone.feed.sync.errors import ExecProcessError, FileLockingError
+
+DEFAULT_FLOCK_WAIT_INTERVAL = 5  # in seconds
 
 
 async def exec_command(
@@ -45,14 +47,23 @@ async def exec_command(
         raise ExecProcessError(returncode, cmd, stdout=stdout, stderr=stderr)
 
 
+@asynccontextmanager
+async def flock_wait(
+    path: Union[str, Path],
+    *,
+    wait_interval: Optional[int] = DEFAULT_FLOCK_WAIT_INTERVAL,
+    verbose: bool = False,
+) -> AsyncGenerator[None, None]:
     """
-@contextmanager
-def flock(path: Union[str, Path]) -> Generator[None, None, None]:
-    """
-    Lock a file
+    Try to lock a file and wait if it is already locked
 
     Arguments:
         path: File to lock
+        wait_interval: Time to wait in seconds after failed lock attempt before
+            re-trying to lock the file. Set to None to raise a FileLockingError
+            instead of re-trying to acquire the lock. Default is 5 seconds.
+        verbose: Set to True to print locking messages to stdout. Default is
+            False.
     """
     # ensure path is a Path
     path = Path(path)
@@ -67,15 +78,35 @@ def flock(path: Union[str, Path]) -> Generator[None, None, None]:
 
     fd0 = path.open("w", encoding="utf8")
 
-    try:
-        fcntl.flock(fd0, fcntl.LOCK_EX | fcntl.LOCK_NB)
-    except OSError as e:
-        if e.errno in (errno.EAGAIN, errno.EACCES):
-            raise FileLockingError(
-                f"{path} is locked. Another process related to the feed update "
-                "may already running."
-            ) from None
-        raise
+    has_lock = False
+    while not has_lock:
+        try:
+            if verbose:
+                print(f"Trying to acquire lock on {path.absolute()}")
+
+            fcntl.flock(fd0, fcntl.LOCK_EX | fcntl.LOCK_NB)
+
+            if verbose:
+                print(f"Acquired lock on {path.absolute()}")
+
+            has_lock = True
+        except OSError as e:
+            if e.errno in (errno.EAGAIN, errno.EACCES):
+                if wait_interval is None:
+                    raise FileLockingError(
+                        f"{path.absolute()} is locked. Another process related "
+                        "to the feed update may already running."
+                    ) from None
+
+                if verbose:
+                    print(
+                        f"{path.absolute()} is locked by another process. "
+                        f"Waiting {wait_interval} seconds before next try."
+                    )
+                await asyncio.sleep(wait_interval)
+            else:
+                raise
+
     try:
         yield
     finally:
