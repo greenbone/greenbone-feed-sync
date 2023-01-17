@@ -21,6 +21,12 @@ class GreenboneFeedSyncError(Exception):
     """
 
 
+class ConfigFileError(GreenboneFeedSyncError):
+    """
+    Error while processing a config file
+    """
+
+
 class ExecProcessError(GreenboneFeedSyncError):
     """
     Error while executing a process
