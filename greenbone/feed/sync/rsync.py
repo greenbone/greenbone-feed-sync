@@ -95,6 +95,11 @@ class Rsync:
             "--chmod=Fugo+r,Fug+w,Dugo-s,Dugo+rx,Dug+w",
         ]
 
+        rsync_links = [
+            "--copy-unsafe-links",
+            "--hard-links",
+        ]
+
         if self.private_subdir:
             rsync_delete.extend(["--exclude", self.private_subdir])
 
@@ -106,6 +111,7 @@ class Rsync:
             + rsync_compress
             + rsync_delete
             + rsync_chmod
+            + rsync_links
             + [url, str(destination.absolute())]
         )
 
