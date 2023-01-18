@@ -153,11 +153,17 @@ def _to_defaults(values: dict[str, Any]) -> dict[str, Any]:
     return defaults
 
 
-def to_lower(value: str) -> str:
+def feed_type(value: str) -> str:
     """
-    Convert a string argparser value to lower case
+    Converts to a specific feed type
     """
-    return value.replace("_", "-").lower()
+
+    value = value.replace("_", "-").lower()
+
+    if value in ("nvts", "report-formats", "port-lists", "scan-configs"):
+        return value[:-1]
+
+    return value
 
 
 class CliParser:
@@ -209,15 +215,15 @@ class CliParser:
                 "nasl",
                 "scap",
                 "cert",
-                "report-formats",
-                "scan-configs",
-                "port-lists",
+                "report-format",
+                "scan-config",
+                "port-list",
                 "nvt",
                 "gvmd-data",
                 "all",
             ],
             default="all",
-            type=to_lower,
+            type=feed_type,
             help="(Default: %(default)s)",
         )
         parser.add_argument(

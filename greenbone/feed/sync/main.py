@@ -94,19 +94,19 @@ async def feed_sync() -> int:
         ),
         Sync(
             name="report formats",
-            types=("report-formats", "gvmd-data", "all"),
+            types=("report-format", "gvmd-data", "all"),
             url=args.report_formats_url,
             destination=args.report_formats_destination,
         ),
         Sync(
             name="scan configs",
-            types=("scan-configs", "gvmd-data", "all"),
+            types=("scan-config", "gvmd-data", "all"),
             url=args.scan_configs_url,
             destination=args.scan_configs_destination,
         ),
         Sync(
             name="port lists",
-            types=("port-lists", "gvmd-data", "all"),
+            types=("port-list", "gvmd-data", "all"),
             url=args.port_lists_url,
             destination=args.port_lists_destination,
         ),
