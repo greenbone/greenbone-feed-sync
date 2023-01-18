@@ -186,7 +186,13 @@ class CliParser:
             action="store_true",
         )
 
-        parser.add_argument("--verbose", "-v", action="count", default=0)
+        parser.add_argument(
+            "--verbose",
+            "-v",
+            action="count",
+            default=0,
+            help="Set log verbosity. `-vvv` for maximum verbosity.",
+        )
 
         parser.add_argument(
             "-c",
@@ -206,7 +212,7 @@ class CliParser:
             type=int,
             choices=range(0, 10),
             default=DEFAULT_RSYNC_COMPRESSION_LEVEL,
-            help="Compression level (0-9). (Default: %(default)s)",
+            help="Rsync compression level (0-9). (Default: %(default)s)",
         )
         parser.add_argument(
             "--type",
@@ -224,93 +230,110 @@ class CliParser:
             ],
             default="all",
             type=feed_type,
-            help="(Default: %(default)s)",
+            help="Select which feed should be synced. (Default: %(default)s)",
         )
         parser.add_argument(
             "--feed-url",
-            help="(Default: %(default)s)",
+            help="URL to download the feed data from. (Default: %(default)s)",
         )
         parser.add_argument(
             "--notus-destination",
             type=Path,
-            help="(Default: %(default)s)",
+            help="Destination of the downloaded notus data. Overrides "
+            "`--destination-prefix`. (Default: %(default)s)",
         )
         parser.add_argument(
             "--notus-url",
             default=f"{DEFAULT_RSYNC_URL}{DEFAULT_NOTUS_URL_PATH}",
-            help="(Default: %(default)s)",
+            help="URL to download the notus data from. Overrides `--feed-url`. "
+            "(Default: %(default)s)",
         )
         parser.add_argument(
             "--nasl-destination",
             type=Path,
-            help="(Default: %(default)s)",
+            help="Destination of the downloaded nasl data. Overrides "
+            "`--destination-prefix`. (Default: %(default)s)",
         )
         parser.add_argument(
             "--nasl-url",
             default=f"{DEFAULT_RSYNC_URL}{DEFAULT_NASL_URL_PATH}",
-            help="(Default: %(default)s)",
+            help="URL to download the nasl data from. Overrides `--feed-url`. "
+            "(Default: %(default)s)",
         )
         parser.add_argument(
             "--scap-data-destination",
             type=Path,
-            help="(Default: %(default)s)",
+            help="Destination of the downloaded SCAP data. Overrides "
+            "`--destination-prefix`. (Default: %(default)s)",
         )
         parser.add_argument(
             "--scap-data-url",
             default=f"{DEFAULT_RSYNC_URL}{DEFAULT_SCAP_DATA_URL_PATH}",
-            help="(Default: %(default)s)",
+            help="URL to download the SCAP data from. Overrides `--feed-url`. "
+            "(Default: %(default)s)",
         )
         parser.add_argument(
             "--cert-data-destination",
             type=Path,
-            help="(Default: %(default)s)",
+            help="Destination of the downloaded CERT data. Overrides "
+            "`--destination-prefix`. (Default: %(default)s)",
         )
         parser.add_argument(
             "--cert-data-url",
             default=f"{DEFAULT_RSYNC_URL}{DEFAULT_CERT_DATA_URL_PATH}",
-            help="(Default: %(default)s)",
+            help="URL to download the CERT data from. Overrides `--feed-url`. "
+            "(Default: %(default)s)",
         )
         parser.add_argument(
             "--report-formats-destination",
             type=Path,
-            help="(Default: %(default)s)",
+            help="Destination of the downloaded report format data. Overrides "
+            "`--destination-prefix`. (Default: %(default)s)",
         )
         parser.add_argument(
             "--report-formats-url",
             default=f"{DEFAULT_RSYNC_URL}{DEFAULT_REPORT_FORMATS_URL_PATH}",
-            help="(Default: %(default)s)",
+            help="URL to download the report format data from. Overrides "
+            "`--feed-url`. (Default: %(default)s)",
         )
         parser.add_argument(
             "--scan-configs-destination",
             type=Path,
-            help="(Default: %(default)s)",
+            help="Destination of the downloaded scan config data. Overrides "
+            "`--destination-prefix`. (Default: %(default)s)",
         )
         parser.add_argument(
             "--scan-configs-url",
             default=f"{DEFAULT_RSYNC_URL}{DEFAULT_SCAN_CONFIGS_URL_PATH}",
-            help="(Default: %(default)s)",
+            help="URL to download the scan config data from. Overrides "
+            "`--feed-url`. (Default: %(default)s)",
         )
         parser.add_argument(
             "--port-lists-destination",
             type=Path,
-            help="(Default: %(default)s)",
+            help="Destination of the downloaded port list data. Overrides "
+            "`--destination-prefix`. (Default: %(default)s)",
         )
         parser.add_argument(
             "--port-lists-url",
             default=f"{DEFAULT_RSYNC_URL}{DEFAULT_PORT_LISTS_URL_PATH}",
-            help="(Default: %(default)s)",
+            help="URL to download the port list data from. Overrides "
+            "`--feed-url`. (Default: %(default)s)",
         )
         parser.add_argument(
             "--lock-file",
             "--lockfile",
             type=Path,
-            help="(Default: %(default)s)",
+            help="File to use for locking the feed synchronization. "
+            "Used to avoid that more then one process accesses the feed data "
+            "at the same time. (Default: %(default)s)",
         )
         parser.add_argument(
             "--fail-fast",
             "--failfast",
             action="store_true",
-            help="Stop after a first error has occurred.",
+            help="Stop after a first error has occurred. Otherwise the script "
+            "tries to download additional data if specified.",
         )
 
         wait_group = parser.add_mutually_exclusive_group()
