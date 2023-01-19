@@ -57,7 +57,8 @@ DEFAULT_PORT_LISTS_PATH = (
     "{destination-prefix}gvm/data-objects/gvmd/22.04/port-lists"
 )
 
-DEFAULT_LOCK_FILE_PATH = "{destination-prefix}openvas/feed-update.lock"
+DEFAULT_GVMD_LOCK_FILE_PATH = "{destination-prefix}gvm/feed-update.lock"
+DEFAULT_OPENVAS_LOCK_FILE_PATH = "{destination-prefix}openvas/feed-update.lock"
 
 DEFAULT_CONFIG_FILE = "/etc/gvm/greenbone-feed-sync.toml"
 DEFAULT_USER_CONFIG_FILE = "~/.config/greenbone-feed-sync.toml"
@@ -135,7 +136,16 @@ _CONFIG = (
         "GREENBONE_FEED_PORT_LISTS_URL",
         f"{{feed-url}}{DEFAULT_PORT_LISTS_URL_PATH}",
     ),
-    ("lock_file", "GREENBONE_FEED_LOCK_FILE", DEFAULT_LOCK_FILE_PATH),
+    (
+        "gvmd-lock-file",
+        "GREENBONE_FEED_GVMD_LOCK_FILE",
+        DEFAULT_GVMD_LOCK_FILE_PATH,
+    ),
+    (
+        "openvas-lock-file",
+        "GREENBONE_FEED_OPENVAS_LOCK_FILE",
+        DEFAULT_OPENVAS_LOCK_FILE_PATH,
+    ),
     (
         "wait-interval",
         "GREENBONE_FEED_LOCK_WAIT_INTERVAL",
@@ -334,12 +344,20 @@ class CliParser:
             "`--feed-url`. (Default: %(default)s)",
         )
         parser.add_argument(
-            "--lock-file",
-            "--lockfile",
+            "--gvmd-lock-file",
             type=Path,
-            help="File to use for locking the feed synchronization. "
-            "Used to avoid that more then one process accesses the feed data "
-            "at the same time. (Default: %(default)s)",
+            help="File to use for locking the feed synchronization for data "
+            "loaded by the gvmd daemon. Used to avoid that more then one "
+            "process accesses the feed data at the same time. "
+            "(Default: %(default)s)",
+        )
+        parser.add_argument(
+            "--openvas-lock-file",
+            type=Path,
+            help="File to use for locking the feed synchronization for data "
+            "loaded by the openvas scanner. Used to avoid that more then one "
+            "process accesses the feed data at the same time. "
+            "(Default: %(default)s)",
         )
         parser.add_argument(
             "--fail-fast",

@@ -19,7 +19,7 @@ import asyncio
 import os
 import sys
 from dataclasses import dataclass
-from typing import NoReturn
+from typing import Iterable, NoReturn
 
 from greenbone.feed.sync.errors import GreenboneFeedSyncError, RsyncError
 from greenbone.feed.sync.helper import flock_wait
@@ -48,6 +48,26 @@ class Sync:
     destination: str
 
 
+@dataclass
+class SyncList:
+    """
+    Class to store a list of sync information
+    """
+
+    lock_file: str
+    syncs: list[Sync]
+
+
+def filter_syncs(lock_file, feed_type: str, *syncs: Iterable[Sync]) -> SyncList:
+    """
+    Create a list of syncs which only match to the feed type
+    """
+    return SyncList(
+        lock_file=lock_file,
+        syncs=[sync for sync in syncs if feed_type in sync.types],
+    )
+
+
 async def feed_sync() -> int:
     """
     Sync the feeds
@@ -67,7 +87,9 @@ async def feed_sync() -> int:
         compression_level=args.compression_level,
     )
 
-    syncs = (
+    openvas_syncs = filter_syncs(
+        args.openvas_lock_file,
+        args.type,
         Sync(
             name="Notus files",
             types=("notus", "nvt", "all"),
@@ -80,6 +102,10 @@ async def feed_sync() -> int:
             url=args.nasl_url,
             destination=args.nasl_destination,
         ),
+    )
+    gvmd_syncs = filter_syncs(
+        args.gvmd_lock_file,
+        args.type,
         Sync(
             name="SCAP data",
             types=("scap", "all"),
@@ -115,11 +141,16 @@ async def feed_sync() -> int:
     has_error = False
     wait_interval = None if args.no_wait else args.wait_interval
 
-    async with flock_wait(
-        args.lock_file, verbose=args.verbose >= 2, wait_interval=wait_interval
-    ):
-        for sync in syncs:
-            if args.type in sync.types:
+    for sync_list in (openvas_syncs, gvmd_syncs):
+        if not sync_list.syncs:
+            continue
+
+        async with flock_wait(
+            sync_list.lock_file,
+            verbose=args.verbose >= 2,
+            wait_interval=wait_interval,
+        ):
+            for sync in sync_list.syncs:
                 try:
                     if args.verbose >= 1:
                         print(
@@ -129,11 +160,11 @@ async def feed_sync() -> int:
                     await rsync.sync(url=sync.url, destination=sync.destination)
                 except RsyncError as e:
                     print(e.stderr, file=sys.stderr)
-                    if args.failfast:
+                    if args.fail_fast:
                         return 1
                     has_error = True
 
-        return 1 if has_error else 0
+    return 1 if has_error else 0
 
 
 def main() -> NoReturn:
