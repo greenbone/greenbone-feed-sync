@@ -70,7 +70,7 @@ async def flock_wait(
 
     # ensure parent directories exist
     try:
-        path.parent.mkdir(parents=True, exist_ok=True)
+        path.parent.mkdir(parents=True, exist_ok=True, mode=0o770)
     except PermissionError:
         raise FileLockingError(
             f"Could not create parent directories for {path}"
