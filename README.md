@@ -9,6 +9,7 @@ New script for syncing the Greenbone Community Feed
   - [Install using pip](#install-using-pip)
   - [Install using poetry](#install-using-poetry)
 - [Settings](#settings)
+- [Config](#config)
 - [Development](#development)
 - [Maintainer](#maintainer)
 - [Contributing](#contributing)
@@ -68,6 +69,23 @@ a dependency for your current project using [poetry]
 | `--no-wait` | no-wait | GREENBONE_FEED_NO_WAIT | false | Fail directly if the lock file can't be acquired. |
 | `--wait-interval` | wait-interval | GREENBONE_FEED_LOCK_WAIT_INTERVAL | 5 | Time to wait in seconds after failed lock attempt before re-trying to lock the file. |
 
+## Config
+
+It is possible to use a config file for loading the settings of the
+`greenbone-feed-sync` script. The config file uses the [TOML] format. Without
+explicitly passing a config file, `greenbone-feed-sync` tries to load
+`~/.config/greenbone-feed-sync.toml` and if that file doesn't exist afterwards
+`/etc/gvm/greenbone-feed-sync.toml`.
+
+Example:
+
+```toml
+[greenbone-feed-sync]
+destination-prefix = "/opt/greenbone-feed"
+lock-file = "/opt/greenbone-feed.lock"
+no-wait = true
+```
+
 ## Development
 
 **greenbone-feed-sync** uses [poetry] for its own dependency management and
@@ -116,3 +134,4 @@ Licensed under the [GNU General Public License v3.0 or later](LICENSE).
 [poetry]: https://python-poetry.org/
 [pip]: https://pip.pypa.io/
 [autohooks]: https://github.com/greenbone/autohooks
+[TOML]: https://toml.io/
