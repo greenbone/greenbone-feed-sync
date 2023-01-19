@@ -141,6 +141,15 @@ _CONFIG = (
         "GREENBONE_FEED_LOCK_WAIT_INTERVAL",
         DEFAULT_FLOCK_WAIT_INTERVAL,
     ),
+    ("no-wait", "GREENBONE_FEED_NO_WAIT", False),
+    (
+        "compression-level",
+        "GREENBONE_FEED_COMPRESSION_LEVEL",
+        DEFAULT_RSYNC_COMPRESSION_LEVEL,
+    ),
+    ("private-directory", "GREENBONE_FEED_PRIVATE_DIRECTORY", None),
+    ("verbose", "GREENBONE_FEED_VERBOSE", 0),
+    ("fail-fast", "GREENBONE_FEED_FAIL_FAST", False),
 )
 
 
@@ -211,7 +220,6 @@ class CliParser:
             "--compression-level",
             type=int,
             choices=range(0, 10),
-            default=DEFAULT_RSYNC_COMPRESSION_LEVEL,
             help="Rsync compression level (0-9). (Default: %(default)s)",
         )
         parser.add_argument(
@@ -235,6 +243,11 @@ class CliParser:
         parser.add_argument(
             "--feed-url",
             help="URL to download the feed data from. (Default: %(default)s)",
+        )
+        parser.add_argument(
+            "--destination-prefix",
+            help="Destination directory prefix for all downloaded data. "
+            "(Default: %(default)s)",
         )
         parser.add_argument(
             "--notus-destination",
