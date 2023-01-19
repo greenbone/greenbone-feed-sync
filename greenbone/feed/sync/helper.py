@@ -20,31 +20,11 @@ import errno
 import fcntl
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import AsyncGenerator, Iterable, Optional, Union
+from typing import AsyncGenerator, Optional, Union
 
-from greenbone.feed.sync.errors import ExecProcessError, FileLockingError
+from greenbone.feed.sync.errors import FileLockingError
 
 DEFAULT_FLOCK_WAIT_INTERVAL = 5  # in seconds
-
-
-async def exec_command(
-    *cmd: Iterable[str], capture_output: bool = False
-) -> None:
-    """
-    Run a command as subprocess
-
-    Argument:
-        cmd: Command with arguments to run as subprocess
-    """
-    process = await asyncio.create_subprocess_exec(
-        *cmd,
-        stderr=asyncio.subprocess.PIPE,
-        stdout=asyncio.subprocess.PIPE if capture_output else None,
-    )
-    stdout, stderr = await process.communicate()
-    returncode = await process.wait()
-    if returncode:
-        raise ExecProcessError(returncode, cmd, stdout=stdout, stderr=stderr)
 
 
 @asynccontextmanager
