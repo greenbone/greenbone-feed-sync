@@ -9,7 +9,33 @@ New script for syncing the Greenbone Community Feed
   - [Install using pip](#install-using-pip)
   - [Install using poetry](#install-using-poetry)
 - [Settings](#settings)
-- [Config](#config)
+  - [verbose](#verbose)
+  - [config](#config)
+  - [private-directory](#private-directory)
+  - [compression-level](#compression-level)
+  - [type](#type)
+  - [feed-url](#feed-url)
+  - [destination-prefix](#destination-prefix)
+  - [notus-destination](#notus-destination)
+  - [notus-url](#notus-url)
+  - [nasl-destination](#nasl-destination)
+  - [nasl-url](#nasl-url)
+  - [scap-data-destination](#scap-data-destination)
+  - [scap-data-url](#scap-data-url)
+  - [cert-data-destination](#cert-data-destination)
+  - [cert-data-url](#cert-data-url)
+  - [report-formats-destination](#report-formats-destination)
+  - [report-formats-url](#report-formats-url)
+  - [scan-configs-destination](#scan-configs-destination)
+  - [scan-configs-url](#scan-configs-url)
+  - [port-lists-destination](#port-lists-destination)
+  - [port-lists-url](#port-lists-url)
+  - [gvmd-lock-file](#gvmd-lock-file)
+  - [openvas-lock-file](#openvas-lock-file)
+  - [fail-fast](#fail-fast)
+  - [no-wait](#no-wait)
+  - [wait-interval](#wait-interval)
+- [Config](#config-1)
 - [Development](#development)
 - [Maintainer](#maintainer)
 - [Contributing](#contributing)
@@ -41,33 +67,265 @@ a dependency for your current project using [poetry]
 
 ## Settings
 
-| Argument | Config Setting | Environment Variable | Default | Description |
-|----------|----------------|----------------------|---------|-------------|
-| `--verbose, -v` | verbose | GREENBONE_FEED_VERBOSE | | Log verbosity. `-vvv` for maximum verbosity. |
-| `--config, -c` | | | `~/.config/greenbone-feed-sync.toml` and `/etc/gvm/greenbone-feed-sync.toml` | TOML config file to load settings from. |
-| `--private-directory` | private-directory | GREENBONE_FEED_PRIVATE_DIRECTORY | | (Sub-)Directory to exclude from the sync which will never get deleted automatically. |
-| `--compression-level` | compression-level | GREENBONE_FEED_COMPRESSION_LEVEL | 9 | rsync compression level 0-9. (0 - no compression, 9 - high compression) |
-| `--type` | | | all | Specifies which feed(s) should be synced. |
-| `--feed-url` | feed_url | GREENBONE_FEED_URL | `rsync://feed.community.greenbone.net/community` | URL to download the feed data from. |
-| `--destination-prefix` | destination-prefix | GREENBONE_FEED_DESTINATION_PREFIX | `/var/lib/` | Directory prefix to use for feed data download destinations. |
-| `--notus-destination` | notus-destination | GREENBONE_FEED_NOTUS_DESTINATION | `/var/lib/notus` | Destination of the downloaded notus data. Overrides `--destination-prefix`. |
-| `--notus-url` | notus-url | GREENBONE_FEED_NOTUS_URL | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/vt-data/notus/` | URL to download the notus data from. Overrides `--feed-url`. |
-| `--nasl-destination` | nasl-destination | GREENBONE_NASL_DESTINATION | `/var/lib/openvas/plugins` | Destination of the downloaded nasl data. Overrides `--destination-prefix`. |
-| `--nasl-url` | nasl-url | GREENBONE_FEED_NASL_URL | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/vt-data/nasl/` | URL to download the nasl data from. Overrides `--feed-url`. |
-| `--scap-data-destination` | scap-data-destination | GREENBONE_FEED_SCAP_DATA_DESTINATION | `/var/lib/gvm/scap-data` | Destination of the downloaded SCAP data. Overrides `--destination-prefix`. |
-| `--scap-data-url` | scap-data-url | GREENBONE_FEED_SCAP_DATA_URL | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/scap-data` | URL to download the SCAP data from. Overrides `--feed-url`. |
-| `--cert-data-destination` | cert-data-destination | GREENBONE_FEED_CERT_DATA_DESTINATION | `/var/lib/gvm/cert-data` | Destination of the downloaded CERT data. Overrides `--destination-prefix`. |
-| `--cert-data-url` | cert-data-url | GREENBONE_FEED_CERT_DATA_URL | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/cert-data` | URL to download the CERT data from. Overrides `--feed-url`. |
-| `--report-formats-destination` | report-formats-destination | GREENBONE_FEED_REPORT_FORMATS_DESTINATION | `/var/lib/gvm/data-objects/gvmd/22.04/report-formats` | Destination of the downloaded report format data. Overrides `--destination-prefix`. |
-| `--report-formats-url` | report-formats-url | GREENBONE_FEED_REPORT_FORMATS_URL | `rsync://feed.community.greenbone.net/community/data-feed/22.04/report-formats` | URL to download the report format data from. Overrides `--feed-url` |
-| `--scan-configs-destination` | scan-configs-destination | GREENBONE_FEED_SCAN_CONFIGS_DESTINATION | `/var/lib/gvm/data-objects/gvmd/22.04/scan-configs` | Destination of the downloaded scan config data. Overrides `--destination-prefix`. |
-| `--scan-configs-url` | scan-configs-url | GREENBONE_FEED_SCAN_CONFIGS_URL | `rsync://feed.community.greenbone.net/community/data-feed/22.04/scan-configs` | URL to download the scan config data from. Overrides `--feed-url`. |
-| `--port-lists-destination` | port-lists-destination | GREENBONE_FEED_PORT_LISTS_DESTINATION | /var/lib/gvm/data-objects/gvmd/22.04/port-lists | Destination of the downloaded port list data. Overrides `--destination-prefix`. |
-| `--port-lists-url` | port-lists-url | GREENBONE_FEED_PORT_LISTS_URL | `rsync://feed.community.greenbone.net/community/data-feed/22.04/port-lists` | URL to download the port list data from. Overrides `--feed-url`. |
-| `--lock-file, --lockfile` | lock-file | GREENBONE_FEED_LOCK_FILE | `/var/lib/` | File to use for locking the feed synchronization. Used to avoid that more then one process accesses the feed data at the same time. |
-| `--fail-fast, --failfast` | fail-fast | GREENBONE_FEED_FAIL_FAST | false | Stop after a first error has occurred. Otherwise the script tries to download additional data if specified. |
-| `--no-wait` | no-wait | GREENBONE_FEED_NO_WAIT | false | Fail directly if the lock file can't be acquired. |
-| `--wait-interval` | wait-interval | GREENBONE_FEED_LOCK_WAIT_INTERVAL | 5 | Time to wait in seconds after failed lock attempt before re-trying to lock the file. |
+### verbose
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--verbose, -v` |
+| Config Variable  | verbose |
+| Environment Variable | `GREENBONE_FEED_VERBOSE` |
+| Default Value | |
+| Description | Log verbosity. `-vvv` for maximum verbosity. |
+
+### config
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--config, -c` |
+| Config Variable  |  |
+| Environment Variable |  |
+| Default Value | `~/.config/greenbone-feed-sync.toml` and `/etc/gvm/greenbone-feed-sync.toml` |
+| Description | TOML config file to load settings from. |
+
+### private-directory
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--private-directory` |
+| Config Variable  | private-directory |
+| Environment Variable | `GREENBONE_FEED_PRIVATE_DIRECTORY` |
+| Default Value |  |
+| Description | (Sub-)Directory to exclude from the sync which will never get deleted automatically. |
+
+### compression-level
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--compression-level` |
+| Config Variable  | compression-level |
+| Environment Variable | `GREENBONE_FEED_COMPRESSION_LEVEL` |
+| Default Value | 9 |
+| Description | rsync compression level 0-9. (0 - no compression, 9 - high compression) |
+
+### type
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--type` |
+| Config Variable  |  |
+| Environment Variable |  |
+| Default Value | all  |
+| Description | Specifies which feed data should be downloaded. |
+
+### feed-url
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--feed-url` |
+| Config Variable  | feed-url |
+| Environment Variable | `GREENBONE_FEED_URL` |
+| Default Value | `rsync://feed.community.greenbone.net/community` |
+| Description | URL to download the feed data from. |
+
+### destination-prefix
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--destination-prefix` |
+| Config Variable  | destination-prefix |
+| Environment Variable | `GREENBONE_FEED_DESTINATION_PREFIX`  |
+| Default Value | `/var/lib/` |
+| Description | Directory prefix to use for feed data download destinations. |
+
+### notus-destination
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--notus-destination` |
+| Config Variable  | notus-destination |
+| Environment Variable | `GREENBONE_FEED_NOTUS_DESTINATION` |
+| Default Value | `/var/lib/notus` |
+| Description | Destination of the downloaded notus data. Overrides `--destination-prefix`. |
+
+### notus-url
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--notus-url` |
+| Config Variable  | notus-url |
+| Environment Variable | `GREENBONE_FEED_NOTUS_URL` |
+| Default Value | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/vt-data/notus/` |
+| Description | URL to download the notus data from. Overrides `--feed-url`. |
+
+### nasl-destination
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--nasl-destination` |
+| Config Variable  | nasl-destination |
+| Environment Variable | `GREENBONE_NASL_DESTINATION` |
+| Default Value | `/var/lib/openvas/plugins` |
+| Description | Destination of the downloaded nasl data. Overrides `--destination-prefix`. |
+
+### nasl-url
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--nasl-url` |
+| Config Variable  | nasl-url |
+| Environment Variable | `GREENBONE_FEED_NASL_URL` |
+| Default Value | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/vt-data/nasl/` |
+| Description | URL to download the nasl data from. Overrides `--feed-url`. |
+
+### scap-data-destination
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--scap-data-destination` |
+| Config Variable  | scap-data-destination |
+| Environment Variable | `GREENBONE_FEED_SCAP_DATA_DESTINATION` |
+| Default Value | `/var/lib/gvm/scap-data` |
+| Description | Destination of the downloaded SCAP data. Overrides `--destination-prefix`. |
+
+### scap-data-url
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--scap-data-url` |
+| Config Variable  | scap-data-url |
+| Environment Variable | `GREENBONE_FEED_SCAP_DATA_URL` |
+| Default Value | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/scap-data` |
+| Description | URL to download the SCAP data from. Overrides `--feed-url`. |
+
+### cert-data-destination
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--cert-data-destination` |
+| Config Variable  | cert-data-destination |
+| Environment Variable | `GREENBONE_FEED_CERT_DATA_DESTINATION` |
+| Default Value | `/var/lib/gvm/cert-data` |
+| Description | Destination of the downloaded CERT data. Overrides `--destination-prefix`. |
+
+### cert-data-url
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--cert-data-url` |
+| Config Variable  | cert-data-url |
+| Environment Variable | `GREENBONE_FEED_CERT_DATA_URL` |
+| Default Value | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/cert-data` |
+| Description | URL to download the CERT data from. Overrides `--feed-url`. |
+
+### report-formats-destination
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--report-formats-destination` |
+| Config Variable  | report-formats-destination |
+| Environment Variable | `GREENBONE_FEED_REPORT_FORMATS_DESTINATION` |
+| Default Value | `/var/lib/gvm/data-objects/gvmd/22.04/report-formats` |
+| Description | Destination of the downloaded report format data. Overrides `--destination-prefix`. |
+
+### report-formats-url
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--report-formats-url` |
+| Config Variable  | report-formats-url |
+| Environment Variable | `GREENBONE_FEED_REPORT_FORMATS_URL` |
+| Default Value | `rsync://feed.community.greenbone.net/community/data-feed/22.04/report-formats` |
+| Description | URL to download the report format data from. Overrides `--feed-url` |
+
+### scan-configs-destination
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--scan-configs-destination` |
+| Config Variable  | scan-configs-destination |
+| Environment Variable | `GREENBONE_FEED_SCAN_CONFIGS_DESTINATION` |
+| Default Value | `/var/lib/gvm/data-objects/gvmd/22.04/scan-configs` |
+| Description | Destination of the downloaded scan config data. Overrides `--destination-prefix`. |
+
+### scan-configs-url
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--scan-configs-url` |
+| Config Variable  | scan-configs-url |
+| Environment Variable | `GREENBONE_FEED_SCAN_CONFIGS_URL` |
+| Default Value | `rsync://feed.community.greenbone.net/community/data-feed/22.04/scan-configs` |
+| Description | URL to download the scan config data from. Overrides `--feed-url`. |
+
+### port-lists-destination
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--port-lists-destination` |
+| Config Variable  | port-lists-destination |
+| Environment Variable | `GREENBONE_FEED_PORT_LISTS_DESTINATION` |
+| Default Value | `/var/lib/gvm/data-objects/gvmd/22.04/port-lists` |
+| Description | Destination of the downloaded port list data. Overrides `--destination-prefix`. |
+
+### port-lists-url
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--port-lists-url` |
+| Config Variable  | port-lists-url |
+| Environment Variable | `GREENBONE_FEED_PORT_LISTS_URL` |
+| Default Value | `rsync://feed.community.greenbone.net/community/data-feed/22.04/port-lists` |
+| Description | URL to download the port list data from. Overrides `--feed-url`. |
+
+### gvmd-lock-file
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--gvmd-lock-file` |
+| Config Variable  | gvmd-lock-file |
+| Environment Variable | `GREENBONE_FEED_GVMD_LOCK_FILE` |
+| Default Value | `/var/lib/openvas/feed-update.lock` |
+| Description | File to use for locking the feed synchronization for data loaded by the gvmd daemon. Used to avoid that more then one process accesses the feed data at the same time. |
+
+### openvas-lock-file
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--openvas-lock-file` |
+| Config Variable  | openvas-lock-file |
+| Environment Variable | `GREENBONE_FEED_OPENVAS_LOCK_FILE` |
+| Default Value | `/var/lib/gvm/feed-update.lock` |
+| Description | File to use for locking the feed synchronization for data loaded by the openvas scanner. Used to avoid that more then one process accesses the feed data at the same time. |
+
+### fail-fast
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--fail-fast, --failfast` |
+| Config Variable  | fail-fast |
+| Environment Variable | `GREENBONE_FEED_FAIL_FAST` |
+| Default Value | false |
+| Description | Stop after a first error has occurred. Otherwise the script tries to download additional data if specified. |
+
+### no-wait
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--no-wait` |
+| Config Variable  | no-wait |
+| Environment Variable | `GREENBONE_FEED_NO_WAIT` |
+| Default Value | false |
+| Description | Fail directly if the lock file can't be acquired. |
+
+### wait-interval
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--wait-interval` |
+| Config Variable  | wait-interval |
+| Environment Variable | `GREENBONE_FEED_LOCK_WAIT_INTERVAL` |
+| Default Value | 5 |
+| Description | Time to wait in seconds after failed lock attempt before re-trying to lock the file. |
 
 ## Config
 
