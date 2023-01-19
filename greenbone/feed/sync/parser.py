@@ -63,6 +63,8 @@ DEFAULT_OPENVAS_LOCK_FILE_PATH = "{destination-prefix}openvas/feed-update.lock"
 DEFAULT_CONFIG_FILE = "/etc/gvm/greenbone-feed-sync.toml"
 DEFAULT_USER_CONFIG_FILE = "~/.config/greenbone-feed-sync.toml"
 
+DEFAULT_VERBOSITY = 2
+
 _CONFIG = (
     (
         "destination-prefix",
@@ -158,7 +160,7 @@ _CONFIG = (
         DEFAULT_RSYNC_COMPRESSION_LEVEL,
     ),
     ("private-directory", "GREENBONE_FEED_PRIVATE_DIRECTORY", None),
-    ("verbose", "GREENBONE_FEED_VERBOSE", 0),
+    ("verbose", "GREENBONE_FEED_VERBOSE", DEFAULT_VERBOSITY),
     ("fail-fast", "GREENBONE_FEED_FAIL_FAST", False),
 )
 
@@ -205,12 +207,16 @@ class CliParser:
             action="store_true",
         )
 
-        parser.add_argument(
+        output_group = parser.add_mutually_exclusive_group()
+        output_group.add_argument(
             "--verbose",
             "-v",
             action="count",
-            default=0,
-            help="Set log verbosity. `-vvv` for maximum verbosity.",
+            help="Set log verbosity. `-vvv` for maximum verbosity. "
+            "(Default: %(default)s)",
+        )
+        output_group.add_argument(
+            "--quiet", action="store_true", help="Disable all log output."
         )
 
         parser.add_argument(

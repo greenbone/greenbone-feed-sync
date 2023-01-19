@@ -81,9 +81,11 @@ async def feed_sync() -> int:
     parser = CliParser()
     args = parser.parse_arguments()
 
+    verbose = 0 if args.quiet else args.verbose
+
     rsync = Rsync(
         private_subdir=args.private_directory,
-        verbose=args.verbose >= 3,
+        verbose=verbose >= 3,
         compression_level=args.compression_level,
     )
 
@@ -147,12 +149,12 @@ async def feed_sync() -> int:
 
         async with flock_wait(
             sync_list.lock_file,
-            verbose=args.verbose >= 2,
+            verbose=verbose >= 2,
             wait_interval=wait_interval,
         ):
             for sync in sync_list.syncs:
                 try:
-                    if args.verbose >= 1:
+                    if verbose >= 1:
                         print(
                             f"Downloading {sync.name} from {sync.url} to "
                             f"{sync.destination}"
@@ -163,6 +165,10 @@ async def feed_sync() -> int:
                     if args.fail_fast:
                         return 1
                     has_error = True
+
+        if verbose >= 2:
+            # add newline for grouping lock
+            print()
 
     return 1 if has_error else 0
 

@@ -10,6 +10,7 @@ New script for syncing the Greenbone Community Feed
   - [Install using poetry](#install-using-poetry)
 - [Settings](#settings)
   - [verbose](#verbose)
+  - [quiet](#quiet)
   - [config](#config)
   - [private-directory](#private-directory)
   - [compression-level](#compression-level)
@@ -81,8 +82,18 @@ a dependency for your current project using [poetry]
 | CLI Argument | `--verbose, -v` |
 | Config Variable  | verbose |
 | Environment Variable | `GREENBONE_FEED_VERBOSE` |
-| Default Value | |
+| Default Value | 2 |
 | Description | Log verbosity. `-vvv` for maximum verbosity. |
+
+### quiet
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--quiet` |
+| Config Variable  |  |
+| Environment Variable | |
+| Default Value | |
+| Description | Disable all log output. Same as setting `verbose` or  `GREENBONE_FEED_VERBOSE` to 0 |
 
 ### config
 
