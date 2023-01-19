@@ -47,6 +47,13 @@ New script for syncing the Greenbone Community Feed
 
 Python 3.9 and later is supported.
 
+`greenbone-feed-sync` requires the `rsync` tool being installed and available
+within the `PATH`.
+
+On Debian based Distributions like Ubuntu and Kali `rsync` can be installed via
+
+    apt install rsync
+
 ### Install using pip
 
 You can install the latest stable release of **greenbone-feed-sync** from the
