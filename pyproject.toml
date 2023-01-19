@@ -419,6 +419,7 @@ disable = [
     "use-symbolic-message-instead",
     "missing-module-docstring",
     "too-few-public-methods",
+    "too-many-branches",
 ]
 
 # Enable the message, report, category or checker with the given id(s). You can
