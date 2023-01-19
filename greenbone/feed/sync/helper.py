@@ -112,6 +112,9 @@ async def flock_wait(
     finally:
         try:
             # free the lock
+            if verbose:
+                print(f"Releasing lock on {path.absolute()}")
+
             fcntl.flock(fd0, fcntl.LOCK_UN)
             fd0.close()
         except OSError:
