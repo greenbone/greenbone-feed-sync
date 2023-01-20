@@ -22,6 +22,8 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import AsyncGenerator, Optional, Union
 
+from rich.console import Console
+
 from greenbone.feed.sync.errors import FileLockingError
 
 DEFAULT_FLOCK_WAIT_INTERVAL = 5  # in seconds
@@ -31,19 +33,19 @@ DEFAULT_FLOCK_WAIT_INTERVAL = 5  # in seconds
 async def flock_wait(
     path: Union[str, Path],
     *,
+    console: Optional[Console] = None,
     wait_interval: Optional[int] = DEFAULT_FLOCK_WAIT_INTERVAL,
-    verbose: bool = False,
 ) -> AsyncGenerator[None, None]:
     """
     Try to lock a file and wait if it is already locked
 
     Arguments:
         path: File to lock
+        console: A console to print messages to or None to keep the function
+            quiet.
         wait_interval: Time to wait in seconds after failed lock attempt before
             re-trying to lock the file. Set to None to raise a FileLockingError
             instead of re-trying to acquire the lock. Default is 5 seconds.
-        verbose: Set to True to print locking messages to stdout. Default is
-            False.
     """
     # ensure path is a Path
     path = Path(path)
@@ -61,13 +63,13 @@ async def flock_wait(
     has_lock = False
     while not has_lock:
         try:
-            if verbose:
-                print(f"Trying to acquire lock on {path.absolute()}")
+            if console:
+                console.print(f"Trying to acquire lock on {path.absolute()}")
 
             fcntl.flock(fd0, fcntl.LOCK_EX | fcntl.LOCK_NB)
 
-            if verbose:
-                print(f"Acquired lock on {path.absolute()}")
+            if console:
+                console.print(f"Acquired lock on {path.absolute()}")
 
             has_lock = True
         except OSError as e:
@@ -78,8 +80,8 @@ async def flock_wait(
                         "to the feed update may already running."
                     ) from None
 
-                if verbose:
-                    print(
+                if console:
+                    console.print(
                         f"{path.absolute()} is locked by another process. "
                         f"Waiting {wait_interval} seconds before next try."
                     )
@@ -92,8 +94,8 @@ async def flock_wait(
     finally:
         try:
             # free the lock
-            if verbose:
-                print(f"Releasing lock on {path.absolute()}")
+            if console:
+                console.print(f"Releasing lock on {path.absolute()}")
 
             fcntl.flock(fd0, fcntl.LOCK_UN)
             fd0.close()
