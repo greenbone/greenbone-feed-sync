@@ -17,7 +17,9 @@
 
 # pylint: disable=line-too-long
 
+import io
 import unittest
+from contextlib import redirect_stderr
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
@@ -40,6 +42,7 @@ from greenbone.feed.sync.parser import (
     DEFAULT_SCAN_CONFIGS_URL_PATH,
     DEFAULT_SCAP_DATA_PATH,
     DEFAULT_SCAP_DATA_URL_PATH,
+    CliParser,
     Config,
     feed_type,
 )
@@ -512,3 +515,27 @@ fail-fast = false
         self.assertEqual(values["private-directory"], Path("keep-this"))
         self.assertEqual(values["verbose"], 5)
         self.assertTrue(values["fail-fast"])
+
+
+class CliParserTestCase(unittest.TestCase):
+    def test_output_group(self):
+        parser = CliParser()
+
+        with redirect_stderr(io.StringIO()) as f, self.assertRaises(SystemExit):
+            parser.parse_arguments(["-vvv", "--quiet"])
+
+        self.assertIn(
+            "argument --quiet: not allowed with argument --verbose/-v",
+            f.getvalue(),
+        )
+
+    def test_wait_group(self):
+        parser = CliParser()
+
+        with redirect_stderr(io.StringIO()) as f, self.assertRaises(SystemExit):
+            parser.parse_arguments(["--no-wait", "--wait-interval", "20"])
+
+        self.assertIn(
+            "argument --wait-interval: not allowed with argument --no-wait",
+            f.getvalue(),
+        )
