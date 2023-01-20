@@ -43,22 +43,16 @@ DEFAULT_PORT_LISTS_URL_PATH = "/data-feed/22.04/port-lists/"
 
 DEFAULT_DESTINATION_PREFIX = "/var/lib/"
 
-DEFAULT_NASL_PATH = "{destination-prefix}openvas/plugins"
-DEFAULT_NOTUS_PATH = "{destination-prefix}notus"
-DEFAULT_SCAP_DATA_PATH = "{destination-prefix}gvm/scap-data"
-DEFAULT_CERT_DATA_PATH = "{destination-prefix}gvm/cert-data"
-DEFAULT_REPORT_FORMATS_PATH = (
-    "{destination-prefix}gvm/data-objects/gvmd/22.04/report-formats"
-)
-DEFAULT_SCAN_CONFIGS_PATH = (
-    "{destination-prefix}gvm/data-objects/gvmd/22.04/scan-configs"
-)
-DEFAULT_PORT_LISTS_PATH = (
-    "{destination-prefix}gvm/data-objects/gvmd/22.04/port-lists"
-)
+DEFAULT_NASL_PATH = "openvas/plugins"
+DEFAULT_NOTUS_PATH = "notus"
+DEFAULT_SCAP_DATA_PATH = "gvm/scap-data"
+DEFAULT_CERT_DATA_PATH = "gvm/cert-data"
+DEFAULT_REPORT_FORMATS_PATH = "gvm/data-objects/gvmd/22.04/report-formats"
+DEFAULT_SCAN_CONFIGS_PATH = "gvm/data-objects/gvmd/22.04/scan-configs"
+DEFAULT_PORT_LISTS_PATH = "gvm/data-objects/gvmd/22.04/port-lists"
 
-DEFAULT_GVMD_LOCK_FILE_PATH = "{destination-prefix}gvm/feed-update.lock"
-DEFAULT_OPENVAS_LOCK_FILE_PATH = "{destination-prefix}openvas/feed-update.lock"
+DEFAULT_GVMD_LOCK_FILE_PATH = "gvm/feed-update.lock"
+DEFAULT_OPENVAS_LOCK_FILE_PATH = "openvas/feed-update.lock"
 
 DEFAULT_CONFIG_FILE = "/etc/gvm/greenbone-feed-sync.toml"
 DEFAULT_USER_CONFIG_FILE = "~/.config/greenbone-feed-sync.toml"
@@ -75,7 +69,7 @@ _CONFIG = (
     (
         "notus-destination",
         "GREENBONE_FEED_SYNC_NOTUS_DESTINATION",
-        DEFAULT_NOTUS_PATH,
+        f"{{destination-prefix}}{DEFAULT_NOTUS_PATH}",
     ),
     (
         "notus-url",
@@ -85,7 +79,7 @@ _CONFIG = (
     (
         "nasl-destination",
         "GREENBONE_NASL_DESTINATION",
-        DEFAULT_NASL_PATH,
+        f"{{destination-prefix}}{DEFAULT_NASL_PATH}",
     ),
     (
         "nasl-url",
@@ -95,7 +89,7 @@ _CONFIG = (
     (
         "scap-data-destination",
         "GREENBONE_FEED_SYNC_SCAP_DATA_DESTINATION",
-        DEFAULT_SCAP_DATA_PATH,
+        f"{{destination-prefix}}{DEFAULT_SCAP_DATA_PATH}",
     ),
     (
         "scap-data-url",
@@ -105,7 +99,7 @@ _CONFIG = (
     (
         "cert-data-destination",
         "GREENBONE_FEED_SYNC_CERT_DATA_DESTINATION",
-        DEFAULT_CERT_DATA_PATH,
+        f"{{destination-prefix}}{DEFAULT_CERT_DATA_PATH}",
     ),
     (
         "cert-data-url",
@@ -115,7 +109,7 @@ _CONFIG = (
     (
         "report-formats-destination",
         "GREENBONE_FEED_SYNC_REPORT_FORMATS_DESTINATION",
-        DEFAULT_REPORT_FORMATS_PATH,
+        f"{{destination-prefix}}{DEFAULT_REPORT_FORMATS_PATH}",
     ),
     (
         "report-formats-url",
@@ -125,7 +119,7 @@ _CONFIG = (
     (
         "scan-configs-destination",
         "GREENBONE_FEED_SYNC_SCAN_CONFIGS_DESTINATION",
-        DEFAULT_SCAN_CONFIGS_PATH,
+        f"{{destination-prefix}}{DEFAULT_SCAN_CONFIGS_PATH}",
     ),
     (
         "scan-configs-url",
@@ -135,7 +129,7 @@ _CONFIG = (
     (
         "port-lists-destination",
         "GREENBONE_FEED_SYNC_PORT_LISTS_DESTINATION",
-        DEFAULT_PORT_LISTS_PATH,
+        f"{{destination-prefix}}{DEFAULT_PORT_LISTS_PATH}",
     ),
     (
         "port-lists-url",
@@ -145,12 +139,12 @@ _CONFIG = (
     (
         "gvmd-lock-file",
         "GREENBONE_FEED_SYNC_GVMD_LOCK_FILE",
-        DEFAULT_GVMD_LOCK_FILE_PATH,
+        f"{{destination-prefix}}{DEFAULT_GVMD_LOCK_FILE_PATH}",
     ),
     (
         "openvas-lock-file",
         "GREENBONE_FEED_SYNC_OPENVAS_LOCK_FILE",
-        DEFAULT_OPENVAS_LOCK_FILE_PATH,
+        f"{{destination-prefix}}{DEFAULT_OPENVAS_LOCK_FILE_PATH}",
     ),
     (
         "wait-interval",
