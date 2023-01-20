@@ -21,9 +21,11 @@ import sys
 from dataclasses import dataclass
 from typing import Iterable, NoReturn
 
+from rich.console import Console
+
 from greenbone.feed.sync.errors import GreenboneFeedSyncError, RsyncError
-from greenbone.feed.sync.helper import flock_wait
-from greenbone.feed.sync.parser import CliParser
+from greenbone.feed.sync.helper import Spinner, flock_wait
+from greenbone.feed.sync.parser import DEFAULT_VERBOSITY, CliParser
 from greenbone.feed.sync.rsync import Rsync
 
 __all__ = ("main",)
@@ -68,7 +70,7 @@ def filter_syncs(lock_file, feed_type: str, *syncs: Iterable[Sync]) -> SyncList:
     )
 
 
-async def feed_sync() -> int:
+async def feed_sync(console: Console, error_console: Console) -> int:
     """
     Sync the feeds
     """
@@ -81,7 +83,10 @@ async def feed_sync() -> int:
     parser = CliParser()
     args = parser.parse_arguments()
 
-    verbose = 0 if args.quiet else args.verbose
+    if args.quiet:
+        verbose = 0
+    else:
+        verbose = DEFAULT_VERBOSITY if args.verbose is None else args.verbose
 
     rsync = Rsync(
         private_subdir=args.private_directory,
@@ -149,26 +154,40 @@ async def feed_sync() -> int:
 
         async with flock_wait(
             sync_list.lock_file,
-            verbose=verbose >= 2,
+            console=console if verbose else None,
             wait_interval=wait_interval,
         ):
             for sync in sync_list.syncs:
                 try:
-                    if verbose >= 1:
-                        print(
+                    rsync_coro = rsync.sync(
+                        url=sync.url, destination=sync.destination
+                    )
+                    if verbose >= 3:
+                        console.print(
                             f"Downloading {sync.name} from {sync.url} to "
                             f"{sync.destination}"
                         )
-                    await rsync.sync(url=sync.url, destination=sync.destination)
+                        await rsync_coro
+                        # add newline after rsync
+                        console.print()
+                    elif verbose >= 1:
+                        with Spinner(
+                            console,
+                            f"Downloading {sync.name} from {sync.url} to "
+                            f"{sync.destination}",
+                        ):
+                            await rsync_coro
+                    else:
+                        await rsync_coro
                 except RsyncError as e:
-                    print(e.stderr, file=sys.stderr)
+                    has_error = True
+                    error_console.print(e.stderr)
                     if args.fail_fast:
                         return 1
-                    has_error = True
 
         if verbose >= 2:
             # add newline for grouping lock
-            print()
+            console.print()
 
     return 1 if has_error else 0
 
@@ -177,8 +196,11 @@ def main() -> NoReturn:
     """
     Main CLI function
     """
+    console = Console()
+    error_console = Console(stderr=True)
+
     try:
-        sys.exit(asyncio.run(feed_sync()))
+        sys.exit(asyncio.run(feed_sync(console, error_console)))
     except GreenboneFeedSyncError as e:
         print(str(e), file=sys.stderr)
         sys.exit(1)
