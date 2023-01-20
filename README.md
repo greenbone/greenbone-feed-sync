@@ -81,7 +81,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--verbose, -v` |
 | Config Variable  | verbose |
-| Environment Variable | `GREENBONE_FEED_VERBOSE` |
+| Environment Variable | `GREENBONE_FEED_SYNC_VERBOSE` |
 | Default Value | 2 |
 | Description | Log verbosity. `-vvv` for maximum verbosity. |
 
@@ -93,7 +93,7 @@ a dependency for your current project using [poetry]
 | Config Variable  |  |
 | Environment Variable | |
 | Default Value | |
-| Description | Disable all log output. Same as setting `verbose` or  `GREENBONE_FEED_VERBOSE` to 0 |
+| Description | Disable all log output. Same as setting `verbose` or  `GREENBONE_FEED_SYNC_VERBOSE` to 0 |
 
 ### config
 
@@ -111,7 +111,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--private-directory` |
 | Config Variable  | private-directory |
-| Environment Variable | `GREENBONE_FEED_PRIVATE_DIRECTORY` |
+| Environment Variable | `GREENBONE_FEED_SYNC_PRIVATE_DIRECTORY` |
 | Default Value |  |
 | Description | (Sub-)Directory to exclude from the sync which will never get deleted automatically. |
 
@@ -121,7 +121,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--compression-level` |
 | Config Variable  | compression-level |
-| Environment Variable | `GREENBONE_FEED_COMPRESSION_LEVEL` |
+| Environment Variable | `GREENBONE_FEED_SYNC_COMPRESSION_LEVEL` |
 | Default Value | 9 |
 | Description | rsync compression level 0-9. (0 - no compression, 9 - high compression) |
 
@@ -141,7 +141,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--feed-url` |
 | Config Variable  | feed-url |
-| Environment Variable | `GREENBONE_FEED_URL` |
+| Environment Variable | `GREENBONE_FEED_SYNC_URL` |
 | Default Value | `rsync://feed.community.greenbone.net/community` |
 | Description | URL to download the feed data from. |
 
@@ -151,7 +151,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--destination-prefix` |
 | Config Variable  | destination-prefix |
-| Environment Variable | `GREENBONE_FEED_DESTINATION_PREFIX`  |
+| Environment Variable | `GREENBONE_FEED_SYNC_DESTINATION_PREFIX`  |
 | Default Value | `/var/lib/` |
 | Description | Directory prefix to use for feed data download destinations. |
 
@@ -161,7 +161,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--notus-destination` |
 | Config Variable  | notus-destination |
-| Environment Variable | `GREENBONE_FEED_NOTUS_DESTINATION` |
+| Environment Variable | `GREENBONE_FEED_SYNC_NOTUS_DESTINATION` |
 | Default Value | `/var/lib/notus` |
 | Description | Destination of the downloaded notus data. Overrides `--destination-prefix`. |
 
@@ -171,7 +171,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--notus-url` |
 | Config Variable  | notus-url |
-| Environment Variable | `GREENBONE_FEED_NOTUS_URL` |
+| Environment Variable | `GREENBONE_FEED_SYNC_NOTUS_URL` |
 | Default Value | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/vt-data/notus/` |
 | Description | URL to download the notus data from. Overrides `--feed-url`. |
 
@@ -191,7 +191,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--nasl-url` |
 | Config Variable  | nasl-url |
-| Environment Variable | `GREENBONE_FEED_NASL_URL` |
+| Environment Variable | `GREENBONE_FEED_SYNC_NASL_URL` |
 | Default Value | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/vt-data/nasl/` |
 | Description | URL to download the nasl data from. Overrides `--feed-url`. |
 
@@ -201,7 +201,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--scap-data-destination` |
 | Config Variable  | scap-data-destination |
-| Environment Variable | `GREENBONE_FEED_SCAP_DATA_DESTINATION` |
+| Environment Variable | `GREENBONE_FEED_SYNC_SCAP_DATA_DESTINATION` |
 | Default Value | `/var/lib/gvm/scap-data` |
 | Description | Destination of the downloaded SCAP data. Overrides `--destination-prefix`. |
 
@@ -211,7 +211,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--scap-data-url` |
 | Config Variable  | scap-data-url |
-| Environment Variable | `GREENBONE_FEED_SCAP_DATA_URL` |
+| Environment Variable | `GREENBONE_FEED_SYNC_SCAP_DATA_URL` |
 | Default Value | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/scap-data` |
 | Description | URL to download the SCAP data from. Overrides `--feed-url`. |
 
@@ -221,7 +221,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--cert-data-destination` |
 | Config Variable  | cert-data-destination |
-| Environment Variable | `GREENBONE_FEED_CERT_DATA_DESTINATION` |
+| Environment Variable | `GREENBONE_FEED_SYNC_CERT_DATA_DESTINATION` |
 | Default Value | `/var/lib/gvm/cert-data` |
 | Description | Destination of the downloaded CERT data. Overrides `--destination-prefix`. |
 
@@ -231,7 +231,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--cert-data-url` |
 | Config Variable  | cert-data-url |
-| Environment Variable | `GREENBONE_FEED_CERT_DATA_URL` |
+| Environment Variable | `GREENBONE_FEED_SYNC_CERT_DATA_URL` |
 | Default Value | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/cert-data` |
 | Description | URL to download the CERT data from. Overrides `--feed-url`. |
 
@@ -241,7 +241,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--report-formats-destination` |
 | Config Variable  | report-formats-destination |
-| Environment Variable | `GREENBONE_FEED_REPORT_FORMATS_DESTINATION` |
+| Environment Variable | `GREENBONE_FEED_SYNC_REPORT_FORMATS_DESTINATION` |
 | Default Value | `/var/lib/gvm/data-objects/gvmd/22.04/report-formats` |
 | Description | Destination of the downloaded report format data. Overrides `--destination-prefix`. |
 
@@ -251,7 +251,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--report-formats-url` |
 | Config Variable  | report-formats-url |
-| Environment Variable | `GREENBONE_FEED_REPORT_FORMATS_URL` |
+| Environment Variable | `GREENBONE_FEED_SYNC_REPORT_FORMATS_URL` |
 | Default Value | `rsync://feed.community.greenbone.net/community/data-feed/22.04/report-formats` |
 | Description | URL to download the report format data from. Overrides `--feed-url` |
 
@@ -261,7 +261,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--scan-configs-destination` |
 | Config Variable  | scan-configs-destination |
-| Environment Variable | `GREENBONE_FEED_SCAN_CONFIGS_DESTINATION` |
+| Environment Variable | `GREENBONE_FEED_SYNC_SCAN_CONFIGS_DESTINATION` |
 | Default Value | `/var/lib/gvm/data-objects/gvmd/22.04/scan-configs` |
 | Description | Destination of the downloaded scan config data. Overrides `--destination-prefix`. |
 
@@ -271,7 +271,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--scan-configs-url` |
 | Config Variable  | scan-configs-url |
-| Environment Variable | `GREENBONE_FEED_SCAN_CONFIGS_URL` |
+| Environment Variable | `GREENBONE_FEED_SYNC_SCAN_CONFIGS_URL` |
 | Default Value | `rsync://feed.community.greenbone.net/community/data-feed/22.04/scan-configs` |
 | Description | URL to download the scan config data from. Overrides `--feed-url`. |
 
@@ -281,7 +281,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--port-lists-destination` |
 | Config Variable  | port-lists-destination |
-| Environment Variable | `GREENBONE_FEED_PORT_LISTS_DESTINATION` |
+| Environment Variable | `GREENBONE_FEED_SYNC_PORT_LISTS_DESTINATION` |
 | Default Value | `/var/lib/gvm/data-objects/gvmd/22.04/port-lists` |
 | Description | Destination of the downloaded port list data. Overrides `--destination-prefix`. |
 
@@ -291,7 +291,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--port-lists-url` |
 | Config Variable  | port-lists-url |
-| Environment Variable | `GREENBONE_FEED_PORT_LISTS_URL` |
+| Environment Variable | `GREENBONE_FEED_SYNC_PORT_LISTS_URL` |
 | Default Value | `rsync://feed.community.greenbone.net/community/data-feed/22.04/port-lists` |
 | Description | URL to download the port list data from. Overrides `--feed-url`. |
 
@@ -301,7 +301,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--gvmd-lock-file` |
 | Config Variable  | gvmd-lock-file |
-| Environment Variable | `GREENBONE_FEED_GVMD_LOCK_FILE` |
+| Environment Variable | `GREENBONE_FEED_SYNC_GVMD_LOCK_FILE` |
 | Default Value | `/var/lib/openvas/feed-update.lock` |
 | Description | File to use for locking the feed synchronization for data loaded by the gvmd daemon. Used to avoid that more then one process accesses the feed data at the same time. |
 
@@ -311,7 +311,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--openvas-lock-file` |
 | Config Variable  | openvas-lock-file |
-| Environment Variable | `GREENBONE_FEED_OPENVAS_LOCK_FILE` |
+| Environment Variable | `GREENBONE_FEED_SYNC_OPENVAS_LOCK_FILE` |
 | Default Value | `/var/lib/gvm/feed-update.lock` |
 | Description | File to use for locking the feed synchronization for data loaded by the openvas scanner. Used to avoid that more then one process accesses the feed data at the same time. |
 
@@ -321,7 +321,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--fail-fast, --failfast` |
 | Config Variable  | fail-fast |
-| Environment Variable | `GREENBONE_FEED_FAIL_FAST` |
+| Environment Variable | `GREENBONE_FEED_SYNC_FAIL_FAST` |
 | Default Value | false |
 | Description | Stop after a first error has occurred. Otherwise the script tries to download additional data if specified. |
 
@@ -331,7 +331,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--no-wait` |
 | Config Variable  | no-wait |
-| Environment Variable | `GREENBONE_FEED_NO_WAIT` |
+| Environment Variable | `GREENBONE_FEED_SYNC_NO_WAIT` |
 | Default Value | false |
 | Description | Fail directly if the lock file can't be acquired. |
 
@@ -341,7 +341,7 @@ a dependency for your current project using [poetry]
 |------|-------|
 | CLI Argument | `--wait-interval` |
 | Config Variable  | wait-interval |
-| Environment Variable | `GREENBONE_FEED_LOCK_WAIT_INTERVAL` |
+| Environment Variable | `GREENBONE_FEED_SYNC_LOCK_WAIT_INTERVAL` |
 | Default Value | 5 |
 | Description | Time to wait in seconds after failed lock attempt before re-trying to lock the file. |
 
