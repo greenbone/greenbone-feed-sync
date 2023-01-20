@@ -406,8 +406,6 @@ class CliParser:
         self.parser = parser
 
     def _load_config(self, config_file: str) -> dict[str, Any]:
-        config = Config()
-
         config_path = None
 
         if config_file is None:
@@ -422,7 +420,7 @@ class CliParser:
             if not config_path.exists():
                 config_path = None
 
-        return config.load(config_path)
+        return Config.load(config_path)
 
     def _set_defaults(self, config_file=None) -> None:
         config_data = self._load_config(config_file)
@@ -452,10 +450,8 @@ class Config:
     defaults.
     """
 
-    def __init__(self) -> None:
-        self._config = {}
-
-    def load(self, config_file: Optional[Path] = None) -> dict[str, Any]:
+    @staticmethod
+    def load(config_file: Optional[Path] = None) -> dict[str, Any]:
         """Load config values from config_file"""
         config: dict[str, Any] = {}
 
