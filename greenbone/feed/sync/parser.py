@@ -64,102 +64,121 @@ _CONFIG = (
         "destination-prefix",
         "GREENBONE_FEED_SYNC_DESTINATION_PREFIX",
         DEFAULT_DESTINATION_PREFIX,
+        Path,
     ),
-    ("feed-url", "GREENBONE_FEED_SYNC_URL", DEFAULT_RSYNC_URL),
+    ("feed-url", "GREENBONE_FEED_SYNC_URL", DEFAULT_RSYNC_URL, str),
     (
         "notus-destination",
         "GREENBONE_FEED_SYNC_NOTUS_DESTINATION",
-        f"{{destination-prefix}}{DEFAULT_NOTUS_PATH}",
+        f"{{destination-prefix}}/{DEFAULT_NOTUS_PATH}",
+        Path,
     ),
     (
         "notus-url",
         "GREENBONE_FEED_SYNC_NOTUS_URL",
         f"{{feed-url}}{DEFAULT_NOTUS_URL_PATH}",
+        str,
     ),
     (
         "nasl-destination",
         "GREENBONE_NASL_DESTINATION",
-        f"{{destination-prefix}}{DEFAULT_NASL_PATH}",
+        f"{{destination-prefix}}/{DEFAULT_NASL_PATH}",
+        Path,
     ),
     (
         "nasl-url",
         "GREENBONE_FEED_SYNC_NASL_URL",
         f"{{feed-url}}{DEFAULT_NASL_URL_PATH}",
+        str,
     ),
     (
         "scap-data-destination",
         "GREENBONE_FEED_SYNC_SCAP_DATA_DESTINATION",
-        f"{{destination-prefix}}{DEFAULT_SCAP_DATA_PATH}",
+        f"{{destination-prefix}}/{DEFAULT_SCAP_DATA_PATH}",
+        Path,
     ),
     (
         "scap-data-url",
         "GREENBONE_FEED_SYNC_SCAP_DATA_URL",
         f"{{feed-url}}{DEFAULT_SCAP_DATA_URL_PATH}",
+        str,
     ),
     (
         "cert-data-destination",
         "GREENBONE_FEED_SYNC_CERT_DATA_DESTINATION",
-        f"{{destination-prefix}}{DEFAULT_CERT_DATA_PATH}",
+        f"{{destination-prefix}}/{DEFAULT_CERT_DATA_PATH}",
+        Path,
     ),
     (
         "cert-data-url",
         "GREENBONE_FEED_SYNC_CERT_DATA_URL",
         f"{{feed-url}}{DEFAULT_CERT_DATA_URL_PATH}",
+        str,
     ),
     (
         "report-formats-destination",
         "GREENBONE_FEED_SYNC_REPORT_FORMATS_DESTINATION",
-        f"{{destination-prefix}}{DEFAULT_REPORT_FORMATS_PATH}",
+        f"{{destination-prefix}}/{DEFAULT_REPORT_FORMATS_PATH}",
+        Path,
     ),
     (
         "report-formats-url",
         "GREENBONE_FEED_SYNC_REPORT_FORMATS_URL",
         f"{{feed-url}}{DEFAULT_REPORT_FORMATS_URL_PATH}",
+        str,
     ),
     (
         "scan-configs-destination",
         "GREENBONE_FEED_SYNC_SCAN_CONFIGS_DESTINATION",
-        f"{{destination-prefix}}{DEFAULT_SCAN_CONFIGS_PATH}",
+        f"{{destination-prefix}}/{DEFAULT_SCAN_CONFIGS_PATH}",
+        Path,
     ),
     (
         "scan-configs-url",
         "GREENBONE_FEED_SYNC_SCAN_CONFIGS_URL",
         f"{{feed-url}}{DEFAULT_SCAN_CONFIGS_URL_PATH}",
+        str,
     ),
     (
         "port-lists-destination",
         "GREENBONE_FEED_SYNC_PORT_LISTS_DESTINATION",
-        f"{{destination-prefix}}{DEFAULT_PORT_LISTS_PATH}",
+        f"{{destination-prefix}}/{DEFAULT_PORT_LISTS_PATH}",
+        Path,
     ),
     (
         "port-lists-url",
         "GREENBONE_FEED_SYNC_PORT_LISTS_URL",
         f"{{feed-url}}{DEFAULT_PORT_LISTS_URL_PATH}",
+        str,
     ),
     (
         "gvmd-lock-file",
         "GREENBONE_FEED_SYNC_GVMD_LOCK_FILE",
-        f"{{destination-prefix}}{DEFAULT_GVMD_LOCK_FILE_PATH}",
+        f"{{destination-prefix}}/{DEFAULT_GVMD_LOCK_FILE_PATH}",
+        Path,
     ),
     (
         "openvas-lock-file",
         "GREENBONE_FEED_SYNC_OPENVAS_LOCK_FILE",
-        f"{{destination-prefix}}{DEFAULT_OPENVAS_LOCK_FILE_PATH}",
+        f"{{destination-prefix}}/{DEFAULT_OPENVAS_LOCK_FILE_PATH}",
+        Path,
     ),
     (
         "wait-interval",
         "GREENBONE_FEED_SYNC_LOCK_WAIT_INTERVAL",
         DEFAULT_FLOCK_WAIT_INTERVAL,
+        int,
     ),
-    ("no-wait", "GREENBONE_FEED_SYNC_NO_WAIT", False),
+    ("no-wait", "GREENBONE_FEED_SYNC_NO_WAIT", False, bool),
     (
         "compression-level",
         "GREENBONE_FEED_SYNC_COMPRESSION_LEVEL",
         DEFAULT_RSYNC_COMPRESSION_LEVEL,
+        int,
     ),
-    ("private-directory", "GREENBONE_FEED_SYNC_PRIVATE_DIRECTORY", None),
-    ("verbose", "GREENBONE_FEED_SYNC_VERBOSE", None),
-    ("fail-fast", "GREENBONE_FEED_SYNC_FAIL_FAST", False),
+    ("private-directory", "GREENBONE_FEED_SYNC_PRIVATE_DIRECTORY", None, Path),
+    ("verbose", "GREENBONE_FEED_SYNC_VERBOSE", None, int),
+    ("fail-fast", "GREENBONE_FEED_SYNC_FAIL_FAST", False, bool),
 )
 
 
@@ -458,14 +477,16 @@ class Config:
 
         values: dict[str, Any] = {}
 
-        for config_key, env_key, default in _CONFIG:
+        for config_key, env_key, default, value_type in _CONFIG:
             if env_key in os.environ:
-                values[config_key] = os.environ.get(env_key)
+                value = os.environ.get(env_key)
             elif config_key in config:
-                values[config_key] = config.get(config_key)
+                value = config.get(config_key)
             elif isinstance(default, str):
-                values[config_key] = default.format(**values)
+                value = default.format(**values)
             else:
-                values[config_key] = default
+                value = default
+
+            values[config_key] = None if value is None else value_type(value)
 
         return values
