@@ -36,7 +36,6 @@ from greenbone.feed.sync.parser import (
     DEFAULT_SCAN_CONFIGS_URL_PATH,
     DEFAULT_SCAP_DATA_PATH,
     DEFAULT_SCAP_DATA_URL_PATH,
-    DEFAULT_VERBOSITY,
     Config,
     feed_type,
 )
@@ -161,5 +160,5 @@ class ConfigTestCase(unittest.TestCase):
             values["compression-level"], DEFAULT_RSYNC_COMPRESSION_LEVEL
         )
         self.assertIsNone(values["private-directory"])
-        self.assertEqual(values["verbose"], DEFAULT_VERBOSITY)
+        self.assertIsNone(values["verbose"])
         self.assertFalse(values["fail-fast"])

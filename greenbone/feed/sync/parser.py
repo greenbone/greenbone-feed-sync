@@ -158,7 +158,7 @@ _CONFIG = (
         DEFAULT_RSYNC_COMPRESSION_LEVEL,
     ),
     ("private-directory", "GREENBONE_FEED_SYNC_PRIVATE_DIRECTORY", None),
-    ("verbose", "GREENBONE_FEED_SYNC_VERBOSE", DEFAULT_VERBOSITY),
+    ("verbose", "GREENBONE_FEED_SYNC_VERBOSE", None),
     ("fail-fast", "GREENBONE_FEED_SYNC_FAIL_FAST", False),
 )
 
