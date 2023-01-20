@@ -20,9 +20,12 @@ import errno
 import fcntl
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import AsyncGenerator, Optional, Union
+from types import TracebackType
+from typing import AsyncGenerator, Optional, Type, Union
 
 from rich.console import Console
+from rich.live import Live
+from rich.spinner import Spinner as RichSpinner
 
 from greenbone.feed.sync.errors import FileLockingError
 
@@ -101,3 +104,28 @@ async def flock_wait(
             fd0.close()
         except OSError:
             pass
+
+
+class Spinner:
+    def __init__(self, console: Console, status: str) -> None:
+        self._spinner = RichSpinner(
+            "dots", text=status, style="status.spinner", speed=1.0
+        )
+        self._live = Live(
+            self._spinner,
+            console=console,
+            refresh_per_second=12.5,
+            transient=False,
+        )
+
+    def __enter__(self) -> "Spinner":
+        self._live.start()
+        return self
+
+    def __exit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
+    ) -> None:
+        self._live.stop()
