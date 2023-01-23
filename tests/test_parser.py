@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# pylint: disable=line-too-long
+# pylint: disable=line-too-long, too-many-lines
 
 import io
 import unittest
@@ -518,6 +518,25 @@ fail-fast = false
         self.assertEqual(values["private-directory"], Path("keep-this"))
         self.assertEqual(values["verbose"], 5)
         self.assertTrue(values["fail-fast"])
+
+    def test_invalid_toml(self):
+        content = "This is not TOML"
+        path_mock = MagicMock(spec=Path)
+        path_mock.read_text.return_value = content
+        path_mock.absolute.return_value = "/foo/bar.toml"
+
+        with self.assertRaisesRegex(
+            ConfigFileError,
+            "Can't load config file. /foo/bar.toml is not a valid TOML file.",
+        ):
+            Config.load(path_mock)
+
+    def test_load_ioerror(self):
+        with self.assertRaisesRegex(
+            ConfigFileError,
+            r"Can't load config file .*foo\.toml\. Error was .*",
+        ):
+            Config.load(Path("foo.toml"))
 
 
 class CliParserTestCase(unittest.TestCase):
