@@ -419,7 +419,9 @@ class CliParser:
         else:
             config_path = Path(config_file).expanduser().resolve()
             if not config_path.exists():
-                config_path = None
+                raise ConfigFileError(
+                    f"Config file {config_file} does not exist."
+                )
 
         return Config.load(config_path)
 

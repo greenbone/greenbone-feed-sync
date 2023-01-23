@@ -23,6 +23,7 @@ from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
+from greenbone.feed.sync.errors import ConfigFileError
 from greenbone.feed.sync.helper import DEFAULT_FLOCK_WAIT_INTERVAL
 from greenbone.feed.sync.parser import (
     DEFAULT_CERT_DATA_PATH,
@@ -973,3 +974,11 @@ wait-interval = 100
         self.assertEqual(args.feed_url, "rsync://bar.baz")
         self.assertEqual(args.destination_prefix, Path("/usr/lib"))
         self.assertEqual(args.wait_interval, 100)
+
+    def test_config_file_not_exists(self):
+        parser = CliParser()
+
+        with self.assertRaisesRegex(
+            ConfigFileError, "Config file foo.bar does not exist."
+        ):
+            parser.parse_arguments(["--config", "foo.bar"])
