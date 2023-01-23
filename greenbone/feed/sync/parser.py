@@ -279,6 +279,7 @@ class CliParser:
         )
         parser.add_argument(
             "--destination-prefix",
+            type=Path,
             help="Destination directory prefix for all downloaded data. "
             "(Default: %(default)s)",
         )
