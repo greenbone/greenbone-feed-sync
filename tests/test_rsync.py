@@ -15,10 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import asyncio
 import unittest
+from asyncio.subprocess import Process
 from unittest.mock import AsyncMock, patch
 
-from greenbone.feed.sync.rsync import Rsync
+from greenbone.feed.sync.errors import RsyncError
+from greenbone.feed.sync.rsync import Rsync, exec_rsync
 
 
 class RsyncTestCase(unittest.IsolatedAsyncioTestCase):
@@ -114,4 +117,48 @@ class RsyncTestCase(unittest.IsolatedAsyncioTestCase):
             "--hard-links",
             "rsync://foo.bar/baz",
             "/tmp/baz",
+        )
+
+
+class ExecRsyncTestCase(unittest.IsolatedAsyncioTestCase):
+    @patch(
+        "greenbone.feed.sync.rsync.asyncio.create_subprocess_exec",
+        autospec=True,
+    )
+    async def test_failure(self, exec_mock: AsyncMock):
+        process_mock = AsyncMock(spec=Process)
+        process_mock.communicate.return_value = (None, b"An error occurred")
+        process_mock.wait.return_value = 1
+        exec_mock.return_value = process_mock
+
+        with self.assertRaises(RsyncError) as cm:
+            await exec_rsync("foo", "bar")
+
+        exec_mock.assert_awaited_once_with(
+            "rsync", "foo", "bar", stderr=asyncio.subprocess.PIPE
+        )
+
+        self.assertEqual(cm.exception.returncode, 1)
+        self.assertEqual(cm.exception.stderr, "An error occurred")
+        self.assertEqual(cm.exception.cmd, ["rsync", "foo", "bar"])
+        self.assertIsNone(cm.exception.stout)
+        self.assertEqual(
+            str(cm.exception),
+            "'rsync foo bar' returned non-zero exit status 1.",
+        )
+
+    @patch(
+        "greenbone.feed.sync.rsync.asyncio.create_subprocess_exec",
+        autospec=True,
+    )
+    async def test_success(self, exec_mock: AsyncMock):
+        process_mock = AsyncMock(spec=Process)
+        process_mock.communicate.return_value = (None, None)
+        process_mock.wait.return_value = 0
+        exec_mock.return_value = process_mock
+
+        await exec_rsync("foo", "bar")
+
+        exec_mock.assert_awaited_once_with(
+            "rsync", "foo", "bar", stderr=asyncio.subprocess.PIPE
         )
