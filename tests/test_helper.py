@@ -17,13 +17,14 @@
 
 import errno
 import unittest
+from io import StringIO
 from unittest.mock import MagicMock, call, patch
 
 from pontos.testing import temp_directory
 from rich.console import Console
 
 from greenbone.feed.sync.errors import FileLockingError
-from greenbone.feed.sync.helper import flock_wait
+from greenbone.feed.sync.helper import Spinner, flock_wait
 
 
 class FlockTestCase(unittest.IsolatedAsyncioTestCase):
@@ -142,3 +143,23 @@ class FlockTestCase(unittest.IsolatedAsyncioTestCase):
                 lock_file,
             ):
                 pass
+
+
+class SpinnerTestCase(unittest.TestCase):
+    @patch("greenbone.feed.sync.helper.Live", autospec=True)
+    def test_context_manager(self, live_mock: MagicMock):
+        console = MagicMock(spec=Console)
+        with Spinner(console, "Some Text"):
+            pass
+
+        live_mock_instance = live_mock.return_value
+        live_mock_instance.start.assert_called_once_with()
+        live_mock_instance.stop.assert_called_once_with()
+
+    def test_render(self):
+        out = StringIO()
+        console = Console(file=out)
+        with Spinner(console, "Some Text"):
+            pass
+
+        self.assertEqual("⠋ Some Text", out.getvalue())
