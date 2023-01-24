@@ -18,6 +18,7 @@
 import asyncio
 import errno
 import fcntl
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 from types import TracebackType
@@ -30,6 +31,13 @@ from rich.spinner import Spinner as RichSpinner
 from greenbone.feed.sync.errors import FileLockingError
 
 DEFAULT_FLOCK_WAIT_INTERVAL = 5  # in seconds
+
+
+def is_root() -> bool:
+    """
+    Checks if the current user is root
+    """
+    return os.geteuid() == 0
 
 
 @asynccontextmanager

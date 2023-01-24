@@ -16,7 +16,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import asyncio
-import os
 import sys
 from dataclasses import dataclass
 from typing import Iterable, NoReturn
@@ -24,18 +23,11 @@ from typing import Iterable, NoReturn
 from rich.console import Console
 
 from greenbone.feed.sync.errors import GreenboneFeedSyncError, RsyncError
-from greenbone.feed.sync.helper import Spinner, flock_wait
+from greenbone.feed.sync.helper import Spinner, flock_wait, is_root
 from greenbone.feed.sync.parser import DEFAULT_VERBOSITY, CliParser
 from greenbone.feed.sync.rsync import Rsync
 
 __all__ = ("main",)
-
-
-def is_root() -> bool:
-    """
-    Checks if the current user is root
-    """
-    return os.geteuid() == 0
 
 
 @dataclass

@@ -24,7 +24,7 @@ from pontos.testing import temp_directory
 from rich.console import Console
 
 from greenbone.feed.sync.errors import FileLockingError
-from greenbone.feed.sync.helper import Spinner, flock_wait
+from greenbone.feed.sync.helper import Spinner, flock_wait, is_root
 
 
 class FlockTestCase(unittest.IsolatedAsyncioTestCase):
@@ -163,3 +163,17 @@ class SpinnerTestCase(unittest.TestCase):
             pass
 
         self.assertEqual("⠋ Some Text", out.getvalue())
+
+
+class IsRootTestCase(unittest.TestCase):
+    @patch("greenbone.feed.sync.helper.os.geteuid", autospec=True)
+    def test_not_root(self, geteuid_mock: MagicMock):
+        geteuid_mock.return_value = 123
+
+        self.assertFalse(is_root())
+
+    @patch("greenbone.feed.sync.helper.os.geteuid", autospec=True)
+    def test_root(self, geteuid_mock: MagicMock):
+        geteuid_mock.return_value = 0
+
+        self.assertTrue(is_root())
