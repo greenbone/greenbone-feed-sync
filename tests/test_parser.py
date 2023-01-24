@@ -733,7 +733,7 @@ class CliParserTestCase(unittest.TestCase):
             f.getvalue(),
         )
 
-    def test_feed_type(self):
+    def test_feed_url(self):
         parser = CliParser()
         args = parser.parse_arguments(["--feed-url", "rsync://foo.bar"])
         self.assertEqual(args.feed_url, "rsync://foo.bar")
