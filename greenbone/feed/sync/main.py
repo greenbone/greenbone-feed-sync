@@ -52,7 +52,9 @@ class SyncList:
     syncs: list[Sync]
 
 
-def filter_syncs(lock_file, feed_type: str, *syncs: Iterable[Sync]) -> SyncList:
+def filter_syncs(
+    lock_file: str, feed_type: str, *syncs: Iterable[Sync]
+) -> SyncList:
     """
     Create a list of syncs which only match to the feed type
     """

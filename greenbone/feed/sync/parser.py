@@ -18,7 +18,7 @@
 import os
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Optional, Sequence
 
 from greenbone.feed.sync.__version__ import __version__
 from greenbone.feed.sync.errors import ConfigFileError
@@ -425,11 +425,13 @@ class CliParser:
 
         return Config.load(config_path)
 
-    def _set_defaults(self, config_file=None) -> None:
+    def _set_defaults(self, config_file: Optional[str] = None) -> None:
         config_data = self._load_config(config_file)
         self.parser.set_defaults(**_to_defaults(config_data))
 
-    def parse_arguments(self, args=None) -> Namespace:
+    def parse_arguments(
+        self, args: Optional[Sequence[str]] = None
+    ) -> Namespace:
         """
         Parse CLI arguments
         """
