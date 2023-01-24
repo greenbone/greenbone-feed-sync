@@ -139,7 +139,7 @@ a dependency for your current project using [poetry]
 
 | Name | Value |
 |------|-------|
-| CLI Argument | `--feed-url` |
+| CLI Argument |  |
 | Config Variable  | feed-url |
 | Environment Variable | `GREENBONE_FEED_SYNC_URL` |
 | Default Value | `rsync://feed.community.greenbone.net/community` |
@@ -149,7 +149,7 @@ a dependency for your current project using [poetry]
 
 | Name | Value |
 |------|-------|
-| CLI Argument | `--destination-prefix` |
+| CLI Argument |  |
 | Config Variable  | destination-prefix |
 | Environment Variable | `GREENBONE_FEED_SYNC_DESTINATION_PREFIX`  |
 | Default Value | `/var/lib/` |
@@ -163,7 +163,7 @@ a dependency for your current project using [poetry]
 | Config Variable  | notus-destination |
 | Environment Variable | `GREENBONE_FEED_SYNC_NOTUS_DESTINATION` |
 | Default Value | `/var/lib/notus` |
-| Description | Destination of the downloaded notus data. Overrides `--destination-prefix`. |
+| Description | Destination of the downloaded notus data. |
 
 ### notus-url
 
@@ -173,7 +173,7 @@ a dependency for your current project using [poetry]
 | Config Variable  | notus-url |
 | Environment Variable | `GREENBONE_FEED_SYNC_NOTUS_URL` |
 | Default Value | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/vt-data/notus/` |
-| Description | URL to download the notus data from. Overrides `--feed-url`. |
+| Description | URL to download the notus data from. |
 
 ### nasl-destination
 
@@ -183,7 +183,7 @@ a dependency for your current project using [poetry]
 | Config Variable  | nasl-destination |
 | Environment Variable | `GREENBONE_NASL_DESTINATION` |
 | Default Value | `/var/lib/openvas/plugins` |
-| Description | Destination of the downloaded nasl data. Overrides `--destination-prefix`. |
+| Description | Destination of the downloaded nasl data. |
 
 ### nasl-url
 
@@ -193,7 +193,7 @@ a dependency for your current project using [poetry]
 | Config Variable  | nasl-url |
 | Environment Variable | `GREENBONE_FEED_SYNC_NASL_URL` |
 | Default Value | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/vt-data/nasl/` |
-| Description | URL to download the nasl data from. Overrides `--feed-url`. |
+| Description | URL to download the nasl data from. |
 
 ### scap-data-destination
 
@@ -203,7 +203,7 @@ a dependency for your current project using [poetry]
 | Config Variable  | scap-data-destination |
 | Environment Variable | `GREENBONE_FEED_SYNC_SCAP_DATA_DESTINATION` |
 | Default Value | `/var/lib/gvm/scap-data` |
-| Description | Destination of the downloaded SCAP data. Overrides `--destination-prefix`. |
+| Description | Destination of the downloaded SCAP data. |
 
 ### scap-data-url
 
@@ -213,7 +213,7 @@ a dependency for your current project using [poetry]
 | Config Variable  | scap-data-url |
 | Environment Variable | `GREENBONE_FEED_SYNC_SCAP_DATA_URL` |
 | Default Value | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/scap-data` |
-| Description | URL to download the SCAP data from. Overrides `--feed-url`. |
+| Description | URL to download the SCAP data from. |
 
 ### cert-data-destination
 
@@ -223,7 +223,7 @@ a dependency for your current project using [poetry]
 | Config Variable  | cert-data-destination |
 | Environment Variable | `GREENBONE_FEED_SYNC_CERT_DATA_DESTINATION` |
 | Default Value | `/var/lib/gvm/cert-data` |
-| Description | Destination of the downloaded CERT data. Overrides `--destination-prefix`. |
+| Description | Destination of the downloaded CERT data. |
 
 ### cert-data-url
 
@@ -233,7 +233,7 @@ a dependency for your current project using [poetry]
 | Config Variable  | cert-data-url |
 | Environment Variable | `GREENBONE_FEED_SYNC_CERT_DATA_URL` |
 | Default Value | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/cert-data` |
-| Description | URL to download the CERT data from. Overrides `--feed-url`. |
+| Description | URL to download the CERT data from. |
 
 ### report-formats-destination
 
@@ -243,7 +243,7 @@ a dependency for your current project using [poetry]
 | Config Variable  | report-formats-destination |
 | Environment Variable | `GREENBONE_FEED_SYNC_REPORT_FORMATS_DESTINATION` |
 | Default Value | `/var/lib/gvm/data-objects/gvmd/22.04/report-formats` |
-| Description | Destination of the downloaded report format data. Overrides `--destination-prefix`. |
+| Description | Destination of the downloaded report format data. |
 
 ### report-formats-url
 
@@ -253,7 +253,7 @@ a dependency for your current project using [poetry]
 | Config Variable  | report-formats-url |
 | Environment Variable | `GREENBONE_FEED_SYNC_REPORT_FORMATS_URL` |
 | Default Value | `rsync://feed.community.greenbone.net/community/data-feed/22.04/report-formats` |
-| Description | URL to download the report format data from. Overrides `--feed-url` |
+| Description | URL to download the report format data from. |
 
 ### scan-configs-destination
 
@@ -263,7 +263,7 @@ a dependency for your current project using [poetry]
 | Config Variable  | scan-configs-destination |
 | Environment Variable | `GREENBONE_FEED_SYNC_SCAN_CONFIGS_DESTINATION` |
 | Default Value | `/var/lib/gvm/data-objects/gvmd/22.04/scan-configs` |
-| Description | Destination of the downloaded scan config data. Overrides `--destination-prefix`. |
+| Description | Destination of the downloaded scan config data. |
 
 ### scan-configs-url
 
@@ -273,7 +273,7 @@ a dependency for your current project using [poetry]
 | Config Variable  | scan-configs-url |
 | Environment Variable | `GREENBONE_FEED_SYNC_SCAN_CONFIGS_URL` |
 | Default Value | `rsync://feed.community.greenbone.net/community/data-feed/22.04/scan-configs` |
-| Description | URL to download the scan config data from. Overrides `--feed-url`. |
+| Description | URL to download the scan config data from. |
 
 ### port-lists-destination
 
@@ -283,7 +283,7 @@ a dependency for your current project using [poetry]
 | Config Variable  | port-lists-destination |
 | Environment Variable | `GREENBONE_FEED_SYNC_PORT_LISTS_DESTINATION` |
 | Default Value | `/var/lib/gvm/data-objects/gvmd/22.04/port-lists` |
-| Description | Destination of the downloaded port list data. Overrides `--destination-prefix`. |
+| Description | Destination of the downloaded port list data. |
 
 ### port-lists-url
 
@@ -293,7 +293,7 @@ a dependency for your current project using [poetry]
 | Config Variable  | port-lists-url |
 | Environment Variable | `GREENBONE_FEED_SYNC_PORT_LISTS_URL` |
 | Default Value | `rsync://feed.community.greenbone.net/community/data-feed/22.04/port-lists` |
-| Description | URL to download the port list data from. Overrides `--feed-url`. |
+| Description | URL to download the port list data from. |
 
 ### gvmd-lock-file
 

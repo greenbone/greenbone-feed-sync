@@ -274,98 +274,88 @@ class CliParser:
             help="Select which feed should be synced. (Default: %(default)s)",
         )
         parser.add_argument(
-            "--feed-url",
-            help="URL to download the feed data from. (Default: %(default)s)",
-        )
-        parser.add_argument(
-            "--destination-prefix",
-            type=Path,
-            help="Destination directory prefix for all downloaded data. "
-            "(Default: %(default)s)",
-        )
-        parser.add_argument(
             "--notus-destination",
             type=Path,
-            help="Destination of the downloaded notus data. Overrides "
-            "`--destination-prefix`. (Default: %(default)s)",
+            help="Destination of the downloaded notus data. "
+            "(Default: %(default)s)",
         )
         parser.add_argument(
             "--notus-url",
             default=f"{DEFAULT_RSYNC_URL}{DEFAULT_NOTUS_URL_PATH}",
-            help="URL to download the notus data from. Overrides `--feed-url`. "
+            help="URL to download the notus data from. "
             "(Default: %(default)s)",
         )
         parser.add_argument(
             "--nasl-destination",
             type=Path,
-            help="Destination of the downloaded nasl data. Overrides "
-            "`--destination-prefix`. (Default: %(default)s)",
+            help="Destination of the downloaded nasl data. "
+            "(Default: %(default)s)",
         )
         parser.add_argument(
             "--nasl-url",
             default=f"{DEFAULT_RSYNC_URL}{DEFAULT_NASL_URL_PATH}",
-            help="URL to download the nasl data from. Overrides `--feed-url`. "
+            help="URL to download the nasl data from. "
             "(Default: %(default)s)",
         )
         parser.add_argument(
             "--scap-data-destination",
             type=Path,
-            help="Destination of the downloaded SCAP data. Overrides "
-            "`--destination-prefix`. (Default: %(default)s)",
+            help="Destination of the downloaded SCAP data. "
+            "(Default: %(default)s)",
         )
         parser.add_argument(
             "--scap-data-url",
             default=f"{DEFAULT_RSYNC_URL}{DEFAULT_SCAP_DATA_URL_PATH}",
-            help="URL to download the SCAP data from. Overrides `--feed-url`. "
+            help="URL to download the SCAP data from. "
             "(Default: %(default)s)",
         )
         parser.add_argument(
             "--cert-data-destination",
             type=Path,
-            help="Destination of the downloaded CERT data. Overrides "
-            "`--destination-prefix`. (Default: %(default)s)",
+            help="Destination of the downloaded CERT data. "
+            "(Default: %(default)s)",
         )
         parser.add_argument(
             "--cert-data-url",
             default=f"{DEFAULT_RSYNC_URL}{DEFAULT_CERT_DATA_URL_PATH}",
-            help="URL to download the CERT data from. Overrides `--feed-url`. "
+            help="URL to download the CERT data from. "
             "(Default: %(default)s)",
         )
         parser.add_argument(
             "--report-formats-destination",
             type=Path,
-            help="Destination of the downloaded report format data. Overrides "
-            "`--destination-prefix`. (Default: %(default)s)",
+            help="Destination of the downloaded report format data "
+            "(Default: %(default)s)",
         )
         parser.add_argument(
             "--report-formats-url",
             default=f"{DEFAULT_RSYNC_URL}{DEFAULT_REPORT_FORMATS_URL_PATH}",
-            help="URL to download the report format data from. Overrides "
-            "`--feed-url`. (Default: %(default)s)",
+            help="URL to download the report format data from. "
+            "(Default: %(default)s)",
         )
         parser.add_argument(
             "--scan-configs-destination",
             type=Path,
-            help="Destination of the downloaded scan config data. Overrides "
-            "`--destination-prefix`. (Default: %(default)s)",
+            help="Destination of the downloaded scan config data. "
+            "(Default: %(default)s)",
         )
         parser.add_argument(
             "--scan-configs-url",
             default=f"{DEFAULT_RSYNC_URL}{DEFAULT_SCAN_CONFIGS_URL_PATH}",
-            help="URL to download the scan config data from. Overrides "
-            "`--feed-url`. (Default: %(default)s)",
+            help="URL to download the scan config data from. "
+            "(Default: %(default)s)",
         )
         parser.add_argument(
             "--port-lists-destination",
             type=Path,
-            help="Destination of the downloaded port list data. Overrides "
-            "`--destination-prefix`. (Default: %(default)s)",
+            help="Destination of the downloaded port list data. "
+            "(Default: %(default)s)",
         )
         parser.add_argument(
             "--port-lists-url",
             default=f"{DEFAULT_RSYNC_URL}{DEFAULT_PORT_LISTS_URL_PATH}",
-            help="URL to download the port list data from. Overrides "
-            "`--feed-url`. (Default: %(default)s)",
+            help="URL to download the port list data from. "
+            "(Default: %(default)s)",
         )
         parser.add_argument(
             "--gvmd-lock-file",

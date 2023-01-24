@@ -733,11 +733,6 @@ class CliParserTestCase(unittest.TestCase):
             f.getvalue(),
         )
 
-    def test_feed_url(self):
-        parser = CliParser()
-        args = parser.parse_arguments(["--feed-url", "rsync://foo.bar"])
-        self.assertEqual(args.feed_url, "rsync://foo.bar")
-
     def test_notus_destination(self):
         parser = CliParser()
         args = parser.parse_arguments(["--notus-destination", "foo/bar"])
@@ -984,15 +979,15 @@ wait-interval = 100
         parser = CliParser()
         args = parser.parse_arguments(
             [
-                "--feed-url",
-                "rsync://bar.baz",
+                "--wait-interval",
+                "90",
             ]
         )
 
         self.assertEqual(args.verbose, 3)
-        self.assertEqual(args.feed_url, "rsync://bar.baz")
+        self.assertEqual(args.feed_url, "rsync://foo.bar")
         self.assertEqual(args.destination_prefix, Path("/usr/lib"))
-        self.assertEqual(args.wait_interval, 100)
+        self.assertEqual(args.wait_interval, 90)
 
     def test_config_file_not_exists(self):
         parser = CliParser()
