@@ -7,7 +7,6 @@ New script for syncing the Greenbone Community Feed
 - [Installation](#installation)
   - [Requirements](#requirements)
   - [Install using pip](#install-using-pip)
-  - [Install using poetry](#install-using-poetry)
 - [Settings](#settings)
   - [verbose](#verbose)
   - [quiet](#quiet)
@@ -61,17 +60,6 @@ You can install the latest stable release of **greenbone-feed-sync** from the
 Python Package Index (pypi) using [pip]
 
     python3 -m pip install --user greenbone-feed-sync
-
-### Install using poetry
-
-Because **pontos** is a Python library you most likely need a tool to
-handle Python package dependencies and Python environments. Therefore we
-strongly recommend using [poetry].
-
-You can install the latest stable release of **pontos** and add it as
-a dependency for your current project using [poetry]
-
-    poetry add pontos
 
 ## Settings
 
