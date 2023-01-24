@@ -37,7 +37,7 @@ pontos = ">=22.12.2"
 coverage = {extras = ["toml"], version = "^7.0.5"}
 
 [tool.poetry.scripts]
-greenbone-feed-sync = 'greenbone.feed.sync:main'
+greenbone-feed-sync = 'greenbone.feed.sync.main:main'
 
 [build-system]
 requires = ["poetry-core"]
