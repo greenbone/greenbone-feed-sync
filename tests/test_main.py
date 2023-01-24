@@ -23,7 +23,7 @@ from pontos.testing import temp_directory
 from rich.console import Console
 
 from greenbone.feed.sync.errors import GreenboneFeedSyncError, RsyncError
-from greenbone.feed.sync.main import Sync, feed_sync, filter_syncs
+from greenbone.feed.sync.main import Sync, feed_sync, filter_syncs, main
 
 
 class FilterSyncsTestCase(unittest.TestCase):
@@ -249,6 +249,118 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
                     call(
                         f"Releasing lock on {temp_dir}/openvas/feed-update.lock"
                     ),
+                ]
+            )
+
+            rsync_mock_instance.sync.assert_has_awaits(
+                [
+                    call(
+                        url="rsync://feed.community.greenbone.net/community/"
+                        "vulnerability-feed/22.04/vt-data/notus/",
+                        destination=temp_dir / "notus",
+                    ),
+                ]
+            )
+
+
+class MainFunctionTestCase(unittest.TestCase):
+    @patch("greenbone.feed.sync.main.Console")
+    @patch("greenbone.feed.sync.main.Rsync", autospec=True)
+    def test_sync_nvts(self, rsync_mock: MagicMock, console_mock: MagicMock):
+        rsync_mock_instance = rsync_mock.return_value
+        console_mock_instance = console_mock.return_value
+
+        with temp_directory() as temp_dir, patch.dict(
+            "os.environ",
+            {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
+        ), patch.object(
+            sys,
+            "argv",
+            [
+                "greenbone-feed-sync",
+                "--type",
+                "nvt",
+            ],
+        ):
+            with self.assertRaises(SystemExit) as cm:
+                main()
+
+            self.assertEqual(cm.exception.code, 0)
+
+            rsync_mock.assert_called_once_with(
+                private_subdir=None, verbose=False, compression_level=9
+            )
+            console_mock_instance.print.assert_has_calls(
+                [
+                    call(
+                        "Trying to acquire lock on "
+                        f"{temp_dir}/openvas/feed-update.lock"
+                    ),
+                    call(
+                        f"Acquired lock on {temp_dir}/openvas/feed-update.lock"
+                    ),
+                    call(
+                        f"Releasing lock on {temp_dir}/openvas/feed-update.lock"
+                    ),
+                    call(),
+                ]
+            )
+
+            rsync_mock_instance.sync.assert_has_awaits(
+                [
+                    call(
+                        url="rsync://feed.community.greenbone.net/community/"
+                        "vulnerability-feed/22.04/vt-data/notus/",
+                        destination=temp_dir / "notus",
+                    ),
+                    call(
+                        url="rsync://feed.community.greenbone.net/community/"
+                        "vulnerability-feed/22.04/vt-data/nasl/",
+                        destination=temp_dir / "openvas/plugins",
+                    ),
+                ]
+            )
+
+    @patch("greenbone.feed.sync.main.Console")
+    @patch("greenbone.feed.sync.main.Rsync", autospec=True)
+    def test_sync_nvts_error(
+        self, rsync_mock: MagicMock, console_mock: MagicMock
+    ):
+        rsync_mock_instance = rsync_mock.return_value
+        console_mock_instance = console_mock.return_value
+        rsync_mock_instance.sync.side_effect = GreenboneFeedSyncError(
+            "An error"
+        )
+
+        with temp_directory() as temp_dir, patch.dict(
+            "os.environ",
+            {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
+        ), patch.object(
+            sys,
+            "argv",
+            ["greenbone-feed-sync", "--type", "nvt", "--fail-fast"],
+        ):
+            with self.assertRaises(SystemExit) as cm:
+                main()
+
+            self.assertEqual(cm.exception.code, 1)
+
+            rsync_mock.assert_called_once_with(
+                private_subdir=None, verbose=False, compression_level=9
+            )
+            console_mock_instance.print.assert_has_calls(
+                [
+                    call(
+                        "Trying to acquire lock on "
+                        f"{temp_dir}/openvas/feed-update.lock"
+                    ),
+                    call(
+                        f"Acquired lock on {temp_dir}/openvas/feed-update.lock"
+                    ),
+                    call(
+                        f"Releasing lock on {temp_dir}/openvas/feed-update.lock"
+                    ),
+                    call("An error"),
                 ]
             )
 

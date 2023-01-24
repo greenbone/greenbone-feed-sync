@@ -196,7 +196,7 @@ def main() -> NoReturn:
     try:
         sys.exit(asyncio.run(feed_sync(console, error_console)))
     except GreenboneFeedSyncError as e:
-        print(str(e), file=sys.stderr)
+        error_console.print(str(e))
         sys.exit(1)
     except KeyboardInterrupt:
         sys.exit(1)
