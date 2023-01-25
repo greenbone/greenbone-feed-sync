@@ -34,7 +34,7 @@ autohooks-plugin-black = ">=22.11.0"
 autohooks-plugin-isort = ">=22.8.0"
 autohooks-plugin-pylint = ">=22.8.1"
 pontos = ">=22.12.2"
-coverage = {extras = ["toml"], version = "^7.0.5"}
+coverage = {extras = ["toml"], version = "^7.1.0"}
 
 [tool.poetry.scripts]
 greenbone-feed-sync = 'greenbone.feed.sync.main:main'
