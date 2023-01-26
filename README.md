@@ -17,6 +17,8 @@ New script for syncing the Greenbone Community Feed
   - [type](#type)
   - [feed-url](#feed-url)
   - [destination-prefix](#destination-prefix)
+  - [gvmd-data-destination](#gvmd-data-destination)
+  - [gvmd-data-url](#gvmd-data-url)
   - [notus-destination](#notus-destination)
   - [notus-url](#notus-url)
   - [nasl-destination](#nasl-destination)
@@ -165,6 +167,26 @@ is only required for experts and testing purposes.
 | Environment Variable | `GREENBONE_FEED_SYNC_DESTINATION_PREFIX`  |
 | Default Value | `/var/lib/` |
 | Description | Directory prefix to use for default feed data download destinations. Other download destinations will be relative to this path by default. For example using `/opt/lib` as destination prefix will change the default of the notus destination to `/opt/lib/notus`. |
+
+### gvmd-data-destination
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--gvmd-data-destination` |
+| Config Variable  | gvmd-data-destination |
+| Environment Variable | `GREENBONE_FEED_SYNC_GVMD_DATA_DESTINATION` |
+| Default Value | `/var/lib/gvm/data-objects/gvmd/22.04/` |
+| Description | Destination of the downloaded gvmd data. |
+
+### gvmd-data-url
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--gvmd-data-url` |
+| Config Variable  | gvmd-data-url |
+| Environment Variable | `GREENBONE_FEED_SYNC_GVMD_DATA_URL` |
+| Default Value | `rsync://feed.community.greenbone.net/community/data-feed/22.04/` |
+| Description | URL to download the gvmd data from. This includes scan-configs, report-formats and port-lists. |
 
 ### notus-destination
 

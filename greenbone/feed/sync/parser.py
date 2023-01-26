@@ -37,6 +37,7 @@ DEFAULT_NOTUS_URL_PATH = "/vulnerability-feed/22.04/vt-data/notus/"
 DEFAULT_NASL_URL_PATH = "/vulnerability-feed/22.04/vt-data/nasl/"
 DEFAULT_SCAP_DATA_URL_PATH = "/vulnerability-feed/22.04/scap-data/"
 DEFAULT_CERT_DATA_URL_PATH = "/vulnerability-feed/22.04/cert-data/"
+DEFAULT_GVMD_DATA_URL_PATH = "/data-feed/22.04/"
 DEFAULT_REPORT_FORMATS_URL_PATH = "/data-feed/22.04/report-formats/"
 DEFAULT_SCAN_CONFIGS_URL_PATH = "/data-feed/22.04/scan-configs/"
 DEFAULT_PORT_LISTS_URL_PATH = "/data-feed/22.04/port-lists/"
@@ -47,6 +48,7 @@ DEFAULT_NASL_PATH = "openvas/plugins"
 DEFAULT_NOTUS_PATH = "notus"
 DEFAULT_SCAP_DATA_PATH = "gvm/scap-data"
 DEFAULT_CERT_DATA_PATH = "gvm/cert-data"
+DEFAULT_GVMD_DATA_PATH = "gvm/data-objects/gvmd/22.04/"
 DEFAULT_REPORT_FORMATS_PATH = "gvm/data-objects/gvmd/22.04/report-formats"
 DEFAULT_SCAN_CONFIGS_PATH = "gvm/data-objects/gvmd/22.04/scan-configs"
 DEFAULT_PORT_LISTS_PATH = "gvm/data-objects/gvmd/22.04/port-lists"
@@ -67,6 +69,18 @@ _CONFIG = (
         Path,
     ),
     ("feed-url", "GREENBONE_FEED_SYNC_URL", DEFAULT_RSYNC_URL, str),
+    (
+        "gvmd-data-destination",
+        "GREENBONE_FEED_SYNC_GVMD_DATA_DESTINATION",
+        f"{{destination-prefix}}/{DEFAULT_GVMD_DATA_PATH}",
+        Path,
+    ),
+    (
+        "gvmd-data-url",
+        "GREENBONE_FEED_SYNC_GVMD_DATA_URL",
+        f"{{feed-url}}{DEFAULT_GVMD_DATA_URL_PATH}",
+        str,
+    ),
     (
         "notus-destination",
         "GREENBONE_FEED_SYNC_NOTUS_DESTINATION",
@@ -258,106 +272,120 @@ class CliParser:
         parser.add_argument(
             "--type",
             choices=[
-                "notus",
-                "nasl",
+                "all",
+                "nvt",
+                "gvmd-data",
                 "scap",
                 "cert",
+                "notus",
+                "nasl",
                 "report-format",
                 "scan-config",
                 "port-list",
-                "nvt",
-                "gvmd-data",
-                "all",
             ],
             default="all",
             type=feed_type,
             help="Select which feed should be synced. (Default: %(default)s)",
         )
         parser.add_argument(
+            "--gvmd-data-destination",
+            type=Path,
+            help="Destination of the downloaded gvmd data. "
+            "(Default: %(default)s)",
+        )
+        parser.add_argument(
+            "--gvmd-data-url",
+            help="URL to download the gvmd data from. "
+            "(Default: %(default)s)",
+        )
+        nvts_destination_group = parser.add_argument_group()
+        nvts_destination_group.add_argument(
             "--notus-destination",
             type=Path,
             help="Destination of the downloaded notus data. "
             "(Default: %(default)s)",
         )
-        parser.add_argument(
+        nvts_url_group = parser.add_argument_group()
+        nvts_url_group.add_argument(
             "--notus-url",
-            default=f"{DEFAULT_RSYNC_URL}{DEFAULT_NOTUS_URL_PATH}",
             help="URL to download the notus data from. "
             "(Default: %(default)s)",
         )
-        parser.add_argument(
+        nvts_destination_group.add_argument(
             "--nasl-destination",
             type=Path,
             help="Destination of the downloaded nasl data. "
             "(Default: %(default)s)",
         )
-        parser.add_argument(
+        nvts_url_group.add_argument(
             "--nasl-url",
-            default=f"{DEFAULT_RSYNC_URL}{DEFAULT_NASL_URL_PATH}",
             help="URL to download the nasl data from. "
             "(Default: %(default)s)",
         )
-        parser.add_argument(
+
+        secinfo_destination_group = parser.add_argument_group()
+        secinfo_destination_group.add_argument(
             "--scap-data-destination",
             type=Path,
             help="Destination of the downloaded SCAP data. "
             "(Default: %(default)s)",
         )
-        parser.add_argument(
+        secinfo_url_group = parser.add_argument_group()
+        secinfo_url_group.add_argument(
             "--scap-data-url",
-            default=f"{DEFAULT_RSYNC_URL}{DEFAULT_SCAP_DATA_URL_PATH}",
             help="URL to download the SCAP data from. "
             "(Default: %(default)s)",
         )
-        parser.add_argument(
+        secinfo_destination_group.add_argument(
             "--cert-data-destination",
             type=Path,
             help="Destination of the downloaded CERT data. "
             "(Default: %(default)s)",
         )
-        parser.add_argument(
+        secinfo_url_group.add_argument(
             "--cert-data-url",
-            default=f"{DEFAULT_RSYNC_URL}{DEFAULT_CERT_DATA_URL_PATH}",
             help="URL to download the CERT data from. "
             "(Default: %(default)s)",
         )
-        parser.add_argument(
+
+        data_objects_destination_group = parser.add_argument_group()
+        data_objects_destination_group.add_argument(
             "--report-formats-destination",
             type=Path,
             help="Destination of the downloaded report format data "
             "(Default: %(default)s)",
         )
-        parser.add_argument(
+        data_objects_url_group = parser.add_argument_group()
+        data_objects_url_group.add_argument(
             "--report-formats-url",
-            default=f"{DEFAULT_RSYNC_URL}{DEFAULT_REPORT_FORMATS_URL_PATH}",
             help="URL to download the report format data from. "
             "(Default: %(default)s)",
         )
-        parser.add_argument(
+        data_objects_destination_group.add_argument(
             "--scan-configs-destination",
             type=Path,
             help="Destination of the downloaded scan config data. "
             "(Default: %(default)s)",
         )
-        parser.add_argument(
+        data_objects_url_group.add_argument(
             "--scan-configs-url",
-            default=f"{DEFAULT_RSYNC_URL}{DEFAULT_SCAN_CONFIGS_URL_PATH}",
             help="URL to download the scan config data from. "
             "(Default: %(default)s)",
         )
-        parser.add_argument(
+        data_objects_destination_group.add_argument(
             "--port-lists-destination",
             type=Path,
             help="Destination of the downloaded port list data. "
             "(Default: %(default)s)",
         )
-        parser.add_argument(
+        data_objects_url_group.add_argument(
             "--port-lists-url",
-            default=f"{DEFAULT_RSYNC_URL}{DEFAULT_PORT_LISTS_URL_PATH}",
             help="URL to download the port list data from. "
             "(Default: %(default)s)",
         )
-        parser.add_argument(
+
+        lock_file_group = parser.add_argument_group()
+        lock_file_group.add_argument(
             "--gvmd-lock-file",
             type=Path,
             help="File to use for locking the feed synchronization for data "
@@ -365,7 +393,7 @@ class CliParser:
             "process accesses the feed data at the same time. "
             "(Default: %(default)s)",
         )
-        parser.add_argument(
+        lock_file_group.add_argument(
             "--openvas-lock-file",
             type=Path,
             help="File to use for locking the feed synchronization for data "
