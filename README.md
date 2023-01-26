@@ -7,6 +7,7 @@ New script for syncing the Greenbone Community Feed
 - [Installation](#installation)
   - [Requirements](#requirements)
   - [Install using pip](#install-using-pip)
+- [Usage](#usage)
 - [Settings](#settings)
   - [verbose](#verbose)
   - [quiet](#quiet)
@@ -59,9 +60,29 @@ On Debian based Distributions like Ubuntu and Kali `rsync` can be installed via
 You can install the latest stable release of **greenbone-feed-sync** from the
 Python Package Index (pypi) using [pip]
 
-    python3 -m pip install --user greenbone-feed-sync
+    python3 -m pip install greenbone-feed-sync
+
+## Usage
+
+Most of the time you should just run `greenbone-feed-sync` without any
+arguments to download the new data for all necessary feed types.
+
+To get verbose progress output during the data download you might increase the
+verbosity:
+
+    greenbone-feed-sync -vvv
+
+
+If the script is run in a cron job the output can be turned of via
+
+    greenbone-feed-sync --quiet
 
 ## Settings
+
+The `greenbone-feed-sync` script is adjustable for all kind of purposes and very
+flexible which content gets downloaded. Most likely you will never need to
+adjust the settings because the defaults will suffice. Changing the settings
+is only required for experts and testing purposes.
 
 ### verbose
 
