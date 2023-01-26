@@ -64,11 +64,13 @@ Python Package Index (pypi) using [pip]
 
 ## Usage
 
-Most of the time you should just run `greenbone-feed-sync` without any
-arguments to download the new data for all necessary feed types.
+Most of the time you should just run the script without any arguments to
+download the new data for all necessary feed types
+
+    greenbone-feed-sync
 
 To get verbose progress output during the data download you might increase the
-verbosity:
+verbosity
 
     greenbone-feed-sync -vvv
 
