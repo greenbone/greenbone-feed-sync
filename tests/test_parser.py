@@ -30,6 +30,8 @@ from greenbone.feed.sync.parser import (
     DEFAULT_CERT_DATA_URL_PATH,
     DEFAULT_CONFIG_FILE,
     DEFAULT_DESTINATION_PREFIX,
+    DEFAULT_GVMD_DATA_PATH,
+    DEFAULT_GVMD_DATA_URL_PATH,
     DEFAULT_GVMD_LOCK_FILE_PATH,
     DEFAULT_NASL_PATH,
     DEFAULT_NASL_URL_PATH,
@@ -92,14 +94,28 @@ class FeedTypeTestCase(unittest.TestCase):
         self.assertEqual("scan-config", feed_type("SCAN-CONFIG"))
         self.assertEqual("scan-config", feed_type("SCAN-CONFIGS"))
 
+    def test_gvmd_data(self):
+        self.assertEqual("gvmd-data", feed_type("gvmd-data"))
+        self.assertEqual("gvmd-data", feed_type("gvmd_data"))
+        self.assertEqual("gvmd-data", feed_type("GVMD-DATA"))
+        self.assertEqual("gvmd-data", feed_type("GVMD_DATA"))
+
 
 class ConfigTestCase(unittest.TestCase):
     def test_defaults(self):
         values = Config.load()
 
-        self.assertEqual(len(values), 24)
+        self.assertEqual(len(values), 26)
         self.assertEqual(
             values["destination-prefix"], Path(DEFAULT_DESTINATION_PREFIX)
+        )
+        self.assertEqual(
+            values["gvmd-data-destination"],
+            Path(DEFAULT_DESTINATION_PREFIX) / DEFAULT_GVMD_DATA_PATH,
+        )
+        self.assertEqual(
+            values["gvmd-data-url"],
+            f"{DEFAULT_RSYNC_URL}{DEFAULT_GVMD_DATA_URL_PATH}",
         )
         self.assertEqual(values["feed-url"], DEFAULT_RSYNC_URL)
         self.assertEqual(
@@ -177,6 +193,8 @@ class ConfigTestCase(unittest.TestCase):
         content = """[greenbone-feed-sync]
 destination-prefix = "/opt/lib"
 feed-url = "rsync://lorem.ipsum"
+gvmd-data-destination = "/usr/lib/gvmd-data"
+gvmd-data-url = "rsync://foo.bar/gvmd-data"
 notus-destination = "/usr/lib/notus"
 notus-url = "rsync://foo.bar/notus"
 nasl-destination = "/usr/lib/openvas/plugins/"
@@ -207,6 +225,13 @@ fail-fast = true
 
         self.assertEqual(values["destination-prefix"], Path("/opt/lib"))
         self.assertEqual(values["feed-url"], "rsync://lorem.ipsum")
+        self.assertEqual(
+            values["gvmd-data-destination"], Path("/usr/lib/gvmd-data")
+        )
+        self.assertEqual(values["gvmd-data-url"], "rsync://foo.bar/gvmd-data")
+        self.assertEqual(
+            values["nasl-destination"], Path("/usr/lib/openvas/plugins")
+        )
         self.assertEqual(values["notus-destination"], Path("/usr/lib/notus"))
         self.assertEqual(values["notus-url"], "rsync://foo.bar/notus")
         self.assertEqual(
@@ -263,6 +288,10 @@ destination-prefix = "/opt/lib/"
         values = Config.load(path_mock)
 
         self.assertEqual(values["destination-prefix"], Path("/opt/lib"))
+        self.assertEqual(
+            values["gvmd-data-destination"],
+            Path("/opt/lib/gvm/data-objects/gvmd/22.04"),
+        )
         self.assertEqual(values["notus-destination"], Path("/opt/lib/notus"))
         self.assertEqual(
             values["nasl-destination"], Path("/opt/lib/openvas/plugins")
@@ -304,6 +333,10 @@ feed-url = "rsync://foo.bar"
 
         self.assertEqual(values["feed-url"], "rsync://foo.bar")
         self.assertEqual(
+            values["gvmd-data-url"],
+            "rsync://foo.bar/data-feed/22.04/",
+        )
+        self.assertEqual(
             values["notus-url"],
             "rsync://foo.bar/vulnerability-feed/22.04/vt-data/notus/",
         )
@@ -337,6 +370,8 @@ feed-url = "rsync://foo.bar"
         {
             "GREENBONE_FEED_SYNC_DESTINATION_PREFIX": "/opt/lib",
             "GREENBONE_FEED_SYNC_URL": "rsync://lorem.ipsum",
+            "GREENBONE_FEED_SYNC_GVMD_DATA_DESTINATION": "/usr/lib/gvmd-data",
+            "GREENBONE_FEED_SYNC_GVMD_DATA_URL": "rsync://foo.bar/gvmd-data",
             "GREENBONE_FEED_SYNC_NOTUS_DESTINATION": "/usr/lib/notus",
             "GREENBONE_FEED_SYNC_NOTUS_URL": "rsync://foo.bar/notus",
             "GREENBONE_FEED_SYNC_NASL_DESTINATION": "/usr/lib/openvas/plugins/",
@@ -366,6 +401,10 @@ feed-url = "rsync://foo.bar"
 
         self.assertEqual(values["destination-prefix"], Path("/opt/lib"))
         self.assertEqual(values["feed-url"], "rsync://lorem.ipsum")
+        self.assertEqual(
+            values["gvmd-data-destination"], Path("/usr/lib/gvmd-data")
+        )
+        self.assertEqual(values["gvmd-data-url"], "rsync://foo.bar/gvmd-data")
         self.assertEqual(values["notus-destination"], Path("/usr/lib/notus"))
         self.assertEqual(values["notus-url"], "rsync://foo.bar/notus")
         self.assertEqual(
@@ -416,6 +455,8 @@ feed-url = "rsync://foo.bar"
         {
             "GREENBONE_FEED_SYNC_DESTINATION_PREFIX": "/opt/lib",
             "GREENBONE_FEED_SYNC_URL": "rsync://lorem.ipsum",
+            "GREENBONE_FEED_SYNC_GVMD_DATA_DESTINATION": "/usr/lib/gvmd-data",
+            "GREENBONE_FEED_SYNC_GVMD_DATA_URL": "rsync://foo.bar/gvmd-data",
             "GREENBONE_FEED_SYNC_NOTUS_DESTINATION": "/usr/lib/notus",
             "GREENBONE_FEED_SYNC_NOTUS_URL": "rsync://foo.bar/notus",
             "GREENBONE_FEED_SYNC_NASL_DESTINATION": "/usr/lib/openvas/plugins/",
@@ -444,6 +485,8 @@ feed-url = "rsync://foo.bar"
         content = """[greenbone-feed-sync]
 destination-prefix = "/svr/lib"
 feed-url = "rsync://ipsum.lorem"
+gvmd-data-destination = "/root/notus"
+gvmd-data-url = "rsync://bar.foo/notus"
 notus-destination = "/root/notus"
 notus-url = "rsync://bar.foo/notus"
 nasl-destination = "/root/openvas/plugins/"
@@ -474,6 +517,10 @@ fail-fast = false
 
         self.assertEqual(values["destination-prefix"], Path("/opt/lib"))
         self.assertEqual(values["feed-url"], "rsync://lorem.ipsum")
+        self.assertEqual(
+            values["gvmd-data-destination"], Path("/usr/lib/gvmd-data")
+        )
+        self.assertEqual(values["gvmd-data-url"], "rsync://foo.bar/gvmd-data")
         self.assertEqual(values["notus-destination"], Path("/usr/lib/notus"))
         self.assertEqual(values["notus-url"], "rsync://foo.bar/notus")
         self.assertEqual(
@@ -569,6 +616,14 @@ class CliParserTestCase(unittest.TestCase):
             args.destination_prefix, Path(DEFAULT_DESTINATION_PREFIX)
         )
         self.assertEqual(args.feed_url, DEFAULT_RSYNC_URL)
+        self.assertEqual(
+            args.gvmd_data_destination,
+            Path(DEFAULT_DESTINATION_PREFIX) / DEFAULT_GVMD_DATA_PATH,
+        )
+        self.assertEqual(
+            args.gvmd_data_url,
+            f"{DEFAULT_RSYNC_URL}{DEFAULT_GVMD_DATA_URL_PATH}",
+        )
         self.assertEqual(
             args.notus_destination,
             Path(DEFAULT_DESTINATION_PREFIX) / DEFAULT_NOTUS_PATH,
@@ -732,6 +787,18 @@ class CliParserTestCase(unittest.TestCase):
             "(choose from 0, 1, 2, 3, 4, 5, 6, 7, 8, 9)",
             f.getvalue(),
         )
+
+    def test_gvmd_data_destination(self):
+        parser = CliParser()
+        args = parser.parse_arguments(["--gvmd-data-destination", "foo/bar"])
+        self.assertEqual(args.gvmd_data_destination, Path("foo/bar"))
+
+    def test_gvmd_data_url(self):
+        parser = CliParser()
+        args = parser.parse_arguments(
+            ["--gvmd-data-url", "rsync://foo.bar/gvmd-data"]
+        )
+        self.assertEqual(args.gvmd_data_url, "rsync://foo.bar/gvmd-data")
 
     def test_notus_destination(self):
         parser = CliParser()
