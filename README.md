@@ -190,7 +190,7 @@ is only required for experts and testing purposes.
 |------|-------|
 | CLI Argument | `--nasl-destination` |
 | Config Variable  | nasl-destination |
-| Environment Variable | `GREENBONE_NASL_DESTINATION` |
+| Environment Variable | `GREENBONE_FEED_SYNC_NASL_DESTINATION` |
 | Default Value | `/var/lib/openvas/plugins` |
 | Description | Destination of the downloaded nasl data. |
 
