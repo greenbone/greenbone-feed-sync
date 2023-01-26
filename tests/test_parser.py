@@ -105,7 +105,7 @@ class ConfigTestCase(unittest.TestCase):
     def test_defaults(self):
         values = Config.load()
 
-        self.assertEqual(len(values), 26)
+        self.assertEqual(len(values), 27)
         self.assertEqual(
             values["destination-prefix"], Path(DEFAULT_DESTINATION_PREFIX)
         )
@@ -188,6 +188,7 @@ class ConfigTestCase(unittest.TestCase):
         self.assertIsNone(values["private-directory"])
         self.assertIsNone(values["verbose"])
         self.assertFalse(values["fail-fast"])
+        self.assertIsNone(values["rsync-timeout"])
 
     def test_config_file(self):
         content = """[greenbone-feed-sync]
@@ -217,6 +218,7 @@ compression-level = 1
 private-directory = "keep-this"
 verbose = 5
 fail-fast = true
+rsync-timeout = 120
 """
         path_mock = MagicMock(spec=Path)
         path_mock.read_text.return_value = content
@@ -276,6 +278,7 @@ fail-fast = true
         self.assertEqual(values["private-directory"], Path("keep-this"))
         self.assertEqual(values["verbose"], 5)
         self.assertTrue(values["fail-fast"])
+        self.assertEqual(values["rsync-timeout"], 120)
 
     def test_destination_prefix(self):
         content = """[greenbone-feed-sync]
@@ -394,6 +397,7 @@ feed-url = "rsync://foo.bar"
             "GREENBONE_FEED_SYNC_PRIVATE_DIRECTORY": "keep-this",
             "GREENBONE_FEED_SYNC_VERBOSE": "5",
             "GREENBONE_FEED_SYNC_FAIL_FAST": "1",
+            "GREENBONE_FEED_SYNC_RSYNC_TIMEOUT": "120",
         },
     )
     def test_environment(self):
@@ -449,6 +453,7 @@ feed-url = "rsync://foo.bar"
         self.assertEqual(values["private-directory"], Path("keep-this"))
         self.assertEqual(values["verbose"], 5)
         self.assertTrue(values["fail-fast"])
+        self.assertEqual(values["rsync-timeout"], 120)
 
     @patch.dict(
         "os.environ",
@@ -479,6 +484,7 @@ feed-url = "rsync://foo.bar"
             "GREENBONE_FEED_SYNC_PRIVATE_DIRECTORY": "keep-this",
             "GREENBONE_FEED_SYNC_VERBOSE": "5",
             "GREENBONE_FEED_SYNC_FAIL_FAST": "1",
+            "GREENBONE_FEED_SYNC_RSYNC_TIMEOUT": "120",
         },
     )
     def test_environment_overrides_config_file(self):
@@ -509,6 +515,7 @@ compression-level = 7
 private-directory = "private"
 verbose = 99
 fail-fast = false
+rsync-timeout = 360
 """
         path_mock = MagicMock(spec=Path)
         path_mock.read_text.return_value = content
@@ -565,6 +572,7 @@ fail-fast = false
         self.assertEqual(values["private-directory"], Path("keep-this"))
         self.assertEqual(values["verbose"], 5)
         self.assertTrue(values["fail-fast"])
+        self.assertEqual(values["rsync-timeout"], 120)
 
     def test_invalid_toml(self):
         content = "This is not TOML"
@@ -694,6 +702,7 @@ class CliParserTestCase(unittest.TestCase):
         self.assertIsNone(args.private_directory)
         self.assertIsNone(args.verbose)
         self.assertFalse(args.fail_fast)
+        self.assertIsNone(args.rsync_timeout)
 
     def test_help(self):
         parser = CliParser()
@@ -913,6 +922,11 @@ class CliParserTestCase(unittest.TestCase):
         parser = CliParser()
         args = parser.parse_arguments(["--wait-interval", "100"])
         self.assertEqual(args.wait_interval, 100)
+
+    def test_rsync_timeout(self):
+        parser = CliParser()
+        args = parser.parse_arguments(["--rsync-timeout", "120"])
+        self.assertEqual(args.rsync_timeout, 120)
 
     def test_other(self):
         parser = CliParser()

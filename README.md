@@ -38,6 +38,7 @@ New script for syncing the Greenbone Community Feed
   - [fail-fast](#fail-fast)
   - [no-wait](#no-wait)
   - [wait-interval](#wait-interval)
+  - [rsync-timeout](#rsync-timeout)
 - [Config](#config-1)
 - [Development](#development)
 - [Maintainer](#maintainer)
@@ -377,6 +378,16 @@ is only required for experts and testing purposes.
 | Environment Variable | `GREENBONE_FEED_SYNC_LOCK_WAIT_INTERVAL` |
 | Default Value | 5 |
 | Description | Time to wait in seconds after failed lock attempt before re-trying to lock the file. |
+
+### rsync-timeout
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--rsync-timeout` |
+| Config Variable  | rsync-timeout |
+| Environment Variable | `GREENBONE_FEED_SYNC_RSYNC_TIMEOUT` |
+| Default Value | |
+| Description | Maximum I/O timeout in seconds used for rsync. If no data is transferred for the specified time then rsync will exit. By default no timeout is set and the rsync default will be used. |
 
 ## Config
 

@@ -40,6 +40,9 @@ async def exec_rsync(*args: Iterable[str]) -> None:
 
 DEFAULT_RSYNC_URL = "rsync://feed.community.greenbone.net/community"
 DEFAULT_RSYNC_COMPRESSION_LEVEL = 9
+DEFAULT_RSYNC_TIMEOUT = (
+    None  # in seconds. 0 means no timeout and None use rsync default
+)
 
 
 class Rsync:
@@ -52,11 +55,13 @@ class Rsync:
         *,
         verbose: bool = False,
         private_subdir: Optional[Path] = None,
-        compression_level: int = DEFAULT_RSYNC_COMPRESSION_LEVEL,
+        compression_level: Optional[int] = DEFAULT_RSYNC_COMPRESSION_LEVEL,
+        timeout: Optional[int] = DEFAULT_RSYNC_TIMEOUT,
     ) -> None:
         self.verbose = verbose
         self.private_subdir = private_subdir
         self.compression_level = compression_level
+        self.timeout = timeout
 
     async def sync(self, url: str, destination: Union[str, Path]) -> None:
         """
@@ -77,6 +82,14 @@ class Rsync:
             "--partial",
             "--progress",
         ]
+
+        rsync_timeout = (
+            [
+                f"--timeout={self.timeout}",
+            ]
+            if self.timeout is not None
+            else []
+        )
 
         rsync_compress = (
             [
@@ -107,6 +120,7 @@ class Rsync:
 
         args = (
             rsync_default_options
+            + rsync_timeout
             + rsync_verbose
             + rsync_compress
             + rsync_delete
