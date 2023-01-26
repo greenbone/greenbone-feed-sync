@@ -193,6 +193,7 @@ _CONFIG = (
     ("private-directory", "GREENBONE_FEED_SYNC_PRIVATE_DIRECTORY", None, Path),
     ("verbose", "GREENBONE_FEED_SYNC_VERBOSE", None, int),
     ("fail-fast", "GREENBONE_FEED_SYNC_FAIL_FAST", False, bool),
+    ("rsync-timeout", "GREENBONE_FEED_SYNC_RSYNC_TIMEOUT", None, int),
 )
 
 
@@ -420,6 +421,14 @@ class CliParser:
             type=int,
             help="Time to wait in seconds after failed lock attempt before"
             "re-trying to lock the file. (Default: %(default)s seconds)",
+        )
+
+        parser.add_argument(
+            "--rsync-timeout",
+            type=int,
+            help="Maximum I/O timeout in seconds used for rsync. If no data is "
+            "transferred for the specified time then rsync will exit. By "
+            "default no timeout is set and the rsync default will be used.",
         )
 
         self.parser = parser

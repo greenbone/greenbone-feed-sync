@@ -162,3 +162,27 @@ class ExecRsyncTestCase(unittest.IsolatedAsyncioTestCase):
         exec_mock.assert_awaited_once_with(
             "rsync", "foo", "bar", stderr=asyncio.subprocess.PIPE
         )
+
+    @patch("greenbone.feed.sync.rsync.exec_rsync", autospec=True)
+    async def test_rsync_with_timeout(self, exec_mock: AsyncMock):
+        rsync = Rsync(timeout=120)
+        await rsync.sync("rsync://foo.bar/baz", "/tmp/baz")
+
+        exec_mock.assert_awaited_once_with(
+            "--links",
+            "--times",
+            "--omit-dir-times",
+            "--recursive",
+            "--partial",
+            "--progress",
+            "--timeout=120",
+            "-q",
+            "--compress-level=9",
+            "--delete",
+            "--perms",
+            "--chmod=Fugo+r,Fug+w,Dugo-s,Dugo+rx,Dug+w",
+            "--copy-unsafe-links",
+            "--hard-links",
+            "rsync://foo.bar/baz",
+            "/tmp/baz",
+        )
