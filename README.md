@@ -131,7 +131,7 @@ Python Package Index (pypi) using [pip]
 | Config Variable  | feed-url |
 | Environment Variable | `GREENBONE_FEED_SYNC_URL` |
 | Default Value | `rsync://feed.community.greenbone.net/community` |
-| Description | URL to download the feed data from. |
+| Description | URL to download the feed data from. Other URLs will be relative to this URL by default. For example using `rsync://example.com` as feed url the notus url will be `rsync://example.com/vulnerability-feed/22.04/vt-data/notus/`. |
 
 ### destination-prefix
 
@@ -141,7 +141,7 @@ Python Package Index (pypi) using [pip]
 | Config Variable  | destination-prefix |
 | Environment Variable | `GREENBONE_FEED_SYNC_DESTINATION_PREFIX`  |
 | Default Value | `/var/lib/` |
-| Description | Directory prefix to use for feed data download destinations. |
+| Description | Directory prefix to use for default feed data download destinations. Other download destinations will be relative to this path by default. For example using `/opt/lib` as destination prefix will change the default of the notus destination to `/opt/lib/notus`. |
 
 ### notus-destination
 
