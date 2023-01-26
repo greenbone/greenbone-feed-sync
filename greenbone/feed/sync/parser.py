@@ -81,7 +81,7 @@ _CONFIG = (
     ),
     (
         "nasl-destination",
-        "GREENBONE_NASL_DESTINATION",
+        "GREENBONE_FEED_SYNC_NASL_DESTINATION",
         f"{{destination-prefix}}/{DEFAULT_NASL_PATH}",
         Path,
     ),
