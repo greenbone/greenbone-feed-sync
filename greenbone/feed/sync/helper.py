@@ -84,6 +84,7 @@ async def flock_wait(
                     console.print(f"Acquired lock on {path.absolute()}")
 
                 has_lock = True
+                path.chmod(mode=0o660)
             except OSError as e:
                 if e.errno in (errno.EAGAIN, errno.EACCES):
                     if wait_interval is None:
