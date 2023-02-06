@@ -52,7 +52,6 @@ class FlockTestCase(unittest.IsolatedAsyncioTestCase):
                     pass
 
     async def test_console_output(self):
-
         with temp_directory() as temp_dir:
             lock_file = temp_dir / "file.lock"
             console = MagicMock(spec=Console)
