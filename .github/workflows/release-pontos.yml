@@ -36,4 +36,4 @@ jobs:
           gpg-fingerprint: ${{ secrets.GPG_FINGERPRINT }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
           strategy: calendar
-          ref: ${{ env.RELEASE_REV }}
+          ref: ${{ env.RELEASE_REF }}
