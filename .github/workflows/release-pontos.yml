@@ -25,7 +25,7 @@ jobs:
             echo "RELEASE_REF=${{ github.base_ref }}" >> $GITHUB_ENV
           fi
       - name: Release with release action
-        uses: greenbone/actions/release-python@v2
+        uses: greenbone/actions/release@v2
         with:
           version: "3.10"
           conventional-commits: true
