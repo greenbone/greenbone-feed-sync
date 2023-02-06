@@ -20,7 +20,6 @@ import unittest
 from unittest.mock import MagicMock, call, patch
 
 from pontos.testing import temp_directory
-from rich.console import Console
 
 from greenbone.feed.sync.errors import GreenboneFeedSyncError, RsyncError
 from greenbone.feed.sync.main import Sync, feed_sync, filter_syncs, main
@@ -48,17 +47,64 @@ class FilterSyncsTestCase(unittest.TestCase):
 
 
 class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
+    @patch("greenbone.feed.sync.main.Rsync", autospec=True)
+    @patch("greenbone.feed.sync.main.change_user_and_group", autospec=True)
     @patch("greenbone.feed.sync.main.is_root", autospec=True)
-    async def test_do_not_run_as_root(self, is_root_mock: MagicMock):
+    async def test_do_not_run_as_root(
+        self,
+        is_root_mock: MagicMock,
+        change_user_mock: MagicMock,
+        rsync_mock: MagicMock,
+    ):
         is_root_mock.return_value = True
-        console = MagicMock(spec=Console)
+        console = MagicMock()
+        rsync_mock_instance = rsync_mock.return_value
 
-        with self.assertRaisesRegex(
-            GreenboneFeedSyncError,
-            "The sync script should not be run as root. Running the script as "
-            "root may cause several hard to find permissions issues.",
+        with temp_directory() as temp_dir, patch.dict(
+            "os.environ",
+            {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
+        ), patch.object(
+            sys,
+            "argv",
+            [
+                "greenbone-feed-sync",
+                "--type",
+                "nvt",
+            ],
         ):
-            await feed_sync(console=console, error_console=console)
+            ret = await feed_sync(console=console, error_console=console)
+            self.assertEqual(ret, 0)
+
+        change_user_mock.assert_called_once_with("gvm", "gvm")
+        rsync_mock.assert_called_once_with(
+            private_subdir=None, verbose=False, compression_level=9
+        )
+        console.print.assert_has_calls(
+            [
+                call(
+                    "Trying to acquire lock on "
+                    f"{temp_dir}/openvas/feed-update.lock"
+                ),
+                call(f"Acquired lock on {temp_dir}/openvas/feed-update.lock"),
+                call(f"Releasing lock on {temp_dir}/openvas/feed-update.lock"),
+                call(),
+            ]
+        )
+
+        rsync_mock_instance.sync.assert_has_awaits(
+            [
+                call(
+                    url="rsync://feed.community.greenbone.net/community/"
+                    "vulnerability-feed/22.04/vt-data/notus/",
+                    destination=temp_dir / "notus",
+                ),
+                call(
+                    url="rsync://feed.community.greenbone.net/community/"
+                    "vulnerability-feed/22.04/vt-data/nasl/",
+                    destination=temp_dir / "openvas/plugins",
+                ),
+            ]
+        )
 
     @patch("greenbone.feed.sync.main.Rsync", autospec=True)
     async def test_sync_nvts(self, rsync_mock: MagicMock):

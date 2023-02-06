@@ -18,7 +18,7 @@
 import os
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
-from typing import Any, Optional, Sequence
+from typing import Any, Optional, Sequence, Union
 
 from greenbone.feed.sync.__version__ import __version__
 from greenbone.feed.sync.errors import ConfigFileError
@@ -32,6 +32,19 @@ try:
     import tomllib
 except ImportError:
     import tomli as tomllib
+
+
+def maybe_int(value: str) -> Union[int, str]:
+    """
+    Convert string into int if possible
+    """
+    try:
+        value = int(value)
+    except ValueError:
+        pass
+
+    return value
+
 
 DEFAULT_NOTUS_URL_PATH = "/vulnerability-feed/22.04/vt-data/notus/"
 DEFAULT_NASL_URL_PATH = "/vulnerability-feed/22.04/vt-data/nasl/"
@@ -58,6 +71,9 @@ DEFAULT_OPENVAS_LOCK_FILE_PATH = "openvas/feed-update.lock"
 
 DEFAULT_CONFIG_FILE = "/etc/gvm/greenbone-feed-sync.toml"
 DEFAULT_USER_CONFIG_FILE = "~/.config/greenbone-feed-sync.toml"
+
+DEFAULT_GROUP = "gvm"
+DEFAULT_USER = "gvm"
 
 DEFAULT_VERBOSITY = 2
 
@@ -194,6 +210,8 @@ _CONFIG = (
     ("verbose", "GREENBONE_FEED_SYNC_VERBOSE", None, int),
     ("fail-fast", "GREENBONE_FEED_SYNC_FAIL_FAST", False, bool),
     ("rsync-timeout", "GREENBONE_FEED_SYNC_RSYNC_TIMEOUT", None, int),
+    ("group", "GREENBONE_FEED_SYNC_GROUP", DEFAULT_GROUP, maybe_int),
+    ("user", "GREENBONE_FEED_SYNC_USER", DEFAULT_USER, maybe_int),
 )
 
 
@@ -429,6 +447,20 @@ class CliParser:
             help="Maximum I/O timeout in seconds used for rsync. If no data is "
             "transferred for the specified time then rsync will exit. By "
             "default no timeout is set and the rsync default will be used.",
+        )
+
+        permissions_group = parser.add_argument_group()
+        permissions_group.add_argument(
+            "--user",
+            type=maybe_int,
+            help="If started as root, use this user name or ID to run the "
+            "script. (Default: %(default)s)",
+        )
+        permissions_group.add_argument(
+            "--group",
+            type=maybe_int,
+            help="If started as root, use this group name or ID to run the "
+            "script. (Default: %(default)s)",
         )
 
         self.parser = parser

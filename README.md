@@ -39,6 +39,8 @@ New script for syncing the Greenbone Community Feed
   - [no-wait](#no-wait)
   - [wait-interval](#wait-interval)
   - [rsync-timeout](#rsync-timeout)
+  - [group](#group)
+  - [user](#user)
 - [Config](#config-1)
 - [Development](#development)
 - [Maintainer](#maintainer)
@@ -388,6 +390,26 @@ is only required for experts and testing purposes.
 | Environment Variable | `GREENBONE_FEED_SYNC_RSYNC_TIMEOUT` |
 | Default Value | |
 | Description | Maximum I/O timeout in seconds used for rsync. If no data is transferred for the specified time then rsync will exit. By default no timeout is set and the rsync default will be used. |
+
+### group
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--group` |
+| Config Variable  | group |
+| Environment Variable | `GREENBONE_FEED_SYNC_GROUP` |
+| Default Value | gvm |
+| Description | If the greenbone-feed-sync script is run as root, the effective group is changed to this group name or ID. |
+
+### user
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--user` |
+| Config Variable  | user |
+| Environment Variable | `GREENBONE_FEED_SYNC_USER` |
+| Default Value | gvm |
+| Description | If the greenbone-feed-sync script is run as root, the effective user is changed to this user name or ID. |
 
 ## Config
 

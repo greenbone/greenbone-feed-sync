@@ -30,6 +30,7 @@ from greenbone.feed.sync.parser import (
     DEFAULT_CERT_DATA_URL_PATH,
     DEFAULT_CONFIG_FILE,
     DEFAULT_DESTINATION_PREFIX,
+    DEFAULT_GROUP,
     DEFAULT_GVMD_DATA_PATH,
     DEFAULT_GVMD_DATA_URL_PATH,
     DEFAULT_GVMD_LOCK_FILE_PATH,
@@ -46,6 +47,7 @@ from greenbone.feed.sync.parser import (
     DEFAULT_SCAN_CONFIGS_URL_PATH,
     DEFAULT_SCAP_DATA_PATH,
     DEFAULT_SCAP_DATA_URL_PATH,
+    DEFAULT_USER,
     DEFAULT_USER_CONFIG_FILE,
     CliParser,
     Config,
@@ -105,7 +107,7 @@ class ConfigTestCase(unittest.TestCase):
     def test_defaults(self):
         values = Config.load()
 
-        self.assertEqual(len(values), 27)
+        self.assertEqual(len(values), 29)
         self.assertEqual(
             values["destination-prefix"], Path(DEFAULT_DESTINATION_PREFIX)
         )
@@ -189,6 +191,8 @@ class ConfigTestCase(unittest.TestCase):
         self.assertIsNone(values["verbose"])
         self.assertFalse(values["fail-fast"])
         self.assertIsNone(values["rsync-timeout"])
+        self.assertEqual(values["group"], DEFAULT_GROUP)
+        self.assertEqual(values["user"], DEFAULT_USER)
 
     def test_config_file(self):
         content = """[greenbone-feed-sync]
@@ -219,6 +223,8 @@ private-directory = "keep-this"
 verbose = 5
 fail-fast = true
 rsync-timeout = 120
+group = "foo"
+user = "bar"
 """
         path_mock = MagicMock(spec=Path)
         path_mock.read_text.return_value = content
@@ -279,6 +285,8 @@ rsync-timeout = 120
         self.assertEqual(values["verbose"], 5)
         self.assertTrue(values["fail-fast"])
         self.assertEqual(values["rsync-timeout"], 120)
+        self.assertEqual(values["group"], "foo")
+        self.assertEqual(values["user"], "bar")
 
     def test_destination_prefix(self):
         content = """[greenbone-feed-sync]
@@ -398,6 +406,8 @@ feed-url = "rsync://foo.bar"
             "GREENBONE_FEED_SYNC_VERBOSE": "5",
             "GREENBONE_FEED_SYNC_FAIL_FAST": "1",
             "GREENBONE_FEED_SYNC_RSYNC_TIMEOUT": "120",
+            "GREENBONE_FEED_SYNC_GROUP": "123",
+            "GREENBONE_FEED_SYNC_USER": "321",
         },
     )
     def test_environment(self):
@@ -454,6 +464,8 @@ feed-url = "rsync://foo.bar"
         self.assertEqual(values["verbose"], 5)
         self.assertTrue(values["fail-fast"])
         self.assertEqual(values["rsync-timeout"], 120)
+        self.assertEqual(values["group"], 123)
+        self.assertEqual(values["user"], 321)
 
     @patch.dict(
         "os.environ",
@@ -1179,3 +1191,19 @@ wait-interval = 100
         self.assertEqual(args.type, "gvmd-data")
         args = parser.parse_arguments(["--type", "gvmd-data"])
         self.assertEqual(args.type, "gvmd-data")
+
+    def test_group(self):
+        parser = CliParser()
+        args = parser.parse_arguments(["--group", "some_group"])
+        self.assertEqual(args.group, "some_group")
+
+        args = parser.parse_arguments(["--group", "123"])
+        self.assertEqual(args.group, 123)
+
+    def test_user(self):
+        parser = CliParser()
+        args = parser.parse_arguments(["--user", "some_user"])
+        self.assertEqual(args.user, "some_user")
+
+        args = parser.parse_arguments(["--user", "123"])
+        self.assertEqual(args.user, 123)
