@@ -156,5 +156,5 @@ def change_user_and_group(
     if isinstance(group, str):
         group = shutil._get_gid(group)  # pylint: disable=protected-access
 
-    os.seteuid(user)
     os.setegid(group)
+    os.seteuid(user)
