@@ -24,7 +24,12 @@ from pontos.testing import temp_directory
 from rich.console import Console
 
 from greenbone.feed.sync.errors import FileLockingError
-from greenbone.feed.sync.helper import Spinner, flock_wait, is_root
+from greenbone.feed.sync.helper import (
+    Spinner,
+    change_user_and_group,
+    flock_wait,
+    is_root,
+)
 
 
 class FlockTestCase(unittest.IsolatedAsyncioTestCase):
@@ -176,3 +181,13 @@ class IsRootTestCase(unittest.TestCase):
         geteuid_mock.return_value = 0
 
         self.assertTrue(is_root())
+
+
+class ChangeUserAndGroupTestCase(unittest.TestCase):
+    @patch("greenbone.feed.sync.helper.os", autospec=True)
+    def test_change(self, os_mock: MagicMock):
+        # root user should exist on all systems
+        change_user_and_group("root", "root")
+
+        os_mock.seteuid.assert_called_once_with(0)
+        os_mock.setegid.assert_called_once_with(0)

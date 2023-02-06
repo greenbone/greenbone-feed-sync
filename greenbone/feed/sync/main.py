@@ -23,7 +23,12 @@ from typing import Iterable, NoReturn
 from rich.console import Console
 
 from greenbone.feed.sync.errors import GreenboneFeedSyncError, RsyncError
-from greenbone.feed.sync.helper import Spinner, flock_wait, is_root
+from greenbone.feed.sync.helper import (
+    Spinner,
+    change_user_and_group,
+    flock_wait,
+    is_root,
+)
 from greenbone.feed.sync.parser import DEFAULT_VERBOSITY, CliParser
 from greenbone.feed.sync.rsync import Rsync
 
@@ -68,12 +73,6 @@ async def feed_sync(console: Console, error_console: Console) -> int:
     """
     Sync the feeds
     """
-    if is_root():
-        raise GreenboneFeedSyncError(
-            "The sync script should not be run as root. Running the script as "
-            "root may cause several hard to find permissions issues."
-        )
-
     parser = CliParser()
     args = parser.parse_arguments()
 
@@ -81,6 +80,14 @@ async def feed_sync(console: Console, error_console: Console) -> int:
         verbose = 0
     else:
         verbose = DEFAULT_VERBOSITY if args.verbose is None else args.verbose
+
+    if is_root():
+        if verbose >= 1:
+            console.print(
+                f"Running as root. Switching to user '{args.user}' and "
+                f"group '{args.group}'."
+            )
+            change_user_and_group(args.user, args.group)
 
     rsync = Rsync(
         private_subdir=args.private_directory,

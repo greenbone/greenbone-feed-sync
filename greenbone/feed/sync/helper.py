@@ -19,6 +19,7 @@ import asyncio
 import errno
 import fcntl
 import os
+import shutil
 from contextlib import asynccontextmanager
 from pathlib import Path
 from types import TracebackType
@@ -138,3 +139,22 @@ class Spinner:
         exc_tb: Optional[TracebackType],
     ) -> None:
         self._live.stop()
+
+
+def change_user_and_group(
+    user: Union[str, int], group: Union[str, int]
+) -> None:
+    """
+    Change effective user or group of the current running process
+
+    Args:
+        user: User name or ID
+        group: Group name or ID
+    """
+    if isinstance(user, str):
+        user = shutil._get_uid(user)  # pylint: disable=protected-access
+    if isinstance(group, str):
+        group = shutil._get_gid(group)  # pylint: disable=protected-access
+
+    os.seteuid(user)
+    os.setegid(group)
