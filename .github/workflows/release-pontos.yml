@@ -4,11 +4,6 @@ on:
   pull_request:
     types: [closed]
   workflow_dispatch:
-    inputs:
-      branch:
-        description: "Branch"
-        required: true
-        default: "main"
 
 jobs:
   build-and-release:
@@ -20,7 +15,7 @@ jobs:
       - name: Setting the Reference
         run: |
           if [[ "${{ github.event_name }}" = "workflow_dispatch" ]]; then
-            echo "RELEASE_REF=${{ github.event.inputs.branch }}" >> $GITHUB_ENV
+            echo "RELEASE_REF=${{ github.ref_name }}" >> $GITHUB_ENV
           else
             echo "RELEASE_REF=${{ github.base_ref }}" >> $GITHUB_ENV
           fi
