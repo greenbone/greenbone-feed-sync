@@ -256,7 +256,11 @@ class CliParser:
             help="Show this help message and exit.",
             action="store_true",
         )
-
+        parser.add_argument(
+            "--selftest",
+            help="Perform self-test and set exit code",
+            action="store_true",
+        )
         output_group = parser.add_mutually_exclusive_group()
         output_group.add_argument(
             "--verbose",
