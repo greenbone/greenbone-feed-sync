@@ -22,7 +22,13 @@ from unittest.mock import MagicMock, call, patch
 from pontos.testing import temp_directory
 
 from greenbone.feed.sync.errors import GreenboneFeedSyncError, RsyncError
-from greenbone.feed.sync.main import Sync, feed_sync, filter_syncs, main
+from greenbone.feed.sync.main import (
+    Sync,
+    do_selftest,
+    feed_sync,
+    filter_syncs,
+    main,
+)
 
 
 class FilterSyncsTestCase(unittest.TestCase):
@@ -44,6 +50,29 @@ class FilterSyncsTestCase(unittest.TestCase):
 
         self.assertEqual(sync_list.syncs[0], sync_a)
         self.assertEqual(sync_list.syncs[1], sync_b)
+
+
+class DoSelftestTestCase(unittest.TestCase):
+    @patch("greenbone.feed.sync.main.subprocess.run")
+    def test_do_selftest(self, mock_subproc_run: MagicMock):
+        mock_subproc_run.side_effect = [b"foo", b"bar"]
+        console = MagicMock()
+
+        self.assertEqual(do_selftest(console), 0)
+
+    @patch("greenbone.feed.sync.main.subprocess.run")
+    def test_do_selftest_sha_fail(self, mock_subproc_run: MagicMock):
+        mock_subproc_run.side_effect = [b"foo", PermissionError]
+        console = MagicMock()
+
+        self.assertEqual(do_selftest(console), 1)
+
+    @patch("greenbone.feed.sync.main.subprocess.run")
+    def test_do_selftest_rsync_fail(self, mock_subproc_run: MagicMock):
+        mock_subproc_run.side_effect = [PermissionError, b"bar"]
+        console = MagicMock()
+
+        self.assertEqual(do_selftest(console), 1)
 
 
 class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
