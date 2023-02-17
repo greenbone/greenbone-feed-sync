@@ -81,7 +81,7 @@ def do_selftest(error_console: Console) -> int:
             stderr=subprocess.DEVNULL,
             check=True,
         )
-    except PermissionError:
+    except (PermissionError, FileNotFoundError, subprocess.CalledProcessError):
         error_console.print("The sha256sum binary could not be found.")
         return 1
 
@@ -92,7 +92,7 @@ def do_selftest(error_console: Console) -> int:
             stderr=subprocess.DEVNULL,
             check=True,
         )
-    except PermissionError:
+    except (PermissionError, FileNotFoundError, subprocess.CalledProcessError):
         error_console.print("The rsync binary could not be found.")
         return 1
 

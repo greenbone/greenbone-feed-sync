@@ -750,6 +750,11 @@ class CliParserTestCase(unittest.TestCase):
         args = parser.parse_arguments(["--quiet"])
         self.assertTrue(args.quiet)
 
+    def test_selftest(self):
+        parser = CliParser()
+        args = parser.parse_arguments(["--selftest"])
+        self.assertTrue(args.selftest)
+
     @patch("greenbone.feed.sync.parser.Path")
     def test_use_default_config_files(self, path_mock: Path):
         path_mock_instance = path_mock.return_value
