@@ -338,7 +338,7 @@ is only required for experts and testing purposes.
 | CLI Argument | `--gvmd-lock-file` |
 | Config Variable  | gvmd-lock-file |
 | Environment Variable | `GREENBONE_FEED_SYNC_GVMD_LOCK_FILE` |
-| Default Value | `/var/lib/openvas/feed-update.lock` |
+| Default Value | `/var/lib/gvm/feed-update.lock` |
 | Description | File to use for locking the feed synchronization for data loaded by the gvmd daemon. Used to avoid that more then one process accesses the feed data at the same time. |
 
 ### openvas-lock-file
@@ -348,7 +348,7 @@ is only required for experts and testing purposes.
 | CLI Argument | `--openvas-lock-file` |
 | Config Variable  | openvas-lock-file |
 | Environment Variable | `GREENBONE_FEED_SYNC_OPENVAS_LOCK_FILE` |
-| Default Value | `/var/lib/gvm/feed-update.lock` |
+| Default Value | `/var/lib/openvas/feed-update.lock` |
 | Description | File to use for locking the feed synchronization for data loaded by the openvas scanner. Used to avoid that more then one process accesses the feed data at the same time. |
 
 ### fail-fast
