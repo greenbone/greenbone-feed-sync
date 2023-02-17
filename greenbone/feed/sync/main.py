@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import asyncio
+import subprocess
 import sys
 from dataclasses import dataclass
 from typing import Iterable, NoReturn
@@ -69,12 +70,44 @@ def filter_syncs(
     )
 
 
+def do_selftest(error_console: Console) -> int:
+    """
+    Check for sha256sum and rsync commands.
+    """
+    try:
+        subprocess.run(
+            ["sha256sum", "--help"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=True,
+        )
+    except PermissionError:
+        error_console.print("The sha256sum binary could not be found.")
+        return 1
+
+    try:
+        subprocess.run(
+            ["rsync", "--help"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=True,
+        )
+    except PermissionError:
+        error_console.print("The rsync binary could not be found.")
+        return 1
+
+    return 0
+
+
 async def feed_sync(console: Console, error_console: Console) -> int:
     """
     Sync the feeds
     """
     parser = CliParser()
     args = parser.parse_arguments()
+
+    if args.selftest:
+        return do_selftest(error_console)
 
     if args.quiet:
         verbose = 0
