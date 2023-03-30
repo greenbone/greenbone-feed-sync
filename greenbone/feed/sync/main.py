@@ -23,6 +23,7 @@ from typing import Iterable, NoReturn
 
 from rich.console import Console
 
+from greenbone.feed.sync.config import DEFAULT_VERBOSITY
 from greenbone.feed.sync.errors import GreenboneFeedSyncError, RsyncError
 from greenbone.feed.sync.helper import (
     Spinner,
@@ -30,7 +31,7 @@ from greenbone.feed.sync.helper import (
     flock_wait,
     is_root,
 )
-from greenbone.feed.sync.parser import DEFAULT_VERBOSITY, CliParser
+from greenbone.feed.sync.parser import CliParser
 from greenbone.feed.sync.rsync import Rsync
 
 __all__ = ("main",)

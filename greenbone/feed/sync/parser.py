@@ -15,204 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
-from typing import Any, Optional, Sequence, Union
+from typing import Any, Optional, Sequence
 
 from greenbone.feed.sync.__version__ import __version__
+from greenbone.feed.sync.config import (
+    DEFAULT_CONFIG_FILE,
+    DEFAULT_USER_CONFIG_FILE,
+    Config,
+    maybe_int,
+)
 from greenbone.feed.sync.errors import ConfigFileError
-from greenbone.feed.sync.helper import DEFAULT_FLOCK_WAIT_INTERVAL
-from greenbone.feed.sync.rsync import (
-    DEFAULT_RSYNC_COMPRESSION_LEVEL,
-    DEFAULT_RSYNC_URL,
-)
-
-try:
-    import tomllib
-except ImportError:
-    import tomli as tomllib
-
-
-def maybe_int(value: str) -> Union[int, str]:
-    """
-    Convert string into int if possible
-    """
-    try:
-        value = int(value)
-    except ValueError:
-        pass
-
-    return value
-
-
-DEFAULT_NOTUS_URL_PATH = "/vulnerability-feed/22.04/vt-data/notus/"
-DEFAULT_NASL_URL_PATH = "/vulnerability-feed/22.04/vt-data/nasl/"
-DEFAULT_SCAP_DATA_URL_PATH = "/vulnerability-feed/22.04/scap-data/"
-DEFAULT_CERT_DATA_URL_PATH = "/vulnerability-feed/22.04/cert-data/"
-DEFAULT_GVMD_DATA_URL_PATH = "/data-feed/22.04/"
-DEFAULT_REPORT_FORMATS_URL_PATH = "/data-feed/22.04/report-formats/"
-DEFAULT_SCAN_CONFIGS_URL_PATH = "/data-feed/22.04/scan-configs/"
-DEFAULT_PORT_LISTS_URL_PATH = "/data-feed/22.04/port-lists/"
-
-DEFAULT_DESTINATION_PREFIX = "/var/lib/"
-
-DEFAULT_NASL_PATH = "openvas/plugins"
-DEFAULT_NOTUS_PATH = "notus"
-DEFAULT_SCAP_DATA_PATH = "gvm/scap-data"
-DEFAULT_CERT_DATA_PATH = "gvm/cert-data"
-DEFAULT_GVMD_DATA_PATH = "gvm/data-objects/gvmd/22.04/"
-DEFAULT_REPORT_FORMATS_PATH = "gvm/data-objects/gvmd/22.04/report-formats"
-DEFAULT_SCAN_CONFIGS_PATH = "gvm/data-objects/gvmd/22.04/scan-configs"
-DEFAULT_PORT_LISTS_PATH = "gvm/data-objects/gvmd/22.04/port-lists"
-
-DEFAULT_GVMD_LOCK_FILE_PATH = "gvm/feed-update.lock"
-DEFAULT_OPENVAS_LOCK_FILE_PATH = "openvas/feed-update.lock"
-
-DEFAULT_CONFIG_FILE = "/etc/gvm/greenbone-feed-sync.toml"
-DEFAULT_USER_CONFIG_FILE = "~/.config/greenbone-feed-sync.toml"
-
-DEFAULT_GROUP = "gvm"
-DEFAULT_USER = "gvm"
-
-DEFAULT_VERBOSITY = 2
-
-_CONFIG = (
-    (
-        "destination-prefix",
-        "GREENBONE_FEED_SYNC_DESTINATION_PREFIX",
-        DEFAULT_DESTINATION_PREFIX,
-        Path,
-    ),
-    ("feed-url", "GREENBONE_FEED_SYNC_URL", DEFAULT_RSYNC_URL, str),
-    (
-        "gvmd-data-destination",
-        "GREENBONE_FEED_SYNC_GVMD_DATA_DESTINATION",
-        f"{{destination-prefix}}/{DEFAULT_GVMD_DATA_PATH}",
-        Path,
-    ),
-    (
-        "gvmd-data-url",
-        "GREENBONE_FEED_SYNC_GVMD_DATA_URL",
-        f"{{feed-url}}{DEFAULT_GVMD_DATA_URL_PATH}",
-        str,
-    ),
-    (
-        "notus-destination",
-        "GREENBONE_FEED_SYNC_NOTUS_DESTINATION",
-        f"{{destination-prefix}}/{DEFAULT_NOTUS_PATH}",
-        Path,
-    ),
-    (
-        "notus-url",
-        "GREENBONE_FEED_SYNC_NOTUS_URL",
-        f"{{feed-url}}{DEFAULT_NOTUS_URL_PATH}",
-        str,
-    ),
-    (
-        "nasl-destination",
-        "GREENBONE_FEED_SYNC_NASL_DESTINATION",
-        f"{{destination-prefix}}/{DEFAULT_NASL_PATH}",
-        Path,
-    ),
-    (
-        "nasl-url",
-        "GREENBONE_FEED_SYNC_NASL_URL",
-        f"{{feed-url}}{DEFAULT_NASL_URL_PATH}",
-        str,
-    ),
-    (
-        "scap-data-destination",
-        "GREENBONE_FEED_SYNC_SCAP_DATA_DESTINATION",
-        f"{{destination-prefix}}/{DEFAULT_SCAP_DATA_PATH}",
-        Path,
-    ),
-    (
-        "scap-data-url",
-        "GREENBONE_FEED_SYNC_SCAP_DATA_URL",
-        f"{{feed-url}}{DEFAULT_SCAP_DATA_URL_PATH}",
-        str,
-    ),
-    (
-        "cert-data-destination",
-        "GREENBONE_FEED_SYNC_CERT_DATA_DESTINATION",
-        f"{{destination-prefix}}/{DEFAULT_CERT_DATA_PATH}",
-        Path,
-    ),
-    (
-        "cert-data-url",
-        "GREENBONE_FEED_SYNC_CERT_DATA_URL",
-        f"{{feed-url}}{DEFAULT_CERT_DATA_URL_PATH}",
-        str,
-    ),
-    (
-        "report-formats-destination",
-        "GREENBONE_FEED_SYNC_REPORT_FORMATS_DESTINATION",
-        f"{{destination-prefix}}/{DEFAULT_REPORT_FORMATS_PATH}",
-        Path,
-    ),
-    (
-        "report-formats-url",
-        "GREENBONE_FEED_SYNC_REPORT_FORMATS_URL",
-        f"{{feed-url}}{DEFAULT_REPORT_FORMATS_URL_PATH}",
-        str,
-    ),
-    (
-        "scan-configs-destination",
-        "GREENBONE_FEED_SYNC_SCAN_CONFIGS_DESTINATION",
-        f"{{destination-prefix}}/{DEFAULT_SCAN_CONFIGS_PATH}",
-        Path,
-    ),
-    (
-        "scan-configs-url",
-        "GREENBONE_FEED_SYNC_SCAN_CONFIGS_URL",
-        f"{{feed-url}}{DEFAULT_SCAN_CONFIGS_URL_PATH}",
-        str,
-    ),
-    (
-        "port-lists-destination",
-        "GREENBONE_FEED_SYNC_PORT_LISTS_DESTINATION",
-        f"{{destination-prefix}}/{DEFAULT_PORT_LISTS_PATH}",
-        Path,
-    ),
-    (
-        "port-lists-url",
-        "GREENBONE_FEED_SYNC_PORT_LISTS_URL",
-        f"{{feed-url}}{DEFAULT_PORT_LISTS_URL_PATH}",
-        str,
-    ),
-    (
-        "gvmd-lock-file",
-        "GREENBONE_FEED_SYNC_GVMD_LOCK_FILE",
-        f"{{destination-prefix}}/{DEFAULT_GVMD_LOCK_FILE_PATH}",
-        Path,
-    ),
-    (
-        "openvas-lock-file",
-        "GREENBONE_FEED_SYNC_OPENVAS_LOCK_FILE",
-        f"{{destination-prefix}}/{DEFAULT_OPENVAS_LOCK_FILE_PATH}",
-        Path,
-    ),
-    (
-        "wait-interval",
-        "GREENBONE_FEED_SYNC_LOCK_WAIT_INTERVAL",
-        DEFAULT_FLOCK_WAIT_INTERVAL,
-        int,
-    ),
-    ("no-wait", "GREENBONE_FEED_SYNC_NO_WAIT", False, bool),
-    (
-        "compression-level",
-        "GREENBONE_FEED_SYNC_COMPRESSION_LEVEL",
-        DEFAULT_RSYNC_COMPRESSION_LEVEL,
-        int,
-    ),
-    ("private-directory", "GREENBONE_FEED_SYNC_PRIVATE_DIRECTORY", None, Path),
-    ("verbose", "GREENBONE_FEED_SYNC_VERBOSE", None, int),
-    ("fail-fast", "GREENBONE_FEED_SYNC_FAIL_FAST", False, bool),
-    ("rsync-timeout", "GREENBONE_FEED_SYNC_RSYNC_TIMEOUT", None, int),
-    ("group", "GREENBONE_FEED_SYNC_GROUP", DEFAULT_GROUP, maybe_int),
-    ("user", "GREENBONE_FEED_SYNC_USER", DEFAULT_USER, maybe_int),
-)
 
 
 def _to_defaults(values: dict[str, Any]) -> dict[str, Any]:
@@ -469,7 +283,7 @@ class CliParser:
 
         self.parser = parser
 
-    def _load_config(self, config_file: str) -> dict[str, Any]:
+    def _load_config(self, config_file: str) -> Config:
         config_path = None
 
         if config_file is None:
@@ -489,8 +303,8 @@ class CliParser:
         return Config.load(config_path)
 
     def _set_defaults(self, config_file: Optional[str] = None) -> None:
-        config_data = self._load_config(config_file)
-        self.parser.set_defaults(**_to_defaults(config_data))
+        config = self._load_config(config_file)
+        self.parser.set_defaults(**_to_defaults(config))
 
     def parse_arguments(
         self, args: Optional[Sequence[str]] = None
@@ -510,47 +324,3 @@ class CliParser:
             self.parser.exit(0)
 
         return self.parser.parse_args(args)
-
-
-class Config:
-    """
-    A class to load configuration values from the environment, config file and
-    defaults.
-    """
-
-    @staticmethod
-    def load(config_file: Optional[Path] = None) -> dict[str, Any]:
-        """Load config values from config_file"""
-        config: dict[str, Any] = {}
-
-        if config_file:
-            try:
-                content = config_file.read_text(encoding="utf-8")
-                config_data = tomllib.loads(content)
-                config = config_data.get("greenbone-feed-sync", {})
-            except IOError as e:
-                raise ConfigFileError(
-                    f"Can't load config file {config_file.absolute()}. "
-                    f"Error was {e}."
-                ) from e
-            except tomllib.TOMLDecodeError as e:
-                raise ConfigFileError(
-                    f"Can't load config file. {config_file.absolute()} is not "
-                    "a valid TOML file."
-                ) from e
-
-        values: dict[str, Any] = {}
-
-        for config_key, env_key, default, value_type in _CONFIG:
-            if env_key in os.environ:
-                value = os.environ.get(env_key)
-            elif config_key in config:
-                value = config.get(config_key)
-            elif isinstance(default, str):
-                value = default.format(**values)
-            else:
-                value = default
-
-            values[config_key] = None if value is None else value_type(value)
-
-        return values
