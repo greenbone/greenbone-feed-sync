@@ -18,6 +18,7 @@
 import asyncio
 import unittest
 from asyncio.subprocess import Process
+from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
 from greenbone.feed.sync.errors import RsyncError
@@ -184,5 +185,31 @@ class ExecRsyncTestCase(unittest.IsolatedAsyncioTestCase):
             "--copy-unsafe-links",
             "--hard-links",
             "rsync://foo.bar/baz",
+            "/tmp/baz",
+        )
+
+    @patch("greenbone.feed.sync.rsync.exec_rsync", autospec=True)
+    async def test_rsync_with_ssh(self, exec_mock: AsyncMock):
+        ssh_key = Path("/tmp/ssh.key")
+        rsync = Rsync(ssh_key=ssh_key)
+        await rsync.sync("ssh://user@foo.bar/baz", "/tmp/baz")
+
+        exec_mock.assert_awaited_once_with(
+            "--links",
+            "--times",
+            "--omit-dir-times",
+            "--recursive",
+            "--partial",
+            "--progress",
+            "-e",
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p 24 -i '/tmp/ssh.key'",  # pylint: disable=line-too-long
+            "-q",
+            "--compress-level=9",
+            "--delete",
+            "--perms",
+            "--chmod=Fugo+r,Fug+w,Dugo-s,Dugo+rx,Dug+w",
+            "--copy-unsafe-links",
+            "--hard-links",
+            "user@foo.bar:/baz",
             "/tmp/baz",
         )
