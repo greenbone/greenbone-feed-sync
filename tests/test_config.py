@@ -21,6 +21,8 @@ import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
+from pontos.testing import temp_file
+
 from greenbone.feed.sync.config import (
     DEFAULT_CERT_DATA_PATH,
     DEFAULT_CERT_DATA_URL_PATH,
@@ -44,6 +46,7 @@ from greenbone.feed.sync.config import (
     DEFAULT_SCAP_DATA_URL_PATH,
     DEFAULT_USER,
     Config,
+    EnterpriseSettings,
 )
 from greenbone.feed.sync.errors import ConfigFileError
 from greenbone.feed.sync.helper import DEFAULT_FLOCK_WAIT_INTERVAL
@@ -554,3 +557,26 @@ rsync-timeout = 360
             r"Can't load config file .*foo\.toml\. Error was .*",
         ):
             Config.load(Path("foo.toml"))
+
+
+class EnterpriseSettingsTestCase(unittest.TestCase):
+    def test_from_key(self):
+        content = """a_user@some.feed.server:/feed/
+Lorem ipsum dolor sit amet,
+consetetur sadipscing elitr,
+sed diam nonumy eirmod tempor
+"""
+        with temp_file(content=content, name="enterprise.key") as f:
+            settings = EnterpriseSettings.from_key(f)
+
+            self.assertEqual(settings.key, f)
+            self.assertEqual(settings.host, "some.feed.server")
+            self.assertEqual(settings.user, "a_user")
+
+    def test_feed_url(self):
+        key = Path("/tmp/some.key")
+        settings = EnterpriseSettings("foo", "some.server", key)
+
+        self.assertEqual(
+            settings.feed_url(), "ssh://foo@some.server/enterprise"
+        )

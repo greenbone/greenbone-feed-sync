@@ -19,6 +19,7 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Iterable, Optional, Union
+from urllib.parse import urlsplit
 
 from greenbone.feed.sync.errors import ConfigFileError
 from greenbone.feed.sync.helper import DEFAULT_FLOCK_WAIT_INTERVAL
@@ -111,6 +112,29 @@ class DependentSetting:
             value = self.default_value(values)
 
         return None if value is None else self.value_type(value)
+
+
+@dataclass
+class EnterpriseSettings:
+    user: str
+    host: str
+    key: Path
+
+    @classmethod
+    def from_key(cls, enterprise_key: Path) -> "EnterpriseSettings":
+        with enterprise_key.open("r", encoding="utf8", errors="ignore") as f:
+            line = f.readline()
+
+        url = urlsplit(line)
+        if not url.scheme:
+            # ensure that url gets splitted correctly if line doesn't contain
+            # an url scheme (which is the default)
+            url = urlsplit(f"//{line}")
+
+        return EnterpriseSettings(url.username, url.hostname, enterprise_key)
+
+    def feed_url(self) -> str:
+        return f"ssh://{self.user}@{self.host}/enterprise"
 
 
 _SETTINGS = (
