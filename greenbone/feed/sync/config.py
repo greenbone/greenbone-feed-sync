@@ -72,6 +72,8 @@ DEFAULT_OPENVAS_LOCK_FILE_PATH = "openvas/feed-update.lock"
 DEFAULT_CONFIG_FILE = "/etc/gvm/greenbone-feed-sync.toml"
 DEFAULT_USER_CONFIG_FILE = "~/.config/greenbone-feed-sync.toml"
 
+DEFAULT_ENTERPRISE_KEY_PATH = "/etc/gvm/greenbone-enterprise-feed-key"
+
 DEFAULT_GROUP = "gvm"
 DEFAULT_USER = "gvm"
 
@@ -166,6 +168,12 @@ _SETTINGS = (
     Setting("rsync-timeout", "GREENBONE_FEED_SYNC_RSYNC_TIMEOUT", None, int),
     Setting("group", "GREENBONE_FEED_SYNC_GROUP", DEFAULT_GROUP, maybe_int),
     Setting("user", "GREENBONE_FEED_SYNC_USER", DEFAULT_USER, maybe_int),
+    Setting(
+        "greenbone-enterprise-feed-key",
+        "GREENBONE_FEED_SYNC_ENTERPRISE_FEED_KEY",
+        DEFAULT_ENTERPRISE_KEY_PATH,
+        Path,
+    ),
 )
 
 # pylint: disable=line-too-long

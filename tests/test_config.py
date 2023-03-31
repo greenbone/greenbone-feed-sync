@@ -27,6 +27,7 @@ from greenbone.feed.sync.config import (
     DEFAULT_CERT_DATA_PATH,
     DEFAULT_CERT_DATA_URL_PATH,
     DEFAULT_DESTINATION_PREFIX,
+    DEFAULT_ENTERPRISE_KEY_PATH,
     DEFAULT_GROUP,
     DEFAULT_GVMD_DATA_PATH,
     DEFAULT_GVMD_DATA_URL_PATH,
@@ -60,7 +61,7 @@ class ConfigTestCase(unittest.TestCase):
     def test_defaults(self):
         values = Config.load()
 
-        self.assertEqual(len(values), 29)
+        self.assertEqual(len(values), 30)
         self.assertEqual(
             values["destination-prefix"], Path(DEFAULT_DESTINATION_PREFIX)
         )
@@ -146,6 +147,10 @@ class ConfigTestCase(unittest.TestCase):
         self.assertIsNone(values["rsync-timeout"])
         self.assertEqual(values["group"], DEFAULT_GROUP)
         self.assertEqual(values["user"], DEFAULT_USER)
+        self.assertEqual(
+            values["greenbone-enterprise-feed-key"],
+            Path(DEFAULT_ENTERPRISE_KEY_PATH),
+        )
 
     def test_config_file(self):
         content = """[greenbone-feed-sync]
@@ -178,6 +183,7 @@ fail-fast = true
 rsync-timeout = 120
 group = "foo"
 user = "bar"
+greenbone-enterprise-feed-key = "/srv/feed.key"
 """
         path_mock = MagicMock(spec=Path)
         path_mock.read_text.return_value = content
@@ -240,6 +246,9 @@ user = "bar"
         self.assertEqual(values["rsync-timeout"], 120)
         self.assertEqual(values["group"], "foo")
         self.assertEqual(values["user"], "bar")
+        self.assertEqual(
+            values["greenbone-enterprise-feed-key"], Path("/srv/feed.key")
+        )
 
     def test_destination_prefix(self):
         content = """[greenbone-feed-sync]
@@ -361,6 +370,7 @@ feed-url = "rsync://foo.bar"
             "GREENBONE_FEED_SYNC_RSYNC_TIMEOUT": "120",
             "GREENBONE_FEED_SYNC_GROUP": "123",
             "GREENBONE_FEED_SYNC_USER": "321",
+            "GREENBONE_FEED_SYNC_ENTERPRISE_FEED_KEY": "/tmp/some.key",
         },
     )
     def test_environment(self):
@@ -419,6 +429,9 @@ feed-url = "rsync://foo.bar"
         self.assertEqual(values["rsync-timeout"], 120)
         self.assertEqual(values["group"], 123)
         self.assertEqual(values["user"], 321)
+        self.assertEqual(
+            values["greenbone-enterprise-feed-key"], Path("/tmp/some.key")
+        )
 
     @patch.dict(
         "os.environ",
@@ -450,6 +463,7 @@ feed-url = "rsync://foo.bar"
             "GREENBONE_FEED_SYNC_VERBOSE": "5",
             "GREENBONE_FEED_SYNC_FAIL_FAST": "1",
             "GREENBONE_FEED_SYNC_RSYNC_TIMEOUT": "120",
+            "GREENBONE_FEED_SYNC_ENTERPRISE_FEED_KEY": "/tmp/some.key",
         },
     )
     def test_environment_overrides_config_file(self):
@@ -481,6 +495,7 @@ private-directory = "private"
 verbose = 99
 fail-fast = false
 rsync-timeout = 360
+greenbone-enterprise-feed-key = "/srv/feed.key"
 """
         path_mock = MagicMock(spec=Path)
         path_mock.read_text.return_value = content
@@ -538,6 +553,9 @@ rsync-timeout = 360
         self.assertEqual(values["verbose"], 5)
         self.assertTrue(values["fail-fast"])
         self.assertEqual(values["rsync-timeout"], 120)
+        self.assertEqual(
+            values["greenbone-enterprise-feed-key"], Path("/tmp/some.key")
+        )
 
     def test_invalid_toml(self):
         content = "This is not TOML"
