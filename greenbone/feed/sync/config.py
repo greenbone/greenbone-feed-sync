@@ -343,5 +343,8 @@ class Config:
     def __getitem__(self, key: str) -> Any:
         return self._config[key]
 
+    def __setitem__(self, key: str, value: Any) -> None:
+        self._config[key] = value
+
     def __len__(self) -> int:
         return len(self._config)

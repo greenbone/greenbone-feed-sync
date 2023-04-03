@@ -576,6 +576,32 @@ greenbone-enterprise-feed-key = "/srv/feed.key"
         ):
             Config.load(Path("foo.toml"))
 
+    def test_getitem(self):
+        content = """[greenbone-feed-sync]
+no-wait = false
+compression-level = 7
+private-directory = "private"
+"""
+        path_mock = MagicMock(spec=Path)
+        path_mock.read_text.return_value = content
+
+        values = Config.load(path_mock)
+
+        self.assertFalse(values["no-wait"])
+        self.assertEqual(values["compression-level"], 7)
+        self.assertEqual(values["private-directory"], Path("private"))
+
+    def test_setitem(self):
+        config = Config()
+
+        config["no-wait"] = True
+        config["compression-level"] = 7
+        config["private-directory"] = "private"
+
+        self.assertTrue(config["no-wait"])
+        self.assertEqual(config["compression-level"], 7)
+        self.assertEqual(config["private-directory"], "private")
+
 
 class EnterpriseSettingsTestCase(unittest.TestCase):
     def test_from_key(self):
