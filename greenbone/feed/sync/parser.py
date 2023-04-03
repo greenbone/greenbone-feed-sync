@@ -24,6 +24,7 @@ from greenbone.feed.sync.config import (
     DEFAULT_CONFIG_FILE,
     DEFAULT_USER_CONFIG_FILE,
     Config,
+    EnterpriseSettings,
     maybe_int,
 )
 from greenbone.feed.sync.errors import ConfigFileError
@@ -281,7 +282,27 @@ class CliParser:
             "script. (Default: %(default)s)",
         )
 
+        parser.add_argument(
+            "--greenbone-enterprise-feed-key",
+            type=Path,
+            help="File to read the Greenbone Enterprise Feed key from. "
+            "The key gives access to additional vulnerability tests for "
+            "enterprise software among other advantages. See "
+            "https://www.greenbone.net/en/feed-comparison/ for more details."
+            "The default URLs are adjusted according to the data in the key."
+            "If the key file does not exist it is ignored. "
+            "(Default: %(default)s)",
+        )
+
         self.parser = parser
+
+    def _determine_enterprise_settings(
+        self, enterprise_key: Path
+    ) -> Optional[EnterpriseSettings]:
+        if not enterprise_key or not enterprise_key.exists():
+            return None
+
+        return EnterpriseSettings.from_key(enterprise_key)
 
     def _load_config(self, config_file: str) -> Config:
         config_path = None
@@ -300,10 +321,14 @@ class CliParser:
                     f"Config file {config_file} does not exist."
                 )
 
-        return Config.load(config_path)
+        config = Config()
 
-    def _set_defaults(self, config_file: Optional[str] = None) -> None:
-        config = self._load_config(config_file)
+        if config_path:
+            config.load_from_config_file(config_path)
+
+        return config
+
+    def _set_defaults(self, config: dict[str, Any]) -> None:
         self.parser.set_defaults(**_to_defaults(config))
 
     def parse_arguments(
@@ -316,8 +341,32 @@ class CliParser:
         known_args, _ = self.parser.parse_known_args(args)
 
         # Load the defaults from the config file if it exists.
-        # This also override what was passed as cmd option.
-        self._set_defaults(known_args.config)
+        config = self._load_config(known_args.config)
+
+        # set greenbone enterprise feed key in config if user passed one to load
+        # desired key for determining the feed url
+        if known_args.greenbone_enterprise_feed_key:
+            config[
+                "greenbone-enterprise-feed-key"
+            ] = known_args.greenbone_enterprise_feed_key
+
+        # apply defaults in config
+        config.apply_settings()
+
+        # check if a enterprise feed key is available
+        enterprise_settings = self._determine_enterprise_settings(
+            config["greenbone-enterprise-feed-key"]
+        )
+
+        # override feed url from key
+        if enterprise_settings:
+            config["feed-url"] = enterprise_settings.feed_url()
+
+        # apply other config defaults
+        config.apply_dependent_settings()
+
+        # set config as defaults for CLI to make them visible in --help
+        self._set_defaults(config)
 
         if known_args.help:
             self.parser.print_help()

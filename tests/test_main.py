@@ -17,6 +17,7 @@
 
 import sys
 import unittest
+from pathlib import Path
 from unittest.mock import MagicMock, call, patch
 
 from pontos.testing import temp_directory
@@ -106,7 +107,10 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
 
         change_user_mock.assert_called_once_with("gvm", "gvm")
         rsync_mock.assert_called_once_with(
-            private_subdir=None, verbose=False, compression_level=9
+            private_subdir=None,
+            verbose=False,
+            compression_level=9,
+            ssh_key=Path("/etc/gvm/greenbone-enterprise-feed-key"),
         )
         console.print.assert_has_calls(
             [
@@ -156,7 +160,10 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(ret, 0)
 
             rsync_mock.assert_called_once_with(
-                private_subdir=None, verbose=False, compression_level=9
+                private_subdir=None,
+                verbose=False,
+                compression_level=9,
+                ssh_key=Path("/etc/gvm/greenbone-enterprise-feed-key"),
             )
             console.print.assert_has_calls(
                 [
@@ -206,7 +213,10 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(ret, 0)
 
             rsync_mock.assert_called_once_with(
-                private_subdir=None, verbose=True, compression_level=9
+                private_subdir=None,
+                verbose=True,
+                compression_level=9,
+                ssh_key=Path("/etc/gvm/greenbone-enterprise-feed-key"),
             )
             console.print.assert_has_calls(
                 [
@@ -270,7 +280,10 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(ret, 0)
 
             rsync_mock.assert_called_once_with(
-                private_subdir=None, verbose=False, compression_level=9
+                private_subdir=None,
+                verbose=False,
+                compression_level=9,
+                ssh_key=Path("/etc/gvm/greenbone-enterprise-feed-key"),
             )
             console.print.assert_not_called()
 
@@ -309,7 +322,10 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(ret, 1)
 
             rsync_mock.assert_called_once_with(
-                private_subdir=None, verbose=False, compression_level=9
+                private_subdir=None,
+                verbose=False,
+                compression_level=9,
+                ssh_key=Path("/etc/gvm/greenbone-enterprise-feed-key"),
             )
             console.print.assert_has_calls(
                 [
@@ -363,7 +379,10 @@ class MainFunctionTestCase(unittest.TestCase):
             self.assertEqual(cm.exception.code, 0)
 
             rsync_mock.assert_called_once_with(
-                private_subdir=None, verbose=False, compression_level=9
+                private_subdir=None,
+                verbose=False,
+                compression_level=9,
+                ssh_key=Path("/etc/gvm/greenbone-enterprise-feed-key"),
             )
             console_mock_instance.print.assert_has_calls(
                 [
@@ -421,7 +440,10 @@ class MainFunctionTestCase(unittest.TestCase):
             self.assertEqual(cm.exception.code, 1)
 
             rsync_mock.assert_called_once_with(
-                private_subdir=None, verbose=False, compression_level=9
+                private_subdir=None,
+                verbose=False,
+                compression_level=9,
+                ssh_key=Path("/etc/gvm/greenbone-enterprise-feed-key"),
             )
             console_mock_instance.print.assert_has_calls(
                 [

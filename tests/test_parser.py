@@ -23,11 +23,14 @@ from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
+from pontos.testing import temp_file
+
 from greenbone.feed.sync.config import (
     DEFAULT_CERT_DATA_PATH,
     DEFAULT_CERT_DATA_URL_PATH,
     DEFAULT_CONFIG_FILE,
     DEFAULT_DESTINATION_PREFIX,
+    DEFAULT_ENTERPRISE_KEY_PATH,
     DEFAULT_GVMD_DATA_PATH,
     DEFAULT_GVMD_DATA_URL_PATH,
     DEFAULT_GVMD_LOCK_FILE_PATH,
@@ -208,6 +211,10 @@ class CliParserTestCase(unittest.TestCase):
         self.assertIsNone(args.verbose)
         self.assertFalse(args.fail_fast)
         self.assertIsNone(args.rsync_timeout)
+        self.assertEqual(
+            args.greenbone_enterprise_feed_key,
+            Path(DEFAULT_ENTERPRISE_KEY_PATH),
+        )
 
     def test_help(self):
         parser = CliParser()
@@ -437,6 +444,15 @@ class CliParserTestCase(unittest.TestCase):
         parser = CliParser()
         args = parser.parse_arguments(["--rsync-timeout", "120"])
         self.assertEqual(args.rsync_timeout, 120)
+
+    def test_greenbone_enterprise_feed_key(self):
+        parser = CliParser()
+        args = parser.parse_arguments(
+            ["--greenbone-enterprise-feed-key", "/tmp/some.key"]
+        )
+        self.assertEqual(
+            args.greenbone_enterprise_feed_key, Path("/tmp/some.key")
+        )
 
     def test_other(self):
         parser = CliParser()
@@ -705,3 +721,93 @@ wait-interval = 100
 
         args = parser.parse_arguments(["--user", "123"])
         self.assertEqual(args.user, 123)
+
+    def test_feed_url_from_enterprise_feed_key(self):
+        parser = CliParser()
+        content = """a_user@some.feed.server:/feed/
+Lorem ipsum dolor sit amet,
+consetetur sadipscing elitr,
+sed diam nonumy eirmod tempor
+"""
+        with temp_file(content=content, name="enterprise.key") as f:
+            args = parser.parse_arguments(
+                ["--greenbone-enterprise-feed-key", str(f)]
+            )
+
+            self.assertEqual(
+                args.feed_url, "ssh://a_user@some.feed.server/enterprise"
+            )
+            self.assertEqual(
+                args.gvmd_data_url,
+                "ssh://a_user@some.feed.server/enterprise/data-feed/22.04/",
+            )
+            self.assertEqual(
+                args.port_lists_url,
+                "ssh://a_user@some.feed.server/enterprise/data-feed/22.04/port-lists/",
+            )
+            self.assertEqual(
+                args.report_formats_url,
+                "ssh://a_user@some.feed.server/enterprise/data-feed/22.04/report-formats/",
+            )
+            self.assertEqual(
+                args.scan_configs_url,
+                "ssh://a_user@some.feed.server/enterprise/data-feed/22.04/scan-configs/",
+            )
+            self.assertEqual(
+                args.notus_url,
+                "ssh://a_user@some.feed.server/enterprise/vulnerability-feed/22.04/vt-data/notus/",
+            )
+            self.assertEqual(
+                args.nasl_url,
+                "ssh://a_user@some.feed.server/enterprise/vulnerability-feed/22.04/vt-data/nasl/",
+            )
+            self.assertEqual(
+                args.scap_data_url,
+                "ssh://a_user@some.feed.server/enterprise/vulnerability-feed/22.04/scap-data/",
+            )
+            self.assertEqual(
+                args.cert_data_url,
+                "ssh://a_user@some.feed.server/enterprise/vulnerability-feed/22.04/cert-data/",
+            )
+
+    def test_ignore_non_existing_enterprise_feed_key(self):
+        parser = CliParser()
+        args = parser.parse_arguments(
+            ["--greenbone-enterprise-feed-key", "/tmp/some.key"]
+        )
+
+        self.assertEqual(
+            args.feed_url, "rsync://feed.community.greenbone.net/community"
+        )
+        self.assertEqual(
+            args.gvmd_data_url,
+            "rsync://feed.community.greenbone.net/community/data-feed/22.04/",
+        )
+        self.assertEqual(
+            args.port_lists_url,
+            "rsync://feed.community.greenbone.net/community/data-feed/22.04/port-lists/",
+        )
+        self.assertEqual(
+            args.report_formats_url,
+            "rsync://feed.community.greenbone.net/community/data-feed/22.04/report-formats/",
+        )
+        self.assertEqual(
+            args.scan_configs_url,
+            "rsync://feed.community.greenbone.net/community/data-feed/22.04/scan-configs/",
+        )
+        self.assertEqual(
+            args.notus_url,
+            "rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/vt-data/notus/",
+        )
+        self.assertEqual(
+            args.nasl_url,
+            "rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/vt-data/nasl/",
+        )
+        self.assertEqual(
+            args.scap_data_url,
+            "rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/scap-data/",
+        )
+        self.assertEqual(
+            args.cert_data_url,
+            "rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/cert-data/",
+        )
