@@ -55,25 +55,25 @@ class FilterSyncsTestCase(unittest.TestCase):
 
 class DoSelftestTestCase(unittest.TestCase):
     @patch("greenbone.feed.sync.main.subprocess.run")
-    def test_do_selftest(self, mock_subproc_run: MagicMock):
-        mock_subproc_run.side_effect = [b"foo", b"bar"]
-        console = MagicMock()
-
-        self.assertEqual(do_selftest(console), 0)
+    def test_do_selftest_success(self, mock_subprocess_run: MagicMock):
+        mock_subprocess_run.side_effect = ["", ""]
+        do_selftest()
 
     @patch("greenbone.feed.sync.main.subprocess.run")
-    def test_do_selftest_sha_fail(self, mock_subproc_run: MagicMock):
-        mock_subproc_run.side_effect = [b"foo", PermissionError]
-        console = MagicMock()
-
-        self.assertEqual(do_selftest(console), 1)
+    def test_do_selftest_sha356sum_fail(self, mock_subprocess_run: MagicMock):
+        mock_subprocess_run.side_effect = [PermissionError, ""]
+        with self.assertRaisesRegex(
+            GreenboneFeedSyncError, "The sha256sum binary could not be found."
+        ):
+            do_selftest()
 
     @patch("greenbone.feed.sync.main.subprocess.run")
-    def test_do_selftest_rsync_fail(self, mock_subproc_run: MagicMock):
-        mock_subproc_run.side_effect = [PermissionError, b"bar"]
-        console = MagicMock()
-
-        self.assertEqual(do_selftest(console), 1)
+    def test_do_selftest_rsync_fail(self, mock_subprocess_run: MagicMock):
+        mock_subprocess_run.side_effect = ["", PermissionError]
+        with self.assertRaisesRegex(
+            GreenboneFeedSyncError, "The rsync binary could not be found."
+        ):
+            do_selftest()
 
 
 class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
