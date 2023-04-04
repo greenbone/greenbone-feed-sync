@@ -350,6 +350,13 @@ class CliParser:
                 "greenbone-enterprise-feed-key"
             ] = known_args.greenbone_enterprise_feed_key
 
+        if self.parser.prog == "greenbone-nvt-sync":
+            config["type"] = "nvt"
+        elif self.parser.prog == "greenbone-scapdata-sync":
+            config["type"] = "scap"
+        elif self.parser.prog == "greenbone-certdata-sync":
+            config["type"] = "cert"
+
         # apply defaults in config
         config.apply_settings()
 
