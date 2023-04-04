@@ -41,6 +41,7 @@ New script for syncing the Greenbone Community Feed
   - [rsync-timeout](#rsync-timeout)
   - [group](#group)
   - [user](#user)
+  - [greenbone-enterprise-feed-key](#greenbone-enterprise-feed-key)
 - [Config](#config-1)
 - [Development](#development)
 - [Maintainer](#maintainer)
@@ -410,6 +411,16 @@ is only required for experts and testing purposes.
 | Environment Variable | `GREENBONE_FEED_SYNC_USER` |
 | Default Value | gvm |
 | Description | If the greenbone-feed-sync script is run as root, the effective user is changed to this user name or ID. |
+
+### greenbone-enterprise-feed-key
+
+| Name | Value |
+|------|-------|
+| CLI Argument | `--greenbone-enterprise-feed-key` |
+| Config Variable  | greenbone-enterprise-feed-key |
+| Environment Variable | `GREENBONE_FEED_SYNC_ENTERPRISE_FEED_KEY` |
+| Default Value | /etc/gvm/greenbone-enterprise-feed-key |
+| Description | File to read the Greenbone Enterprise Feed key from. The key gives access to additional vulnerability tests for enterprise software among other dvantages. See [Greenbone Enterprise Feed and Greenbone Community Feed in Comparison](https://www.greenbone.net/en/feed-comparison/) for more details. The default URLs are adjusted according to the data in the key. If the key file does not exist it is ignored. |
 
 ## Config
 

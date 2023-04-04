@@ -18,6 +18,7 @@
 import asyncio
 from pathlib import Path
 from typing import Iterable, Optional, Union
+from urllib.parse import urlsplit
 
 from greenbone.feed.sync.errors import RsyncError
 
@@ -43,6 +44,10 @@ DEFAULT_RSYNC_COMPRESSION_LEVEL = 9
 DEFAULT_RSYNC_TIMEOUT = (
     None  # in seconds. 0 means no timeout and None use rsync default
 )
+DEFAULT_RSYNC_SSH_PORT = 24
+DEFAULT_RSYNC_SSH_OPTS = (
+    "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+)
 
 
 class Rsync:
@@ -57,11 +62,13 @@ class Rsync:
         private_subdir: Optional[Path] = None,
         compression_level: Optional[int] = DEFAULT_RSYNC_COMPRESSION_LEVEL,
         timeout: Optional[int] = DEFAULT_RSYNC_TIMEOUT,
+        ssh_key: Optional[Path] = None,
     ) -> None:
         self.verbose = verbose
         self.private_subdir = private_subdir
         self.compression_level = compression_level
         self.timeout = timeout
+        self.ssh_key = ssh_key
 
     async def sync(self, url: str, destination: Union[str, Path]) -> None:
         """
@@ -73,6 +80,7 @@ class Rsync:
         """
         destination: Path = Path(destination)
         destination.mkdir(parents=True, exist_ok=True)
+        splitted_url = urlsplit(url)
 
         rsync_default_options = [
             "--links",
@@ -82,6 +90,17 @@ class Rsync:
             "--partial",
             "--progress",
         ]
+
+        if "ssh" in splitted_url.scheme:
+            port = splitted_url.port or DEFAULT_RSYNC_SSH_PORT
+            # we use ssh now
+            rsync_ssh_options = [
+                "-e",
+                f"ssh {DEFAULT_RSYNC_SSH_OPTS} -p {port} -i '{self.ssh_key}'",
+            ]
+            url = f"{splitted_url.netloc}:{splitted_url.path}"
+        else:
+            rsync_ssh_options = []
 
         rsync_timeout = (
             [
@@ -120,6 +139,7 @@ class Rsync:
 
         args = (
             rsync_default_options
+            + rsync_ssh_options
             + rsync_timeout
             + rsync_verbose
             + rsync_compress
