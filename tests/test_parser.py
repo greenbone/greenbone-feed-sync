@@ -18,6 +18,7 @@
 # pylint: disable=line-too-long, too-many-lines
 
 import io
+import sys
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
@@ -128,6 +129,8 @@ class CliParserTestCase(unittest.TestCase):
     def test_defaults(self):
         parser = CliParser()
         args = parser.parse_arguments([])
+
+        self.assertEqual(args.type, "all")
         self.assertEqual(
             args.destination_prefix, Path(DEFAULT_DESTINATION_PREFIX)
         )
@@ -811,3 +814,24 @@ sed diam nonumy eirmod tempor
             args.cert_data_url,
             "rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/cert-data/",
         )
+
+    @patch.object(sys, "argv", ["greenbone-nvt-sync"])
+    def test_greenbone_nvt_sync(self):
+        parser = CliParser()
+        args = parser.parse_arguments([])
+
+        self.assertEqual(args.type, "nvt")
+
+    @patch.object(sys, "argv", ["greenbone-scapdata-sync"])
+    def test_greenbone_scap_data_sync(self):
+        parser = CliParser()
+        args = parser.parse_arguments([])
+
+        self.assertEqual(args.type, "scap")
+
+    @patch.object(sys, "argv", ["greenbone-certdata-sync"])
+    def test_greenbone_cert_data_sync(self):
+        parser = CliParser()
+        args = parser.parse_arguments([])
+
+        self.assertEqual(args.type, "cert")

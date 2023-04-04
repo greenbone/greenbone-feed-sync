@@ -38,6 +38,9 @@ coverage = {extras = ["toml"], version = "^7.1.0"}
 
 [tool.poetry.scripts]
 greenbone-feed-sync = 'greenbone.feed.sync.main:main'
+greenbone-nvt-sync = 'greenbone.feed.sync.main:main'
+greenbone-scapdata-sync = 'greenbone.feed.sync.main:main'
+greenbone-certdata-sync = 'greenbone.feed.sync.main:main'
 
 [build-system]
 requires = ["poetry-core"]
