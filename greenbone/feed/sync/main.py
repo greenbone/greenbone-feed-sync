@@ -71,7 +71,7 @@ def filter_syncs(
     )
 
 
-def do_selftest(error_console: Console) -> int:
+def do_selftest() -> None:
     """
     Check for sha256sum and rsync commands.
     """
@@ -83,8 +83,9 @@ def do_selftest(error_console: Console) -> int:
             check=True,
         )
     except (PermissionError, FileNotFoundError, subprocess.CalledProcessError):
-        error_console.print("The sha256sum binary could not be found.")
-        return 1
+        raise GreenboneFeedSyncError(
+            "The sha256sum binary could not be found."
+        ) from None
 
     try:
         subprocess.run(
@@ -94,10 +95,9 @@ def do_selftest(error_console: Console) -> int:
             check=True,
         )
     except (PermissionError, FileNotFoundError, subprocess.CalledProcessError):
-        error_console.print("The rsync binary could not be found.")
-        return 1
-
-    return 0
+        raise GreenboneFeedSyncError(
+            "The rsync binary could not be found."
+        ) from None
 
 
 async def feed_sync(console: Console, error_console: Console) -> int:
@@ -107,8 +107,10 @@ async def feed_sync(console: Console, error_console: Console) -> int:
     parser = CliParser()
     args = parser.parse_arguments()
 
+    do_selftest()
+
     if args.selftest:
-        return do_selftest(error_console)
+        return 0
 
     if args.quiet:
         verbose = 0
