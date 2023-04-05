@@ -73,20 +73,8 @@ def filter_syncs(
 
 def do_selftest() -> None:
     """
-    Check for sha256sum and rsync commands.
+    Check for rsync command.
     """
-    try:
-        subprocess.run(
-            ["sha256sum", "--help"],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            check=True,
-        )
-    except (PermissionError, FileNotFoundError, subprocess.CalledProcessError):
-        raise GreenboneFeedSyncError(
-            "The sha256sum binary could not be found."
-        ) from None
-
     try:
         subprocess.run(
             ["rsync", "--help"],
