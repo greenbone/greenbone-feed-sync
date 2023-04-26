@@ -6,6 +6,7 @@ New script for syncing the Greenbone Community Feed
 
 - [Installation](#installation)
   - [Requirements](#requirements)
+  - [Install using pipx](#install-using-pipx)
   - [Install using pip](#install-using-pip)
 - [Usage](#usage)
 - [Settings](#settings)
@@ -61,7 +62,18 @@ On Debian based Distributions like Ubuntu and Kali `rsync` can be installed via
 
     apt install rsync
 
+### Install using pipx
+
+You can install the latest stable release of **pontos** from the Python
+Package Index (pypi) using [pipx]
+
+    python3 -m pipx install pontos
+
 ### Install using pip
+
+**NOTE:** The ‘pip install’ command does no longer work out-of-the-box in newer
+distributions like Ubuntu 23.04 because of [PEP 668](https://peps.python.org/pep-0668).
+Please use the [installation via pipx](#install-using-pipx) instead.
 
 You can install the latest stable release of **greenbone-feed-sync** from the
 Python Package Index (pypi) using [pip]
@@ -444,9 +456,9 @@ no-wait = true
 **greenbone-feed-sync** uses [poetry] for its own dependency management and
 build process.
 
-First install poetry via pip
+First install poetry via pipx
 
-    python3 -m pip install --user poetry
+    python3 -m pipx install poetry
 
 Afterwards run
 
@@ -486,5 +498,6 @@ Licensed under the [GNU General Public License v3.0 or later](LICENSE).
 [Greenbone Networks]: https://www.greenbone.net/
 [poetry]: https://python-poetry.org/
 [pip]: https://pip.pypa.io/
+[pipx]: https://pypa.github.io/pipx/
 [autohooks]: https://github.com/greenbone/autohooks
 [TOML]: https://toml.io/
