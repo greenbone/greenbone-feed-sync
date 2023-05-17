@@ -2,49 +2,38 @@ name: Build and test
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
 
 jobs:
   linting:
     name: Linting
-    runs-on: "ubuntu-latest"
     strategy:
       matrix:
         python-version:
           - "3.9"
           - "3.10"
           - "3.11"
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install and check with black, pylint and pontos.version
-        uses: greenbone/actions/lint-python@v2
-        with:
-          packages: greenbone tests
-          python-version: ${{ matrix.python-version }}
+    uses: greenbone/workflows/.github/workflows/lint-python.yml@main
+    with:
+      lint-packages: "greenbone tests"
+      python-version: ${{ matrix.python-version }}
 
   test:
     name: Run all tests
-    runs-on: "ubuntu-latest"
     strategy:
       matrix:
         python-version:
           - "3.9"
           - "3.10"
           - "3.11"
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install python, poetry and dependencies
-        uses: greenbone/actions/poetry@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Run unit tests
-        run: poetry run python -m unittest
+    uses: greenbone/workflows/.github/workflows/test-python.yml@main
+    with:
+      python-version: ${{ matrix.python-version }}
 
   codecov:
     name: Upload coverage to codecov.io
-    needs: test
     runs-on: "ubuntu-latest"
     steps:
       - uses: actions/checkout@v3
@@ -53,3 +42,7 @@ jobs:
         with:
           python-version: "3.10"
           token: ${{ secrets.CODECOV_TOKEN }}
+
+  versioning:
+    name: Check versioning
+    uses: greenbone/workflows/.github/workflows/check-version.yml@main
