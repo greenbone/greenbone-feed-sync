@@ -97,6 +97,11 @@ If the script is run in a cron job the output can be turned of via
 
     greenbone-feed-sync --quiet
 
+
+To download only a specific feed content the `--type` argument can be used
+
+    greenbone-feed-sync --type nvt
+
 ## Settings
 
 The `greenbone-feed-sync` script is adjustable for all kind of purposes and very
@@ -162,7 +167,7 @@ is only required for experts and testing purposes.
 | Config Variable  |  |
 | Environment Variable |  |
 | Default Value | all  |
-| Description | Specifies which feed data should be downloaded. |
+| Description | Specifies which feed data should be downloaded. Possible values are `all`, `nvt`/`nvts`, `gvmd-data`, `scap`, `cert`, `notus`, `nasl`, `report-format`/`report-formats`, `scan-config`/`scan-configs` or `port-list`/`port-lists`. |
 
 ### feed-url
 
