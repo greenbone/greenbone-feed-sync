@@ -120,6 +120,33 @@ class RsyncTestCase(unittest.IsolatedAsyncioTestCase):
             "/tmp/baz",
         )
 
+    @patch("greenbone.feed.sync.rsync.exec_rsync", autospec=True)
+    async def test_rsync_with_exclude(self, exec_mock: AsyncMock):
+        rsync = Rsync(exclude=["foo", Path("exclude/this")])
+        await rsync.sync("rsync://foo.bar/baz", "/tmp/baz")
+
+        exec_mock.assert_awaited_once_with(
+            "--links",
+            "--times",
+            "--omit-dir-times",
+            "--recursive",
+            "--partial",
+            "--progress",
+            "-q",
+            "--compress-level=9",
+            "--delete",
+            "--exclude",
+            "foo",
+            "--exclude",
+            "exclude/this",
+            "--perms",
+            "--chmod=Fugo+r,Fug+w,Dugo-s,Dugo+rx,Dug+w",
+            "--copy-unsafe-links",
+            "--hard-links",
+            "rsync://foo.bar/baz",
+            "/tmp/baz",
+        )
+
 
 class ExecRsyncTestCase(unittest.IsolatedAsyncioTestCase):
     @patch(

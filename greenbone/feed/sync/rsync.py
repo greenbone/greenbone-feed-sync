@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import asyncio
+import os
 from pathlib import Path
 from typing import Iterable, Optional, Union
 from urllib.parse import urlsplit
@@ -53,6 +54,17 @@ DEFAULT_RSYNC_SSH_OPTS = (
 class Rsync:
     """
     Class to sync the feed data via rsync
+
+    Args:
+        verbose: Enable verbose output
+        private_subdir: A private directory to exclude from from the sync
+        compression_level: Set an compression level explicitly.
+            Default is 9 (highest).
+        timeout: Set a specific timeout in seconds. Default timeout of rsync is
+            used of not set explicitly. 0 for no timeout.
+        ssh_key: SSH key for using ssh as rsync transport protocol.
+        exclude: An iterable of directories to exclude from the sync.
+
     """
 
     def __init__(
@@ -63,12 +75,14 @@ class Rsync:
         compression_level: Optional[int] = DEFAULT_RSYNC_COMPRESSION_LEVEL,
         timeout: Optional[int] = DEFAULT_RSYNC_TIMEOUT,
         ssh_key: Optional[Path] = None,
+        exclude: Optional[Iterable[os.PathLike]] = None,
     ) -> None:
         self.verbose = verbose
         self.private_subdir = private_subdir
         self.compression_level = compression_level
         self.timeout = timeout
         self.ssh_key = ssh_key
+        self.exclude = exclude
 
     async def sync(self, url: str, destination: Union[str, Path]) -> None:
         """
@@ -134,6 +148,10 @@ class Rsync:
 
         if self.private_subdir:
             rsync_delete.extend(["--exclude", self.private_subdir])
+
+        if self.exclude:
+            for exclude in self.exclude:
+                rsync_delete.extend(["--exclude", os.fspath(exclude)])
 
         rsync_verbose = ["-v"] if self.verbose else ["-q"]
 
