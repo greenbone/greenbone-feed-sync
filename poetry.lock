@@ -657,23 +657,23 @@ test = ["appdirs (==1.4.4)", "covdefaults (>=2.3)", "pytest (>=7.3.1)", "pytest-
 
 [[package]]
 name = "pontos"
-version = "23.6.2"
+version = "23.7.5"
 description = "Common utilities and tools maintained by Greenbone Networks"
 optional = false
-python-versions = ">=3.9,<4.0"
+python-versions = ">=3.9"
 files = [
-    {file = "pontos-23.6.2-py3-none-any.whl", hash = "sha256:9cb1a4c0916df6ec1a37a9c0388409d63f1d2a6919c67a06f36b2af3c6ee3522"},
-    {file = "pontos-23.6.2.tar.gz", hash = "sha256:ce8553f9583fcad845b3a91699182a66c61a89780a90181e767e9e29d2687a8d"},
+    {file = "pontos-23.7.5-py3-none-any.whl", hash = "sha256:c7b0a169f1774fa054962622c837bce6d478a62e7763b2de86a195c0656c485a"},
+    {file = "pontos-23.7.5.tar.gz", hash = "sha256:285bbdb8b079533b04b2e69c6b48a7417775bc0b957cbc4c2fe4bf5eaaee1bf4"},
 ]
 
 [package.dependencies]
-colorful = ">=0.5.4,<0.6.0"
+colorful = ">=0.5.4"
 httpx = {version = ">=0.23,<0.25", extras = ["http2"]}
-lxml = ">=4.9.0,<5.0.0"
+lxml = ">=4.9.0"
 packaging = ">=20.3"
-python-dateutil = ">=2.8.2,<3.0.0"
+python-dateutil = ">=2.8.2"
 rich = ">=12.4.4"
-semver = ">=2.13,<4.0"
+semver = ">=2.13"
 tomlkit = ">=0.5.11"
 
 [[package]]
