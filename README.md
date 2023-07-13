@@ -2,13 +2,14 @@
 
 # greenbone-feed-sync <!-- omit in toc -->
 
-New script for syncing the Greenbone Community Feed
+New script for downloading the Greenbone Community Feed
 
 - [Installation](#installation)
   - [Requirements](#requirements)
   - [Install using pipx](#install-using-pipx)
   - [Install using pip](#install-using-pip)
 - [Usage](#usage)
+- [Usage on Kali Linux](#usage-on-kali-linux)
 - [Settings](#settings)
   - [verbose](#verbose)
   - [quiet](#quiet)
@@ -90,22 +91,52 @@ Python Package Index ([pypi]) using [pip]
 Most of the time you should just run the script without any arguments to
 download the new data for all necessary feed types
 
-    greenbone-feed-sync
+**NOTE:** See details about [usage on Kali Linux](#usage-on-kali-linux)
+
+    sudo greenbone-feed-sync
 
 To get verbose progress output during the data download you might increase the
 verbosity
 
-    greenbone-feed-sync -vvv
+    sudo greenbone-feed-sync -vvv
 
 
 If the script is run in a cron job the output can be turned of via
 
-    greenbone-feed-sync --quiet
+    sudo greenbone-feed-sync --quiet
 
 
 To download only a specific feed content the `--type` argument can be used
 
-    greenbone-feed-sync --type nvt
+    sudo greenbone-feed-sync --type nvt
+
+Run `--help` to get information about all possible types and additional argument
+options
+
+    greenbone-feed-sync --help
+
+## Usage on Kali Linux
+
+When running `greenbone-feed-sync` as root user, for example via sudo, the
+actual user and group of the process are changed to the `gvm` user and group via
+[seteuid](https://docs.python.org/3/library/os.html#os.seteuid). This is done to
+ensure that [`gvmd`](https://github.com/greenbone/gvmd) and
+[`openvas-scanner`](https://github.com/greenbone/openvas-scanner) can read the
+downloaded file contents.
+
+When using the Greenbone Community Edition installed via packages on Kali Linux
+a different user and group are used. They are both named `_gvm` instead.
+Therefore the [group](#group) and [user](#user) settings need to be adjusted.
+This can be done by using a [config file](#config-1).
+
+    sudo mkdir /etc/gvm
+    sudo chmod +r /etc/gvm
+    cat <<EOF | sudo tee /etc/gvm/greenbone-feed-sync.toml
+    [greenbone-feed-sync]
+    user="_gvm"
+    group="_gvm"
+    EOF
+    sudo chmod +r /etc/gvm/greenbone-feed-sync.toml
 
 ## Settings
 
