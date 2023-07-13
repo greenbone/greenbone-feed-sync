@@ -29,7 +29,7 @@ from rich.console import Console
 from rich.live import Live
 from rich.spinner import Spinner as RichSpinner
 
-from greenbone.feed.sync.errors import FileLockingError
+from greenbone.feed.sync.errors import FileLockingError, GreenboneFeedSyncError
 
 DEFAULT_FLOCK_WAIT_INTERVAL = 5  # in seconds
 
@@ -152,9 +152,19 @@ def change_user_and_group(
         group: Group name or ID
     """
     if isinstance(user, str):
-        user = shutil._get_uid(user)  # pylint: disable=protected-access
+        user_id = shutil._get_uid(user)  # pylint: disable=protected-access
+        if user_id is None:
+            raise GreenboneFeedSyncError(
+                f"Can't run as user '{user}'. User '{user}' is unknown."
+            )
+        user = user_id
     if isinstance(group, str):
-        group = shutil._get_gid(group)  # pylint: disable=protected-access
+        group_id = shutil._get_gid(group)  # pylint: disable=protected-access
+        if group_id is None:
+            raise GreenboneFeedSyncError(
+                f"Can't run as group '{group}'. Group '{group}' is unknown."
+            )
+        group = group_id
 
     os.setegid(group)
     os.seteuid(user)
