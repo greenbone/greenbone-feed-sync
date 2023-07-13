@@ -449,7 +449,7 @@ class MainFunctionTestCase(unittest.TestCase):
                     call(
                         f"Releasing lock on {temp_dir}/openvas/feed-update.lock"
                     ),
-                    call("An error"),
+                    call("[red]❌[/red]Error: An error"),
                 ]
             )
 
