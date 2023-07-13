@@ -147,7 +147,7 @@ class Rsync:
         ]
 
         if self.private_subdir:
-            rsync_delete.extend(["--exclude", self.private_subdir])
+            rsync_delete.extend(["--exclude", str(self.private_subdir)])
 
         if self.exclude:
             for exclude in self.exclude:
