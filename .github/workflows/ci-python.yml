@@ -18,6 +18,7 @@ jobs:
     uses: greenbone/workflows/.github/workflows/lint-python.yml@main
     with:
       lint-packages: "greenbone tests"
+      linter: ruff
       python-version: ${{ matrix.python-version }}
 
   test:

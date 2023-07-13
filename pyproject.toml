@@ -32,7 +32,7 @@ tomli = { version = ">=2.0.1", python = "<3.11" }
 [tool.poetry.group.dev.dependencies]
 autohooks-plugin-black = { version = ">=22.11.0", python = "^3.9" }
 autohooks-plugin-isort = { version = ">=22.8.0", python = "^3.9" }
-autohooks-plugin-pylint = { version = ">=22.8.1", python = "^3.9" }
+autohooks-plugin-ruff = { version = ">=23.6.0", python = "^3.9" }
 pontos = ">=22.12.2"
 coverage = {extras = ["toml"], version = ">=7.1.0"}
 
@@ -64,7 +64,7 @@ exclude = '''
 '''
 
 [tool.autohooks]
-pre-commit = ['autohooks.plugins.black', 'autohooks.plugins.isort', 'autohooks.plugins.pylint']
+pre-commit = ['autohooks.plugins.black', 'autohooks.plugins.isort', 'autohooks.plugins.ruff']
 mode = "poetry"
 
 [tool.pontos.version]
@@ -73,6 +73,10 @@ version-module-file = "greenbone/feed/sync/__version__.py"
 [tool.isort]
 profile = "black"
 line_length = 80
+
+[tool.ruff]
+line-length = 80
+target-version = "py39"
 
 [tool.coverage.run]
 include = ["greenbone/*"]
