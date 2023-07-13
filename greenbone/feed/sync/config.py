@@ -181,7 +181,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "gvmd-data-destination",
         "GREENBONE_FEED_SYNC_GVMD_DATA_DESTINATION",
-        lambda values: f"{values['destination-prefix']}/{DEFAULT_GVMD_DATA_PATH}",
+        lambda values: f"{values['destination-prefix']}/{DEFAULT_GVMD_DATA_PATH}",  # noqa: E501
         Path,
     ),
     DependentSetting(
@@ -217,7 +217,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "scap-data-destination",
         "GREENBONE_FEED_SYNC_SCAP_DATA_DESTINATION",
-        lambda values: f"{values['destination-prefix']}/{DEFAULT_SCAP_DATA_PATH}",
+        lambda values: f"{values['destination-prefix']}/{DEFAULT_SCAP_DATA_PATH}",  # noqa: E501
         Path,
     ),
     DependentSetting(
@@ -229,7 +229,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "cert-data-destination",
         "GREENBONE_FEED_SYNC_CERT_DATA_DESTINATION",
-        lambda values: f"{values['destination-prefix']}/{DEFAULT_CERT_DATA_PATH}",
+        lambda values: f"{values['destination-prefix']}/{DEFAULT_CERT_DATA_PATH}",  # noqa: E501
         Path,
     ),
     DependentSetting(
@@ -241,19 +241,19 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "report-formats-destination",
         "GREENBONE_FEED_SYNC_REPORT_FORMATS_DESTINATION",
-        lambda values: f"{values['destination-prefix']}/{DEFAULT_REPORT_FORMATS_PATH}",
+        lambda values: f"{values['destination-prefix']}/{DEFAULT_REPORT_FORMATS_PATH}",  # noqa: E501
         Path,
     ),
     DependentSetting(
         "report-formats-url",
         "GREENBONE_FEED_SYNC_REPORT_FORMATS_URL",
-        lambda values: f"{values['feed-url']}{DEFAULT_REPORT_FORMATS_URL_PATH}",
+        lambda values: f"{values['feed-url']}{DEFAULT_REPORT_FORMATS_URL_PATH}",  # noqa: E501
         str,
     ),
     DependentSetting(
         "scan-configs-destination",
         "GREENBONE_FEED_SYNC_SCAN_CONFIGS_DESTINATION",
-        lambda values: f"{values['destination-prefix']}/{DEFAULT_SCAN_CONFIGS_PATH}",
+        lambda values: f"{values['destination-prefix']}/{DEFAULT_SCAN_CONFIGS_PATH}",  # noqa: E501
         Path,
     ),
     DependentSetting(
@@ -265,7 +265,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "port-lists-destination",
         "GREENBONE_FEED_SYNC_PORT_LISTS_DESTINATION",
-        lambda values: f"{values['destination-prefix']}/{DEFAULT_PORT_LISTS_PATH}",
+        lambda values: f"{values['destination-prefix']}/{DEFAULT_PORT_LISTS_PATH}",  # noqa: E501
         Path,
     ),
     DependentSetting(
@@ -277,13 +277,13 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "gvmd-lock-file",
         "GREENBONE_FEED_SYNC_GVMD_LOCK_FILE",
-        lambda values: f"{values['destination-prefix']}/{DEFAULT_GVMD_LOCK_FILE_PATH}",
+        lambda values: f"{values['destination-prefix']}/{DEFAULT_GVMD_LOCK_FILE_PATH}",  # noqa: E501
         Path,
     ),
     DependentSetting(
         "openvas-lock-file",
         "GREENBONE_FEED_SYNC_OPENVAS_LOCK_FILE",
-        lambda values: f"{values['destination-prefix']}/{DEFAULT_OPENVAS_LOCK_FILE_PATH}",
+        lambda values: f"{values['destination-prefix']}/{DEFAULT_OPENVAS_LOCK_FILE_PATH}",  # noqa: E501
         Path,
     ),
 )
