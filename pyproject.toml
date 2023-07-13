@@ -25,16 +25,16 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9"
 rich = ">=13.2.0"
-tomli = { version = "^2.0.1", python = "<3.11" }
+tomli = { version = ">=2.0.1", python = "<3.11" }
 
 [tool.poetry.group.dev.dependencies]
-autohooks-plugin-black = ">=22.11.0"
-autohooks-plugin-isort = ">=22.8.0"
-autohooks-plugin-pylint = ">=22.8.1"
+autohooks-plugin-black = { version = ">=22.11.0", python = "^3.9" }
+autohooks-plugin-isort = { version = ">=22.8.0", python = "^3.9" }
+autohooks-plugin-pylint = { version = ">=22.8.1", python = "^3.9" }
 pontos = ">=22.12.2"
-coverage = {extras = ["toml"], version = "^7.1.0"}
+coverage = {extras = ["toml"], version = ">=7.1.0"}
 
 [tool.poetry.scripts]
 greenbone-feed-sync = 'greenbone.feed.sync.main:main'
