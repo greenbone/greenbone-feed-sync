@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# pylint: disable=protected-access
+
 import errno
 import unittest
 from io import StringIO
@@ -23,7 +25,7 @@ from unittest.mock import MagicMock, call, patch
 from pontos.testing import temp_directory
 from rich.console import Console
 
-from greenbone.feed.sync.errors import FileLockingError
+from greenbone.feed.sync.errors import FileLockingError, GreenboneFeedSyncError
 from greenbone.feed.sync.helper import (
     Spinner,
     change_user_and_group,
@@ -191,3 +193,34 @@ class ChangeUserAndGroupTestCase(unittest.TestCase):
 
         os_mock.seteuid.assert_called_once_with(0)
         os_mock.setegid.assert_called_once_with(0)
+
+    @patch("greenbone.feed.sync.helper.shutil", autospec=True)
+    @patch("greenbone.feed.sync.helper.os", autospec=True)
+    def test_change_with_unknown_user(
+        self, os_mock: MagicMock, shutil_mock: MagicMock
+    ):
+        shutil_mock._get_uid.return_value = None
+
+        with self.assertRaisesRegex(
+            GreenboneFeedSyncError, "Can't run as user 'foo'.*"
+        ):
+            change_user_and_group("foo", "bar")
+
+        os_mock.seteuid.assert_not_called()
+        os_mock.setegid.assert_not_called()
+
+    @patch("greenbone.feed.sync.helper.shutil", autospec=True)
+    @patch("greenbone.feed.sync.helper.os", autospec=True)
+    def test_change_with_unknown_group(
+        self, os_mock: MagicMock, shutil_mock: MagicMock
+    ):
+        shutil_mock._get_uid.return_value = 123
+        shutil_mock._get_gid.return_value = None
+
+        with self.assertRaisesRegex(
+            GreenboneFeedSyncError, "Can't run as group 'bar'.*"
+        ):
+            change_user_and_group("foo", "bar")
+
+        os_mock.seteuid.assert_not_called()
+        os_mock.setegid.assert_not_called()
