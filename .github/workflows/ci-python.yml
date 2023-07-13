@@ -44,6 +44,10 @@ jobs:
           python-version: "3.10"
           token: ${{ secrets.CODECOV_TOKEN }}
 
+  mypy:
+    name: Check type information
+    uses: greenbone/workflows/.github/workflows/typing-python.yml@main
+
   versioning:
     name: Check versioning
     uses: greenbone/workflows/.github/workflows/check-version.yml@main
