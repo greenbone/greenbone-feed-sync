@@ -18,7 +18,7 @@
 import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable, Iterable, Optional, Union
+from typing import Any, Callable, Iterable, Optional, Protocol, Union
 from urllib.parse import urlsplit
 
 from greenbone.feed.sync.errors import ConfigFileError
@@ -39,7 +39,7 @@ def maybe_int(value: Optional[str]) -> Union[int, str, None]:
     Convert string into int if possible
     """
     try:
-        value = int(value)
+        value = int(value)  # type: ignore[arg-type,assignment]
     except ValueError:
         pass
 
@@ -88,6 +88,7 @@ class Setting:
     value_type: Callable
 
     def resolve(self, values: dict[str, Any]) -> Any:
+        value: Any
         if self.environment_key in os.environ:
             value = os.environ.get(self.environment_key)
         elif self.config_key in values:
@@ -118,8 +119,8 @@ class DependentSetting:
 
 @dataclass
 class EnterpriseSettings:
-    user: str
-    host: str
+    user: Optional[str]
+    host: Optional[str]
     key: Path
 
     @classmethod
@@ -287,6 +288,14 @@ _DEPENDENT_SETTINGS = (
         Path,
     ),
 )
+
+
+class ConfigDict(Protocol):
+    def items(self) -> Iterable[tuple[str, Any]]:
+        ...
+
+    def __getitem__(self, key: str) -> Any:
+        ...
 
 
 class Config:

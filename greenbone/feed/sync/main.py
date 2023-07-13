@@ -44,7 +44,7 @@ class Sync:
     """
 
     name: str
-    types: list[str]
+    types: Iterable[str]
     url: str
     destination: str
 
@@ -56,12 +56,10 @@ class SyncList:
     """
 
     lock_file: str
-    syncs: list[Sync]
+    syncs: Iterable[Sync]
 
 
-def filter_syncs(
-    lock_file: str, feed_type: str, *syncs: Iterable[Sync]
-) -> SyncList:
+def filter_syncs(lock_file: str, feed_type: str, *syncs: Sync) -> SyncList:
     """
     Create a list of syncs which only match to the feed type
     """

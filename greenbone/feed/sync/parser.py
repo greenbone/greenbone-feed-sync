@@ -24,13 +24,14 @@ from greenbone.feed.sync.config import (
     DEFAULT_CONFIG_FILE,
     DEFAULT_USER_CONFIG_FILE,
     Config,
+    ConfigDict,
     EnterpriseSettings,
     maybe_int,
 )
 from greenbone.feed.sync.errors import ConfigFileError
 
 
-def _to_defaults(values: dict[str, Any]) -> dict[str, Any]:
+def _to_defaults(values: ConfigDict) -> dict[str, Any]:
     defaults = {}
 
     for key, value in values.items():
@@ -328,7 +329,7 @@ class CliParser:
 
         return config
 
-    def _set_defaults(self, config: dict[str, Any]) -> None:
+    def _set_defaults(self, config: ConfigDict) -> None:
         self.parser.set_defaults(**_to_defaults(config))
 
     def parse_arguments(

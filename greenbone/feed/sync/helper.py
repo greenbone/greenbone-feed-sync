@@ -152,19 +152,21 @@ def change_user_and_group(
         group: Group name or ID
     """
     if isinstance(user, str):
-        user_id = shutil._get_uid(user)  # pylint: disable=protected-access
+        user_id = shutil._get_uid(  # type: ignore[attr-defined] # pylint: disable=protected-access # noqa: E501
+            user
+        )
         if user_id is None:
             raise GreenboneFeedSyncError(
                 f"Can't run as user '{user}'. User '{user}' is unknown."
             )
         user = user_id
     if isinstance(group, str):
-        group_id = shutil._get_gid(group)  # pylint: disable=protected-access
+        group_id = shutil._get_gid(group)  # type: ignore[attr-defined] # pylint: disable=protected-access # noqa: E501
         if group_id is None:
             raise GreenboneFeedSyncError(
                 f"Can't run as group '{group}'. Group '{group}' is unknown."
             )
         group = group_id
 
-    os.setegid(group)
-    os.seteuid(user)
+    os.setegid(group)  # type: ignore[arg-type]
+    os.seteuid(user)  # type: ignore[arg-type]

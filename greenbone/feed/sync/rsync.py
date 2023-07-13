@@ -24,7 +24,7 @@ from urllib.parse import urlsplit
 from greenbone.feed.sync.errors import RsyncError
 
 
-async def exec_rsync(*args: Iterable[str]) -> None:
+async def exec_rsync(*args: str) -> None:
     """
     Run rsync
 
@@ -42,9 +42,9 @@ async def exec_rsync(*args: Iterable[str]) -> None:
 
 DEFAULT_RSYNC_URL = "rsync://feed.community.greenbone.net/community"
 DEFAULT_RSYNC_COMPRESSION_LEVEL = 9
-DEFAULT_RSYNC_TIMEOUT = (
-    None  # in seconds. 0 means no timeout and None use rsync default
-)
+DEFAULT_RSYNC_TIMEOUT: Optional[
+    int
+] = None  # in seconds. 0 means no timeout and None use rsync default
 DEFAULT_RSYNC_SSH_PORT = 24
 DEFAULT_RSYNC_SSH_OPTS = (
     "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
@@ -92,8 +92,8 @@ class Rsync:
             url: URL to sync
             destination: Path to store the downloaded data
         """
-        destination: Path = Path(destination)
-        destination.mkdir(parents=True, exist_ok=True)
+        dest = Path(destination)
+        dest.mkdir(parents=True, exist_ok=True)
         splitted_url = urlsplit(url)
 
         rsync_default_options = [
@@ -164,7 +164,7 @@ class Rsync:
             + rsync_delete
             + rsync_chmod
             + rsync_links
-            + [url, str(destination.absolute())]
+            + [url, str(dest.absolute())]
         )
 
         await exec_rsync(*args)
