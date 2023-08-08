@@ -101,7 +101,7 @@ verbosity
     sudo greenbone-feed-sync -vvv
 
 
-If the script is run in a cron job the output can be turned of via
+If the script is run in a cron job the output can be turned off via
 
     sudo greenbone-feed-sync --quiet
 
@@ -473,7 +473,7 @@ is only required for experts and testing purposes.
 | Config Variable  | greenbone-enterprise-feed-key |
 | Environment Variable | `GREENBONE_FEED_SYNC_ENTERPRISE_FEED_KEY` |
 | Default Value | /etc/gvm/greenbone-enterprise-feed-key |
-| Description | File to read the Greenbone Enterprise Feed key from. The key gives access to additional vulnerability tests for enterprise software among other dvantages. See [Greenbone Enterprise Feed and Greenbone Community Feed in Comparison](https://www.greenbone.net/en/feed-comparison/) for more details. The default URLs are adjusted according to the data in the key. If the key file does not exist it is ignored. |
+| Description | File to read the Greenbone Enterprise Feed key from. The key gives access to additional vulnerability tests for enterprise software among other advantages. See [Greenbone Enterprise Feed and Greenbone Community Feed in Comparison](https://www.greenbone.net/en/feed-comparison/) for more details. The default URLs are adjusted according to the data in the key. If the key file does not exist it is ignored. |
 
 ## Config
 
