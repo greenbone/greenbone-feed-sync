@@ -46,14 +46,18 @@ def maybe_int(value: Optional[str]) -> Union[int, str, None]:
     return value
 
 
-DEFAULT_NOTUS_URL_PATH = "/vulnerability-feed/22.04/vt-data/notus/"
-DEFAULT_NASL_URL_PATH = "/vulnerability-feed/22.04/vt-data/nasl/"
-DEFAULT_SCAP_DATA_URL_PATH = "/vulnerability-feed/22.04/scap-data/"
-DEFAULT_CERT_DATA_URL_PATH = "/vulnerability-feed/22.04/cert-data/"
-DEFAULT_GVMD_DATA_URL_PATH = "/data-feed/22.04/"
-DEFAULT_REPORT_FORMATS_URL_PATH = "/data-feed/22.04/report-formats/"
-DEFAULT_SCAN_CONFIGS_URL_PATH = "/data-feed/22.04/scan-configs/"
-DEFAULT_PORT_LISTS_URL_PATH = "/data-feed/22.04/port-lists/"
+DEFAULT_VERSION = "22.04"
+
+DEFAULT_NOTUS_URL_PATH = f"/vulnerability-feed/{DEFAULT_VERSION}/vt-data/notus/"
+DEFAULT_NASL_URL_PATH = f"/vulnerability-feed/{DEFAULT_VERSION}/vt-data/nasl/"
+DEFAULT_SCAP_DATA_URL_PATH = f"/vulnerability-feed/{DEFAULT_VERSION}/scap-data/"
+DEFAULT_CERT_DATA_URL_PATH = f"/vulnerability-feed/{DEFAULT_VERSION}/cert-data/"
+DEFAULT_GVMD_DATA_URL_PATH = f"/data-feed/{DEFAULT_VERSION}/"
+DEFAULT_REPORT_FORMATS_URL_PATH = (
+    f"/data-feed/{DEFAULT_VERSION}/report-formats/"
+)
+DEFAULT_SCAN_CONFIGS_URL_PATH = f"/data-feed/{DEFAULT_VERSION}/scan-configs/"
+DEFAULT_PORT_LISTS_URL_PATH = f"/data-feed/{DEFAULT_VERSION}/port-lists/"
 
 DEFAULT_DESTINATION_PREFIX = "/var/lib/"
 
@@ -61,10 +65,14 @@ DEFAULT_NASL_PATH = "openvas/plugins"
 DEFAULT_NOTUS_PATH = "notus"
 DEFAULT_SCAP_DATA_PATH = "gvm/scap-data"
 DEFAULT_CERT_DATA_PATH = "gvm/cert-data"
-DEFAULT_GVMD_DATA_PATH = "gvm/data-objects/gvmd/22.04/"
-DEFAULT_REPORT_FORMATS_PATH = "gvm/data-objects/gvmd/22.04/report-formats"
-DEFAULT_SCAN_CONFIGS_PATH = "gvm/data-objects/gvmd/22.04/scan-configs"
-DEFAULT_PORT_LISTS_PATH = "gvm/data-objects/gvmd/22.04/port-lists"
+DEFAULT_GVMD_DATA_PATH = f"gvm/data-objects/gvmd/{DEFAULT_VERSION}/"
+DEFAULT_REPORT_FORMATS_PATH = (
+    f"gvm/data-objects/gvmd/{DEFAULT_VERSION}/report-formats"
+)
+DEFAULT_SCAN_CONFIGS_PATH = (
+    f"gvm/data-objects/gvmd/{DEFAULT_VERSION}/scan-configs"
+)
+DEFAULT_PORT_LISTS_PATH = f"gvm/data-objects/gvmd/{DEFAULT_VERSION}/port-lists"
 
 DEFAULT_GVMD_LOCK_FILE_PATH = "gvm/feed-update.lock"
 DEFAULT_OPENVAS_LOCK_FILE_PATH = "openvas/feed-update.lock"
