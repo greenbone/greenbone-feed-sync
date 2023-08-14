@@ -49,6 +49,7 @@ from greenbone.feed.sync.config import (
     DEFAULT_SCAP_DATA_PATH,
     DEFAULT_SCAP_DATA_URL_PATH,
     DEFAULT_USER_CONFIG_FILE,
+    DEFAULT_VERSION,
 )
 from greenbone.feed.sync.errors import ConfigFileError
 from greenbone.feed.sync.helper import DEFAULT_FLOCK_WAIT_INTERVAL
@@ -742,35 +743,35 @@ sed diam nonumy eirmod tempor
             )
             self.assertEqual(
                 args.gvmd_data_url,
-                "ssh://a_user@some.feed.server/enterprise/data-feed/22.04/",
+                f"ssh://a_user@some.feed.server/enterprise/data-feed/{DEFAULT_VERSION}/",
             )
             self.assertEqual(
                 args.port_lists_url,
-                "ssh://a_user@some.feed.server/enterprise/data-feed/22.04/port-lists/",
+                f"ssh://a_user@some.feed.server/enterprise/data-feed/{DEFAULT_VERSION}/port-lists/",
             )
             self.assertEqual(
                 args.report_formats_url,
-                "ssh://a_user@some.feed.server/enterprise/data-feed/22.04/report-formats/",
+                f"ssh://a_user@some.feed.server/enterprise/data-feed/{DEFAULT_VERSION}/report-formats/",
             )
             self.assertEqual(
                 args.scan_configs_url,
-                "ssh://a_user@some.feed.server/enterprise/data-feed/22.04/scan-configs/",
+                f"ssh://a_user@some.feed.server/enterprise/data-feed/{DEFAULT_VERSION}/scan-configs/",
             )
             self.assertEqual(
                 args.notus_url,
-                "ssh://a_user@some.feed.server/enterprise/vulnerability-feed/22.04/vt-data/notus/",
+                f"ssh://a_user@some.feed.server/enterprise/vulnerability-feed/{DEFAULT_VERSION}/vt-data/notus/",
             )
             self.assertEqual(
                 args.nasl_url,
-                "ssh://a_user@some.feed.server/enterprise/vulnerability-feed/22.04/vt-data/nasl/",
+                f"ssh://a_user@some.feed.server/enterprise/vulnerability-feed/{DEFAULT_VERSION}/vt-data/nasl/",
             )
             self.assertEqual(
                 args.scap_data_url,
-                "ssh://a_user@some.feed.server/enterprise/vulnerability-feed/22.04/scap-data/",
+                f"ssh://a_user@some.feed.server/enterprise/vulnerability-feed/{DEFAULT_VERSION}/scap-data/",
             )
             self.assertEqual(
                 args.cert_data_url,
-                "ssh://a_user@some.feed.server/enterprise/vulnerability-feed/22.04/cert-data/",
+                f"ssh://a_user@some.feed.server/enterprise/vulnerability-feed/{DEFAULT_VERSION}/cert-data/",
             )
 
     def test_ignore_non_existing_enterprise_feed_key(self):
@@ -784,35 +785,35 @@ sed diam nonumy eirmod tempor
         )
         self.assertEqual(
             args.gvmd_data_url,
-            "rsync://feed.community.greenbone.net/community/data-feed/22.04/",
+            f"rsync://feed.community.greenbone.net/community/data-feed/{DEFAULT_VERSION}/",
         )
         self.assertEqual(
             args.port_lists_url,
-            "rsync://feed.community.greenbone.net/community/data-feed/22.04/port-lists/",
+            f"rsync://feed.community.greenbone.net/community/data-feed/{DEFAULT_VERSION}/port-lists/",
         )
         self.assertEqual(
             args.report_formats_url,
-            "rsync://feed.community.greenbone.net/community/data-feed/22.04/report-formats/",
+            f"rsync://feed.community.greenbone.net/community/data-feed/{DEFAULT_VERSION}/report-formats/",
         )
         self.assertEqual(
             args.scan_configs_url,
-            "rsync://feed.community.greenbone.net/community/data-feed/22.04/scan-configs/",
+            f"rsync://feed.community.greenbone.net/community/data-feed/{DEFAULT_VERSION}/scan-configs/",
         )
         self.assertEqual(
             args.notus_url,
-            "rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/vt-data/notus/",
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{DEFAULT_VERSION}/vt-data/notus/",
         )
         self.assertEqual(
             args.nasl_url,
-            "rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/vt-data/nasl/",
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{DEFAULT_VERSION}/vt-data/nasl/",
         )
         self.assertEqual(
             args.scap_data_url,
-            "rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/scap-data/",
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{DEFAULT_VERSION}/scap-data/",
         )
         self.assertEqual(
             args.cert_data_url,
-            "rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/cert-data/",
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{DEFAULT_VERSION}/cert-data/",
         )
 
     @patch.object(sys, "argv", ["greenbone-nvt-sync"])
