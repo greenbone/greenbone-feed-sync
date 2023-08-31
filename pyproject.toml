@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "greenbone-feed-sync"
-version = "23.8.0"
+version = "23.8.1.dev1"
 description = "A tool for downloading the Greenbone Community Feed"
 authors = ["Björn Ricks <bjoern.ricks@greenbone.net>"]
 license = "GPL-3.0-or-later"
