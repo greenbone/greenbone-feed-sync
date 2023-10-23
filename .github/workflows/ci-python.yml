@@ -15,6 +15,7 @@ jobs:
           - "3.9"
           - "3.10"
           - "3.11"
+          - "3.12"
     uses: greenbone/workflows/.github/workflows/lint-python.yml@main
     with:
       lint-packages: "greenbone tests"
@@ -29,6 +30,7 @@ jobs:
           - "3.9"
           - "3.10"
           - "3.11"
+          - "3.12"
     uses: greenbone/workflows/.github/workflows/test-python.yml@main
     with:
       python-version: ${{ matrix.python-version }}
