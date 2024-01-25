@@ -47,6 +47,7 @@ from greenbone.feed.sync.config import (
     DEFAULT_SCAP_DATA_PATH,
     DEFAULT_SCAP_DATA_URL_PATH,
     DEFAULT_USER,
+    DEFAULT_VERSION,
     Config,
     EnterpriseSettings,
 )
@@ -264,7 +265,7 @@ destination-prefix = "/opt/lib/"
         self.assertEqual(values["destination-prefix"], Path("/opt/lib"))
         self.assertEqual(
             values["gvmd-data-destination"],
-            Path("/opt/lib/gvm/data-objects/gvmd/22.04"),
+            Path(f"/opt/lib/gvm/data-objects/gvmd/{DEFAULT_VERSION}"),
         )
         self.assertEqual(values["notus-destination"], Path("/opt/lib/notus"))
         self.assertEqual(
@@ -278,15 +279,21 @@ destination-prefix = "/opt/lib/"
         )
         self.assertEqual(
             values["report-formats-destination"],
-            Path("/opt/lib/gvm/data-objects/gvmd/22.04/report-formats"),
+            Path(
+                f"/opt/lib/gvm/data-objects/gvmd/{DEFAULT_VERSION}/report-formats"
+            ),
         )
         self.assertEqual(
             values["scan-configs-destination"],
-            Path("/opt/lib/gvm/data-objects/gvmd/22.04/scan-configs"),
+            Path(
+                f"/opt/lib/gvm/data-objects/gvmd/{DEFAULT_VERSION}/scan-configs"
+            ),
         )
         self.assertEqual(
             values["port-lists-destination"],
-            Path("/opt/lib/gvm/data-objects/gvmd/22.04/port-lists"),
+            Path(
+                f"/opt/lib/gvm/data-objects/gvmd/{DEFAULT_VERSION}/port-lists"
+            ),
         )
         self.assertEqual(
             values["openvas-lock-file"],
@@ -308,35 +315,35 @@ feed-url = "rsync://foo.bar"
         self.assertEqual(values["feed-url"], "rsync://foo.bar")
         self.assertEqual(
             values["gvmd-data-url"],
-            "rsync://foo.bar/data-feed/22.04/",
+            f"rsync://foo.bar/data-feed/{DEFAULT_VERSION}/",
         )
         self.assertEqual(
             values["notus-url"],
-            "rsync://foo.bar/vulnerability-feed/22.04/vt-data/notus/",
+            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_VERSION}/vt-data/notus/",
         )
         self.assertEqual(
             values["nasl-url"],
-            "rsync://foo.bar/vulnerability-feed/22.04/vt-data/nasl/",
+            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_VERSION}/vt-data/nasl/",
         )
         self.assertEqual(
             values["scap-data-url"],
-            "rsync://foo.bar/vulnerability-feed/22.04/scap-data/",
+            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_VERSION}/scap-data/",
         )
         self.assertEqual(
             values["cert-data-url"],
-            "rsync://foo.bar/vulnerability-feed/22.04/cert-data/",
+            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_VERSION}/cert-data/",
         )
         self.assertEqual(
             values["report-formats-url"],
-            "rsync://foo.bar/data-feed/22.04/report-formats/",
+            f"rsync://foo.bar/data-feed/{DEFAULT_VERSION}/report-formats/",
         )
         self.assertEqual(
             values["scan-configs-url"],
-            "rsync://foo.bar/data-feed/22.04/scan-configs/",
+            f"rsync://foo.bar/data-feed/{DEFAULT_VERSION}/scan-configs/",
         )
         self.assertEqual(
             values["port-lists-url"],
-            "rsync://foo.bar/data-feed/22.04/port-lists/",
+            f"rsync://foo.bar/data-feed/{DEFAULT_VERSION}/port-lists/",
         )
 
     @patch.dict(
