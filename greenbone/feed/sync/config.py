@@ -31,7 +31,7 @@ from greenbone.feed.sync.rsync import (
 try:
     import tomllib
 except ImportError:
-    import tomli as tomllib
+    import tomli as tomllib  # type: ignore[no-redef]
 
 
 def maybe_int(value: Optional[str]) -> Union[int, str, None]:
@@ -299,11 +299,9 @@ _DEPENDENT_SETTINGS = (
 
 
 class ConfigDict(Protocol):
-    def items(self) -> Iterable[tuple[str, Any]]:
-        ...
+    def items(self) -> Iterable[tuple[str, Any]]: ...
 
-    def __getitem__(self, key: str) -> Any:
-        ...
+    def __getitem__(self, key: str) -> Any: ...
 
 
 class Config:

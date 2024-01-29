@@ -83,17 +83,21 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
         console = MagicMock()
         rsync_mock_instance = rsync_mock.return_value
 
-        with temp_directory() as temp_dir, patch.dict(
-            "os.environ",
-            {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
-        ), patch.object(
-            sys,
-            "argv",
-            [
-                "greenbone-feed-sync",
-                "--type",
-                "nvt",
-            ],
+        with (
+            temp_directory() as temp_dir,
+            patch.dict(
+                "os.environ",
+                {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
+            ),
+            patch.object(
+                sys,
+                "argv",
+                [
+                    "greenbone-feed-sync",
+                    "--type",
+                    "nvt",
+                ],
+            ),
         ):
             ret = await feed_sync(console=console, error_console=console)
             self.assertEqual(ret, 0)
@@ -137,17 +141,21 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
         console = MagicMock()
         rsync_mock_instance = rsync_mock.return_value
 
-        with temp_directory() as temp_dir, patch.dict(
-            "os.environ",
-            {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
-        ), patch.object(
-            sys,
-            "argv",
-            [
-                "greenbone-feed-sync",
-                "--type",
-                "nvt",
-            ],
+        with (
+            temp_directory() as temp_dir,
+            patch.dict(
+                "os.environ",
+                {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
+            ),
+            patch.object(
+                sys,
+                "argv",
+                [
+                    "greenbone-feed-sync",
+                    "--type",
+                    "nvt",
+                ],
+            ),
         ):
             ret = await feed_sync(console=console, error_console=console)
             self.assertEqual(ret, 0)
@@ -194,13 +202,17 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
         console = MagicMock()
         rsync_mock_instance = rsync_mock.return_value
 
-        with temp_directory() as temp_dir, patch.dict(
-            "os.environ",
-            {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
-        ), patch.object(
-            sys,
-            "argv",
-            ["greenbone-feed-sync", "--type", "nvt", "-vvv"],
+        with (
+            temp_directory() as temp_dir,
+            patch.dict(
+                "os.environ",
+                {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
+            ),
+            patch.object(
+                sys,
+                "argv",
+                ["greenbone-feed-sync", "--type", "nvt", "-vvv"],
+            ),
         ):
             ret = await feed_sync(console=console, error_console=console)
             self.assertEqual(ret, 0)
@@ -261,13 +273,17 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
         console = MagicMock()
         rsync_mock_instance = rsync_mock.return_value
 
-        with temp_directory() as temp_dir, patch.dict(
-            "os.environ",
-            {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
-        ), patch.object(
-            sys,
-            "argv",
-            ["greenbone-feed-sync", "--type", "nvt", "--quiet"],
+        with (
+            temp_directory() as temp_dir,
+            patch.dict(
+                "os.environ",
+                {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
+            ),
+            patch.object(
+                sys,
+                "argv",
+                ["greenbone-feed-sync", "--type", "nvt", "--quiet"],
+            ),
         ):
             ret = await feed_sync(console=console, error_console=console)
             self.assertEqual(ret, 0)
@@ -303,13 +319,17 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
             2, [], b"An rsync error"
         )
 
-        with temp_directory() as temp_dir, patch.dict(
-            "os.environ",
-            {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
-        ), patch.object(
-            sys,
-            "argv",
-            ["greenbone-feed-sync", "--type", "nvt", "--fail-fast"],
+        with (
+            temp_directory() as temp_dir,
+            patch.dict(
+                "os.environ",
+                {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
+            ),
+            patch.object(
+                sys,
+                "argv",
+                ["greenbone-feed-sync", "--type", "nvt", "--fail-fast"],
+            ),
         ):
             ret = await feed_sync(console=console, error_console=console)
             self.assertEqual(ret, 1)
@@ -354,17 +374,21 @@ class MainFunctionTestCase(unittest.TestCase):
         rsync_mock_instance = rsync_mock.return_value
         console_mock_instance = console_mock.return_value
 
-        with temp_directory() as temp_dir, patch.dict(
-            "os.environ",
-            {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
-        ), patch.object(
-            sys,
-            "argv",
-            [
-                "greenbone-feed-sync",
-                "--type",
-                "nvt",
-            ],
+        with (
+            temp_directory() as temp_dir,
+            patch.dict(
+                "os.environ",
+                {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
+            ),
+            patch.object(
+                sys,
+                "argv",
+                [
+                    "greenbone-feed-sync",
+                    "--type",
+                    "nvt",
+                ],
+            ),
         ):
             with self.assertRaises(SystemExit) as cm:
                 main()
@@ -419,13 +443,17 @@ class MainFunctionTestCase(unittest.TestCase):
             "An error"
         )
 
-        with temp_directory() as temp_dir, patch.dict(
-            "os.environ",
-            {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
-        ), patch.object(
-            sys,
-            "argv",
-            ["greenbone-feed-sync", "--type", "nvt", "--fail-fast"],
+        with (
+            temp_directory() as temp_dir,
+            patch.dict(
+                "os.environ",
+                {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
+            ),
+            patch.object(
+                sys,
+                "argv",
+                ["greenbone-feed-sync", "--type", "nvt", "--fail-fast"],
+            ),
         ):
             with self.assertRaises(SystemExit) as cm:
                 main()
