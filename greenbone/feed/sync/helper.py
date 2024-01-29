@@ -46,7 +46,7 @@ async def flock_wait(
     path: Union[str, Path],
     *,
     console: Optional[Console] = None,
-    wait_interval: Optional[int] = DEFAULT_FLOCK_WAIT_INTERVAL,
+    wait_interval: Optional[Union[int, float]] = DEFAULT_FLOCK_WAIT_INTERVAL,
 ) -> AsyncGenerator[None, None]:
     """
     Try to lock a file and wait if it is already locked

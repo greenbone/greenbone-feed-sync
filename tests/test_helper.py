@@ -86,7 +86,9 @@ class FlockTestCase(unittest.IsolatedAsyncioTestCase):
             console = MagicMock(spec=Console)
 
             async with flock_wait(
-                lock_file, console=console, wait_interval=0.5
+                lock_file,
+                console=console,
+                wait_interval=0.5,
             ):
                 pass
 

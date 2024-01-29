@@ -223,9 +223,10 @@ class CliParserTestCase(unittest.TestCase):
     def test_help(self):
         parser = CliParser()
 
-        with redirect_stdout(io.StringIO()) as f, self.assertRaises(
-            SystemExit
-        ) as cm:
+        with (
+            redirect_stdout(io.StringIO()) as f,
+            self.assertRaises(SystemExit) as cm,
+        ):
             parser.parse_arguments(["--help"])
 
         self.assertEqual(cm.exception.code, 0)
@@ -260,7 +261,7 @@ class CliParserTestCase(unittest.TestCase):
         self.assertTrue(args.selftest)
 
     @patch("greenbone.feed.sync.parser.Path")
-    def test_use_default_config_files(self, path_mock: Path):
+    def test_use_default_config_files(self, path_mock):
         path_mock_instance = path_mock.return_value
         path_mock_instance.expanduser.return_value = path_mock_instance
         path_mock_instance.resolve.return_value = path_mock_instance
@@ -461,9 +462,10 @@ class CliParserTestCase(unittest.TestCase):
     def test_other(self):
         parser = CliParser()
 
-        with redirect_stderr(io.StringIO()) as f, self.assertRaises(
-            SystemExit
-        ) as cm:
+        with (
+            redirect_stderr(io.StringIO()) as f,
+            self.assertRaises(SystemExit) as cm,
+        ):
             parser.parse_arguments(["--foo-bar", "10"])
 
         self.assertIn("error: unrecognized arguments: --foo-bar", f.getvalue())

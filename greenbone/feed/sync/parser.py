@@ -347,9 +347,9 @@ class CliParser:
         # set greenbone enterprise feed key in config if user passed one to load
         # desired key for determining the feed url
         if known_args.greenbone_enterprise_feed_key:
-            config[
-                "greenbone-enterprise-feed-key"
-            ] = known_args.greenbone_enterprise_feed_key
+            config["greenbone-enterprise-feed-key"] = (
+                known_args.greenbone_enterprise_feed_key
+            )
 
         if self.parser.prog == "greenbone-nvt-sync":
             config["type"] = "nvt"

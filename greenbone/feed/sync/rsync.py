@@ -42,13 +42,15 @@ async def exec_rsync(*args: str) -> None:
 
 DEFAULT_RSYNC_URL = "rsync://feed.community.greenbone.net/community"
 DEFAULT_RSYNC_COMPRESSION_LEVEL = 9
-DEFAULT_RSYNC_TIMEOUT: Optional[
-    int
-] = None  # in seconds. 0 means no timeout and None use rsync default
+DEFAULT_RSYNC_TIMEOUT: Optional[int] = (
+    None  # in seconds. 0 means no timeout and None use rsync default
+)
 DEFAULT_RSYNC_SSH_PORT = 24
 DEFAULT_RSYNC_SSH_OPTS = (
     "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 )
+
+PathLike = Union[os.PathLike, str]
 
 
 class Rsync:
@@ -71,11 +73,11 @@ class Rsync:
         self,
         *,
         verbose: bool = False,
-        private_subdir: Optional[Path] = None,
+        private_subdir: Optional[PathLike] = None,
         compression_level: Optional[int] = DEFAULT_RSYNC_COMPRESSION_LEVEL,
         timeout: Optional[int] = DEFAULT_RSYNC_TIMEOUT,
-        ssh_key: Optional[Path] = None,
-        exclude: Optional[Iterable[os.PathLike]] = None,
+        ssh_key: Optional[PathLike] = None,
+        exclude: Optional[Iterable[PathLike]] = None,
     ) -> None:
         self.verbose = verbose
         self.private_subdir = private_subdir
@@ -84,7 +86,7 @@ class Rsync:
         self.ssh_key = ssh_key
         self.exclude = exclude
 
-    async def sync(self, url: str, destination: Union[str, Path]) -> None:
+    async def sync(self, url: str, destination: PathLike) -> None:
         """
         Sync data from a remote URL to a destination path
 
@@ -147,7 +149,7 @@ class Rsync:
         ]
 
         if self.private_subdir:
-            rsync_delete.extend(["--exclude", str(self.private_subdir)])
+            rsync_delete.extend(["--exclude", os.fspath(self.private_subdir)])
 
         if self.exclude:
             for exclude in self.exclude:
