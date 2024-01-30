@@ -10,6 +10,7 @@ New script for downloading the Greenbone Community Feed
   - [Install using pip](#install-using-pip)
 - [Usage](#usage)
 - [Usage on Kali Linux](#usage-on-kali-linux)
+- [Command Completion](#command-completion)
 - [Settings](#settings)
   - [verbose](#verbose)
   - [quiet](#quiet)
@@ -137,6 +138,33 @@ This can be done by using a [config file](#config-1).
     group="_gvm"
     EOF
     sudo chmod +r /etc/gvm/greenbone-feed-sync.toml
+
+## Command Completion
+
+`greenbone-feed-sync` comes with support for command line completion in bash
+and zsh.
+
+Setup for bash:
+
+```bash
+echo "source ~/.greenbone-feed-sync-complete.bash" >> ~/.bashrc
+greenbone-feed-sync --print-completion bash > ~/.greenbone-feed-sync-complete.bash
+```
+
+Alternatively, you can use the result of the completion command directly with
+the eval function of your bash shell:
+
+```bash
+eval "$(greenbone-feed-sync --print-completion bash)"
+```
+
+Setup for zsh:
+
+```zsh
+echo 'fpath=("$HOME/.zsh.d" $fpath)' >> ~/.zsh
+mkdir -p ~/.zsh.d/
+greenbone-feed-sync --print-completion zsh > ~/.zsh.d/_greenbone_feed_sync
+```
 
 ## Settings
 

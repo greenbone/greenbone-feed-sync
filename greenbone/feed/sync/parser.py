@@ -7,6 +7,8 @@ from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from typing import Any, Optional, Sequence
 
+import shtab
+
 from greenbone.feed.sync.__version__ import __version__
 from greenbone.feed.sync.config import (
     DEFAULT_CONFIG_FILE,
@@ -48,6 +50,7 @@ class CliParser:
 
     def __init__(self) -> None:
         parser = ArgumentParser(add_help=False)
+        shtab.add_argument_to(parser)
         parser.add_argument(
             "--version",
             help="Print version then exit.",

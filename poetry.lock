@@ -694,6 +694,20 @@ files = [
 ]
 
 [[package]]
+name = "shtab"
+version = "1.6.5"
+description = "Automagic shell tab completion for Python CLI applications"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "shtab-1.6.5-py3-none-any.whl", hash = "sha256:3c7be25ab65a324ed41e9c2964f2146236a5da6e6a247355cfea56f65050f220"},
+    {file = "shtab-1.6.5.tar.gz", hash = "sha256:cf4ab120183e84cce041abeb6f620f9560739741dfc31dd466315550c08be9ec"},
+]
+
+[package.extras]
+dev = ["pytest (>=6)", "pytest-cov", "pytest-timeout"]
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -751,4 +765,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "925e32ab667b7fe929c19c4f304d46000311acda0d2805d9dd27fbba2be7d51c"
+content-hash = "fcb76399a3238b2d08d22b5989b8923506ea2a0375440dfcb1ef7e891ecff9ca"
