@@ -26,14 +26,14 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.9"
+python = "^3.9"
 rich = ">=13.2.0"
 tomli = { version = ">=2.0.1", python = "<3.11" }
 
 [tool.poetry.group.dev.dependencies]
-autohooks-plugin-black = { version = ">=22.11.0", python = "^3.9" }
-autohooks-plugin-ruff = { version = ">=23.6.0", python = "^3.9" }
-autohooks-plugin-mypy = { version = ">=23.3.0", python = "^3.9" }
+autohooks-plugin-black = ">=22.11.0"
+autohooks-plugin-ruff = ">=23.6.0"
+autohooks-plugin-mypy = ">=23.3.0"
 pontos = ">=22.12.2"
 coverage = { extras = ["toml"], version = ">=7.1.0" }
 
