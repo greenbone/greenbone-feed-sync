@@ -84,7 +84,8 @@ target-version = "py39"
 extend-select = ["I", "PLE", "PLW"]
 
 [tool.coverage.run]
-include = ["greenbone/*"]
+omit = ["tests/*", "*/__init__.py"]
+source = ["greenbone"]
 
 [tool.mypy]
 files = "greenbone"
