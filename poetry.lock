@@ -54,21 +54,6 @@ autohooks = ">=21.6.0"
 black = ">=20.8"
 
 [[package]]
-name = "autohooks-plugin-isort"
-version = "23.10.0"
-description = "An autohooks plugin for python code formatting via isort"
-optional = false
-python-versions = ">=3.9,<4.0"
-files = [
-    {file = "autohooks_plugin_isort-23.10.0-py3-none-any.whl", hash = "sha256:40619191a1d21d7ebb59f03ad21e032cadfe56e2e016cf430d37218340727f6c"},
-    {file = "autohooks_plugin_isort-23.10.0.tar.gz", hash = "sha256:9548efb7350021bda0f0c6a1ab030e8a76d7a88774cff5ef130423329afe7ce3"},
-]
-
-[package.dependencies]
-autohooks = ">=21.6.0"
-isort = ">=5.8.0"
-
-[[package]]
 name = "autohooks-plugin-mypy"
 version = "23.10.0"
 description = "An autohooks plugin for python code static typing check with mypy"
@@ -378,20 +363,6 @@ files = [
     {file = "idna-3.6-py3-none-any.whl", hash = "sha256:c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f"},
     {file = "idna-3.6.tar.gz", hash = "sha256:9ecdbbd083b06798ae1e86adcbfe8ab1479cf864e4ee30fe4e46a003d12491ca"},
 ]
-
-[[package]]
-name = "isort"
-version = "5.13.2"
-description = "A Python utility / library to sort Python imports."
-optional = false
-python-versions = ">=3.8.0"
-files = [
-    {file = "isort-5.13.2-py3-none-any.whl", hash = "sha256:8ca5e72a8d85860d5a3fa69b8745237f2939afe12dbf656afbcb47fe72d947a6"},
-    {file = "isort-5.13.2.tar.gz", hash = "sha256:48fdfcb9face5d58a4f6dde2e72a1fb8dcaf8ab26f95ab49fab84c2ddefb0109"},
-]
-
-[package.extras]
-colors = ["colorama (>=0.4.6)"]
 
 [[package]]
 name = "lxml"
@@ -779,4 +750,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9"
-content-hash = "13f9254d71a9145fef3b1aff14b16df1f8e4e4099ba7981c5f9d28e345628ad2"
+content-hash = "d34f9ffa79e37a3f89b14bd4228832d0ea8ff563500f60512c02fba37ee5e930"

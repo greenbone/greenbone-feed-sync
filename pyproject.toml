@@ -32,7 +32,6 @@ tomli = { version = ">=2.0.1", python = "<3.11" }
 
 [tool.poetry.group.dev.dependencies]
 autohooks-plugin-black = { version = ">=22.11.0", python = "^3.9" }
-autohooks-plugin-isort = { version = ">=22.8.0", python = "^3.9" }
 autohooks-plugin-ruff = { version = ">=23.6.0", python = "^3.9" }
 autohooks-plugin-mypy = { version = ">=23.3.0", python = "^3.9" }
 pontos = ">=22.12.2"
@@ -67,7 +66,6 @@ exclude = '''
 [tool.autohooks]
 pre-commit = [
   'autohooks.plugins.black',
-  'autohooks.plugins.isort',
   'autohooks.plugins.ruff',
   'autohooks.plugins.mypy',
 ]
@@ -83,6 +81,7 @@ line_length = 80
 [tool.ruff]
 line-length = 80
 target-version = "py39"
+extend-select = ["I", "PLE", "PLW"]
 
 [tool.coverage.run]
 include = ["greenbone/*"]
