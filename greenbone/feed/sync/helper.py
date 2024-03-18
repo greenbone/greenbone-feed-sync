@@ -58,50 +58,56 @@ async def flock_wait(
             f"Could not create parent directories for {path}"
         ) from e
 
-    with path.open("w", encoding="utf8") as fd0:
-        has_lock = False
-        while not has_lock:
-            try:
-                if console:
-                    console.print(
-                        f"Trying to acquire lock on {path.absolute()}"
-                    )
-
-                fcntl.flock(fd0, fcntl.LOCK_EX | fcntl.LOCK_NB)
-
-                if console:
-                    console.print(f"Acquired lock on {path.absolute()}")
-
-                has_lock = True
-                path.chmod(mode=0o660)
-            except OSError as e:
-                if e.errno in (errno.EAGAIN, errno.EACCES):
-                    if wait_interval is None:
-                        raise FileLockingError(
-                            f"{path.absolute()} is locked. Another process "
-                            "related to the feed update may already running."
-                        ) from None
-
+    try:
+        with path.open("w", encoding="utf8") as fd0:
+            has_lock = False
+            while not has_lock:
+                try:
                     if console:
                         console.print(
-                            f"{path.absolute()} is locked by another process. "
-                            f"Waiting {wait_interval} seconds before next try."
+                            f"Trying to acquire lock on {path.absolute()}"
                         )
-                    await asyncio.sleep(wait_interval)
-                else:
-                    raise
 
-        try:
-            yield
-        finally:
+                    fcntl.flock(fd0, fcntl.LOCK_EX | fcntl.LOCK_NB)
+
+                    if console:
+                        console.print(f"Acquired lock on {path.absolute()}")
+
+                    has_lock = True
+                    path.chmod(mode=0o660)
+                except OSError as e:
+                    if e.errno in (errno.EAGAIN, errno.EACCES):
+                        if wait_interval is None:
+                            raise FileLockingError(
+                                f"{path.absolute()} is locked. Another process "
+                                "related to the feed update may already running."
+                            ) from None
+
+                        if console:
+                            console.print(
+                                f"{path.absolute()} is locked by another process. "
+                                f"Waiting {wait_interval} seconds before next try."
+                            )
+                        await asyncio.sleep(wait_interval)
+                    else:
+                        raise
+
             try:
-                # free the lock
-                if console:
-                    console.print(f"Releasing lock on {path.absolute()}")
+                yield
+            finally:
+                try:
+                    # free the lock
+                    if console:
+                        console.print(f"Releasing lock on {path.absolute()}")
 
-                fcntl.flock(fd0, fcntl.LOCK_UN)
-            except OSError:
-                pass
+                    fcntl.flock(fd0, fcntl.LOCK_UN)
+                except OSError:
+                    pass
+    except PermissionError as e:
+        raise FileLockingError(
+            "Permission error while trying to open the lock file "
+            f"{path.absolute()}"
+        ) from e
 
 
 class Spinner:
