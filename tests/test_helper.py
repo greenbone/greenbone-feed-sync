@@ -140,6 +140,20 @@ class FlockTestCase(unittest.IsolatedAsyncioTestCase):
             ):
                 pass
 
+    async def test_permission_error(self):
+        with temp_directory() as temp_dir:
+            lock_file = temp_dir / "file.lock"
+            lock_file.touch()
+            lock_file.chmod(0)
+            with self.assertRaisesRegex(
+                FileLockingError,
+                f"^Permission error while trying to open the lock file {lock_file.absolute()}$",
+            ):
+                async with flock_wait(
+                    lock_file,
+                ):
+                    pass
+
 
 class SpinnerTestCase(unittest.TestCase):
     @patch("greenbone.feed.sync.helper.Live", autospec=True)
