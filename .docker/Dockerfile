@@ -9,6 +9,7 @@ RUN apt-get update && \
     gosu \
     python3 \
     python-is-python3 \
+    ssh-client \
     pipx && \
     apt-get remove --purge --auto-remove -y && \
     rm -rf /var/lib/apt/lists/*
