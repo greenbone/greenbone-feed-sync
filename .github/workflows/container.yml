@@ -7,43 +7,45 @@ on:
   workflow_dispatch:
 
 jobs:
-  images:
-    name: Build images
-    runs-on: ubuntu-latest
-
+  generate:
+    name: generate greenbone-feed-sync archive
+    runs-on:
+     - self-hosted
+     - self-hosted-generic
+    outputs:
+      labels: ${{ steps.labels.outputs.labels }}
+      feed-info: ${{ steps.feed-info.outputs.feed-version }}
+      is-latest-tag: ${{ steps.latest.outputs.is-latest-tag }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Login to Dockerhub Container Registry
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Determine Feed Info
+        id: feed-info
+        run: |
+          echo "feed-version=$(date +"%Y%m%d%H%M")" >> $GITHUB_OUTPUT
+      - uses: greenbone/actions/is-latest-tag@v3
+        id: latest
       - name: Setup container meta information
-        id: meta
+        id: labels
         uses: docker/metadata-action@v5
         with:
-          images: ${{ github.repository }}
           labels: |
             org.opencontainers.image.vendor=Greenbone
             org.opencontainers.image.documentation=https://greenbone.github.io/docs/
             org.opencontainers.image.base.name=debian:stable-slim
-          tags: |
-            # create container tag for git tags
-            type=ref,event=tag
-            # set edge for default branch
-            type=edge
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build and push Container image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: ${{ github.event_name != 'pull_request' }}
-          file: .docker/Dockerfile
-          platforms: linux/amd64,linux/arm64
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+
+  harbor:
+    name: Build and push to self-hosted harbor
+    needs: generate
+    uses: greenbone/workflows/.github/workflows/container-build-push-feed.yml@main
+    with:
+      image-labels: ${{ needs.generate.outputs.labels }}
+      image-tags: |
+        type=ref,event=tag
+        # set edge for default branch
+        type=edge
+        # when a new git tag is created set stable and a latest tags
+        type=raw,value=latest,enable=${{ needs.generate.outputs.is-latest-tag == 'true' }}
+        type=raw,value=stable,enable=${{ needs.generate.outputs.is-latest-tag == 'true' }}
+      image-url: community/greenbone-feed-sync
+    secrets: inherit
