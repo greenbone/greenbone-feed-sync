@@ -18,6 +18,7 @@ jobs:
     name: Build and push to self-hosted harbor
     uses: greenbone/workflows/.github/workflows/container-build-push-2nd-gen.yml@main
     with:
+      build-docker-file: .docker/Dockerfile
       image-labels: |
         org.opencontainers.image.vendor=Greenbone
         org.opencontainers.image.documentation=https://greenbone.github.io/docs/
