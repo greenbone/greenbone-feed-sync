@@ -1,51 +1,27 @@
-name: Container Image Builds
+name: Build and Push to Greenbone Registry
 
 on:
   push:
     branches: [ main ]
     tags: ["v*"]
+  pull_request:
+    branches: [ main ]
   workflow_dispatch:
+    inputs:
+      ref-name:
+        type: string
+        description: "The ref to build a container image from. For example a tag v23.0.0."
+        required: true
 
 jobs:
-  generate:
-    name: generate greenbone-feed-sync archive
-    runs-on:
-     - self-hosted
-     - self-hosted-generic
-    outputs:
-      labels: ${{ steps.labels.outputs.labels }}
-      feed-info: ${{ steps.feed-info.outputs.feed-version }}
-      is-latest-tag: ${{ steps.latest.outputs.is-latest-tag }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Determine Feed Info
-        id: feed-info
-        run: |
-          echo "feed-version=$(date +"%Y%m%d%H%M")" >> $GITHUB_OUTPUT
-      - uses: greenbone/actions/is-latest-tag@v3
-        id: latest
-      - name: Setup container meta information
-        id: labels
-        uses: docker/metadata-action@v5
-        with:
-          labels: |
-            org.opencontainers.image.vendor=Greenbone
-            org.opencontainers.image.documentation=https://greenbone.github.io/docs/
-            org.opencontainers.image.base.name=debian:stable-slim
-
-  harbor:
+  push:
     name: Build and push to self-hosted harbor
-    needs: generate
-    uses: greenbone/workflows/.github/workflows/container-build-push-feed.yml@main
+    uses: greenbone/workflows/.github/workflows/container-build-push-2nd-gen.yml@main
     with:
-      image-labels: ${{ needs.generate.outputs.labels }}
-      image-tags: |
-        type=ref,event=tag
-        # set edge for default branch
-        type=edge
-        # when a new git tag is created set stable and a latest tags
-        type=raw,value=latest,enable=${{ needs.generate.outputs.is-latest-tag == 'true' }}
-        type=raw,value=stable,enable=${{ needs.generate.outputs.is-latest-tag == 'true' }}
+      image-labels: |
+        org.opencontainers.image.vendor=Greenbone
+        org.opencontainers.image.documentation=https://greenbone.github.io/docs/
+        org.opencontainers.image.base.name=debian:stable-slim
       image-url: community/greenbone-feed-sync
+      ref-name: ${{ inputs.ref-name }}
     secrets: inherit
