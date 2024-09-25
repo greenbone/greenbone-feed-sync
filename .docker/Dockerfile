@@ -33,6 +33,7 @@ RUN apt-get update && \
   rsync \
   python3 \
   pipx \
+  openssh-client \
   python3-pip && \
   apt-get remove --purge --auto-remove -y && \
   rm -rf /var/lib/apt/lists/*
@@ -48,6 +49,7 @@ COPY .docker/entrypoint.sh /usr/local/bin/entrypoint
 RUN python3 -m pip install --break-system-packages /greenbone-feed-sync/*
 
 RUN chown -R gvm:gvm /greenbone-feed-sync && \
+  chown -R gvm:gvm /var/lib/ && \
   chmod 755 /usr/local/bin/entrypoint
 
 ENTRYPOINT [ "/usr/local/bin/entrypoint" ]
