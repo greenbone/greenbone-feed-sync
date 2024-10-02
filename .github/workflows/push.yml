@@ -25,4 +25,5 @@ jobs:
         org.opencontainers.image.base.name=debian:stable-slim
       image-url: community/greenbone-feed-sync
       ref-name: ${{ inputs.ref-name }}
+      notification-channel: "pdfeeddeploymentnotification"
     secrets: inherit
