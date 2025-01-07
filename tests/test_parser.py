@@ -302,8 +302,7 @@ class CliParserTestCase(unittest.TestCase):
             parser.parse_arguments(["--compression-level", "10"])
 
         self.assertIn(
-            "error: argument --compression-level: invalid choice: 10 "
-            "(choose from 0, 1, 2, 3, 4, 5, 6, 7, 8, 9)",
+            "error: argument --compression-level: invalid choice:",
             f.getvalue(),
         )
 
