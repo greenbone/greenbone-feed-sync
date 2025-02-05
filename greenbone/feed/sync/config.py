@@ -34,7 +34,7 @@ def maybe_int(value: Optional[str]) -> Union[int, str, None]:
     return value
 
 
-DEFAULT_FEED_VERSION = "22.04"
+DEFAULT_FEED_VERSION = "24.10"
 
 DEFAULT_DESTINATION_PREFIX = "/var/lib/"
 
