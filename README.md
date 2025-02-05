@@ -597,7 +597,7 @@ first.
 
 ## License
 
-Copyright (C) 2022-2024 [Greenbone AG][Greenbone Networks]
+Copyright (C) 2022-2025 [Greenbone AG][Greenbone Networks]
 
 Licensed under the [GNU General Public License v3.0 or later](LICENSE).
 
