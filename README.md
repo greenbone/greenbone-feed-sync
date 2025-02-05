@@ -2,7 +2,11 @@
 
 # greenbone-feed-sync <!-- omit in toc -->
 
-New script for downloading the Greenbone Community Feed
+Tool for downloading the Greenbone Community Feed.
+
+`greenbone-feed-sync` assumes you are using the latest feed version and up to
+date components of the Greenbone Community Edition by default. It is highly
+configurable and can be adjusted easily for downloading different feed versions.
 
 - [Installation](#installation)
   - [Requirements](#requirements)
