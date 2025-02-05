@@ -19,6 +19,7 @@ New script for downloading the Greenbone Community Feed
   - [compression-level](#compression-level)
   - [type](#type)
   - [feed-url](#feed-url)
+  - [feed-version](#feed-version)
   - [destination-prefix](#destination-prefix)
   - [gvmd-data-destination](#gvmd-data-destination)
   - [gvmd-data-url](#gvmd-data-url)
@@ -242,6 +243,16 @@ is only required for experts and testing purposes.
 | Environment Variable | `GREENBONE_FEED_SYNC_URL`                                                                                                                                                                                                        |
 | Default Value        | `rsync://feed.community.greenbone.net/community`                                                                                                                                                                                 |
 | Description          | URL to download the feed data from. Other URLs will be relative to this URL by default. For example using `rsync://example.com` as feed url the notus url will be `rsync://example.com/vulnerability-feed/22.04/vt-data/notus/`. |
+
+### feed-version
+
+| Name                 |                                       |
+| -------------------- |---------------------------------------|
+| CLI Argument         | `--feed-version`                      |
+| Config Variable      | feed-version                          |
+| Environment Variable | `GREENBONE_FEED_SYNC_FEED_VERSION`    |
+| Default Value        | `22.04`                               |
+| Description          | Version of the feed to be downloaded. |
 
 ### destination-prefix
 
