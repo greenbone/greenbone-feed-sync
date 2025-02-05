@@ -34,18 +34,7 @@ def maybe_int(value: Optional[str]) -> Union[int, str, None]:
     return value
 
 
-DEFAULT_VERSION = "22.04"
-
-DEFAULT_NOTUS_URL_PATH = f"/vulnerability-feed/{DEFAULT_VERSION}/vt-data/notus/"
-DEFAULT_NASL_URL_PATH = f"/vulnerability-feed/{DEFAULT_VERSION}/vt-data/nasl/"
-DEFAULT_SCAP_DATA_URL_PATH = f"/vulnerability-feed/{DEFAULT_VERSION}/scap-data/"
-DEFAULT_CERT_DATA_URL_PATH = f"/vulnerability-feed/{DEFAULT_VERSION}/cert-data/"
-DEFAULT_GVMD_DATA_URL_PATH = f"/data-feed/{DEFAULT_VERSION}/"
-DEFAULT_REPORT_FORMATS_URL_PATH = (
-    f"/data-feed/{DEFAULT_VERSION}/report-formats/"
-)
-DEFAULT_SCAN_CONFIGS_URL_PATH = f"/data-feed/{DEFAULT_VERSION}/scan-configs/"
-DEFAULT_PORT_LISTS_URL_PATH = f"/data-feed/{DEFAULT_VERSION}/port-lists/"
+DEFAULT_FEED_VERSION = "22.04"
 
 DEFAULT_DESTINATION_PREFIX = "/var/lib/"
 
@@ -53,14 +42,6 @@ DEFAULT_NASL_PATH = "openvas/plugins"
 DEFAULT_NOTUS_PATH = "notus"
 DEFAULT_SCAP_DATA_PATH = "gvm/scap-data"
 DEFAULT_CERT_DATA_PATH = "gvm/cert-data"
-DEFAULT_GVMD_DATA_PATH = f"gvm/data-objects/gvmd/{DEFAULT_VERSION}/"
-DEFAULT_REPORT_FORMATS_PATH = (
-    f"gvm/data-objects/gvmd/{DEFAULT_VERSION}/report-formats"
-)
-DEFAULT_SCAN_CONFIGS_PATH = (
-    f"gvm/data-objects/gvmd/{DEFAULT_VERSION}/scan-configs"
-)
-DEFAULT_PORT_LISTS_PATH = f"gvm/data-objects/gvmd/{DEFAULT_VERSION}/port-lists"
 
 DEFAULT_GVMD_LOCK_FILE_PATH = "gvm/feed-update.lock"
 DEFAULT_OPENVAS_LOCK_FILE_PATH = "openvas/feed-update.lock"
@@ -171,6 +152,12 @@ _SETTINGS = (
         DEFAULT_ENTERPRISE_KEY_PATH,
         Path,
     ),
+    Setting(
+        "feed-version",
+        "GREENBONE_FEED_SYNC_FEED_VERSION",
+        DEFAULT_FEED_VERSION,
+        str,
+    ),
 )
 
 # pylint: disable=line-too-long
@@ -178,13 +165,13 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "gvmd-data-destination",
         "GREENBONE_FEED_SYNC_GVMD_DATA_DESTINATION",
-        lambda values: f"{values['destination-prefix']}/{DEFAULT_GVMD_DATA_PATH}",  # noqa: E501
+        lambda values: f"{values['destination-prefix']}/gvm/data-objects/gvmd/{values['feed-version']}/",  # noqa: E501
         Path,
     ),
     DependentSetting(
         "gvmd-data-url",
         "GREENBONE_FEED_SYNC_GVMD_DATA_URL",
-        lambda values: f"{values['feed-url']}{DEFAULT_GVMD_DATA_URL_PATH}",
+        lambda values: f"{values['feed-url']}/data-feed/{values['feed-version']}/",
         str,
     ),
     DependentSetting(
@@ -196,7 +183,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "notus-url",
         "GREENBONE_FEED_SYNC_NOTUS_URL",
-        lambda values: f"{values['feed-url']}{DEFAULT_NOTUS_URL_PATH}",
+        lambda values: f"{values['feed-url']}/vulnerability-feed/{values['feed-version']}/vt-data/notus/",
         str,
     ),
     DependentSetting(
@@ -208,7 +195,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "nasl-url",
         "GREENBONE_FEED_SYNC_NASL_URL",
-        lambda values: f"{values['feed-url']}{DEFAULT_NASL_URL_PATH}",
+        lambda values: f"{values['feed-url']}/vulnerability-feed/{values['feed-version']}/vt-data/nasl/",
         str,
     ),
     DependentSetting(
@@ -220,7 +207,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "scap-data-url",
         "GREENBONE_FEED_SYNC_SCAP_DATA_URL",
-        lambda values: f"{values['feed-url']}{DEFAULT_SCAP_DATA_URL_PATH}",
+        lambda values: f"{values['feed-url']}/vulnerability-feed/{values['feed-version']}/scap-data/",
         str,
     ),
     DependentSetting(
@@ -232,43 +219,43 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "cert-data-url",
         "GREENBONE_FEED_SYNC_CERT_DATA_URL",
-        lambda values: f"{values['feed-url']}{DEFAULT_CERT_DATA_URL_PATH}",
+        lambda values: f"{values['feed-url']}/vulnerability-feed/{values['feed-version']}/cert-data/",
         str,
     ),
     DependentSetting(
         "report-formats-destination",
         "GREENBONE_FEED_SYNC_REPORT_FORMATS_DESTINATION",
-        lambda values: f"{values['destination-prefix']}/{DEFAULT_REPORT_FORMATS_PATH}",  # noqa: E501
+        lambda values: f"{values['destination-prefix']}/gvm/data-objects/gvmd/{values['feed-version']}/report-formats",  # noqa: E501
         Path,
     ),
     DependentSetting(
         "report-formats-url",
         "GREENBONE_FEED_SYNC_REPORT_FORMATS_URL",
-        lambda values: f"{values['feed-url']}{DEFAULT_REPORT_FORMATS_URL_PATH}",  # noqa: E501
+        lambda values: f"{values['feed-url']}/data-feed/{values['feed-version']}/report-formats/",  # noqa: E501
         str,
     ),
     DependentSetting(
         "scan-configs-destination",
         "GREENBONE_FEED_SYNC_SCAN_CONFIGS_DESTINATION",
-        lambda values: f"{values['destination-prefix']}/{DEFAULT_SCAN_CONFIGS_PATH}",  # noqa: E501
+        lambda values: f"{values['destination-prefix']}/gvm/data-objects/gvmd/{values['feed-version']}/scan-configs",  # noqa: E501
         Path,
     ),
     DependentSetting(
         "scan-configs-url",
         "GREENBONE_FEED_SYNC_SCAN_CONFIGS_URL",
-        lambda values: f"{values['feed-url']}{DEFAULT_SCAN_CONFIGS_URL_PATH}",
+        lambda values: f"{values['feed-url']}/data-feed/{values['feed-version']}/scan-configs/",  # noqa: E501
         str,
     ),
     DependentSetting(
         "port-lists-destination",
         "GREENBONE_FEED_SYNC_PORT_LISTS_DESTINATION",
-        lambda values: f"{values['destination-prefix']}/{DEFAULT_PORT_LISTS_PATH}",  # noqa: E501
+        lambda values: f"{values['destination-prefix']}/gvm/data-objects/gvmd/{values['feed-version']}/port-lists",  # noqa: E501
         Path,
     ),
     DependentSetting(
         "port-lists-url",
         "GREENBONE_FEED_SYNC_PORT_LISTS_URL",
-        lambda values: f"{values['feed-url']}{DEFAULT_PORT_LISTS_URL_PATH}",
+        lambda values: f"{values['feed-url']}/data-feed/{values['feed-version']}/port-lists/",  # noqa: E501
         str,
     ),
     DependentSetting(

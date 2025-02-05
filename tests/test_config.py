@@ -13,29 +13,13 @@ from unittest.mock import MagicMock, patch
 from pontos.testing import temp_file
 
 from greenbone.feed.sync.config import (
-    DEFAULT_CERT_DATA_PATH,
-    DEFAULT_CERT_DATA_URL_PATH,
     DEFAULT_DESTINATION_PREFIX,
     DEFAULT_ENTERPRISE_KEY_PATH,
+    DEFAULT_FEED_VERSION,
     DEFAULT_GROUP,
-    DEFAULT_GVMD_DATA_PATH,
-    DEFAULT_GVMD_DATA_URL_PATH,
     DEFAULT_GVMD_LOCK_FILE_PATH,
-    DEFAULT_NASL_PATH,
-    DEFAULT_NASL_URL_PATH,
-    DEFAULT_NOTUS_PATH,
-    DEFAULT_NOTUS_URL_PATH,
     DEFAULT_OPENVAS_LOCK_FILE_PATH,
-    DEFAULT_PORT_LISTS_PATH,
-    DEFAULT_PORT_LISTS_URL_PATH,
-    DEFAULT_REPORT_FORMATS_PATH,
-    DEFAULT_REPORT_FORMATS_URL_PATH,
-    DEFAULT_SCAN_CONFIGS_PATH,
-    DEFAULT_SCAN_CONFIGS_URL_PATH,
-    DEFAULT_SCAP_DATA_PATH,
-    DEFAULT_SCAP_DATA_URL_PATH,
     DEFAULT_USER,
-    DEFAULT_VERSION,
     Config,
     EnterpriseSettings,
 )
@@ -51,72 +35,93 @@ class ConfigTestCase(unittest.TestCase):
     def test_defaults(self):
         values = Config.load()
 
-        self.assertEqual(len(values), 30)
+        self.assertEqual(len(values), 31)
         self.assertEqual(
             values["destination-prefix"], Path(DEFAULT_DESTINATION_PREFIX)
         )
         self.assertEqual(
             values["gvmd-data-destination"],
-            Path(DEFAULT_DESTINATION_PREFIX) / DEFAULT_GVMD_DATA_PATH,
+            Path(DEFAULT_DESTINATION_PREFIX)
+            / "gvm"
+            / "data-objects"
+            / "gvmd"
+            / DEFAULT_FEED_VERSION,
         )
         self.assertEqual(
             values["gvmd-data-url"],
-            f"{DEFAULT_RSYNC_URL}{DEFAULT_GVMD_DATA_URL_PATH}",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_VERSION}/",
         )
         self.assertEqual(values["feed-url"], DEFAULT_RSYNC_URL)
         self.assertEqual(
             values["notus-destination"],
-            Path(DEFAULT_DESTINATION_PREFIX) / DEFAULT_NOTUS_PATH,
+            Path(DEFAULT_DESTINATION_PREFIX) / "notus",
         )
         self.assertEqual(
-            values["notus-url"], f"{DEFAULT_RSYNC_URL}{DEFAULT_NOTUS_URL_PATH}"
+            values["notus-url"],
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/notus/",
         )
         self.assertEqual(
             values["nasl-destination"],
-            Path(DEFAULT_DESTINATION_PREFIX) / DEFAULT_NASL_PATH,
+            Path(DEFAULT_DESTINATION_PREFIX) / "openvas" / "plugins",
         )
         self.assertEqual(
-            values["nasl-url"], f"{DEFAULT_RSYNC_URL}{DEFAULT_NASL_URL_PATH}"
+            values["nasl-url"],
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/nasl/",
         )
         self.assertEqual(
             values["scap-data-destination"],
-            Path(DEFAULT_DESTINATION_PREFIX) / DEFAULT_SCAP_DATA_PATH,
+            Path(DEFAULT_DESTINATION_PREFIX) / "gvm" / "scap-data",
         )
         self.assertEqual(
             values["scap-data-url"],
-            f"{DEFAULT_RSYNC_URL}{DEFAULT_SCAP_DATA_URL_PATH}",
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_VERSION}/scap-data/",
         )
         self.assertEqual(
             values["cert-data-destination"],
-            Path(DEFAULT_DESTINATION_PREFIX) / DEFAULT_CERT_DATA_PATH,
+            Path(DEFAULT_DESTINATION_PREFIX) / "gvm" / "cert-data",
         )
         self.assertEqual(
             values["cert-data-url"],
-            f"{DEFAULT_RSYNC_URL}{DEFAULT_CERT_DATA_URL_PATH}",
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_VERSION}/cert-data/",
         )
         self.assertEqual(
             values["report-formats-destination"],
-            Path(DEFAULT_DESTINATION_PREFIX) / DEFAULT_REPORT_FORMATS_PATH,
+            Path(DEFAULT_DESTINATION_PREFIX)
+            / "gvm"
+            / "data-objects"
+            / "gvmd"
+            / DEFAULT_FEED_VERSION
+            / "report-formats",
         )
         self.assertEqual(
             values["report-formats-url"],
-            f"{DEFAULT_RSYNC_URL}{DEFAULT_REPORT_FORMATS_URL_PATH}",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_VERSION}/report-formats/",
         )
         self.assertEqual(
             values["scan-configs-destination"],
-            Path(DEFAULT_DESTINATION_PREFIX) / DEFAULT_SCAN_CONFIGS_PATH,
+            Path(DEFAULT_DESTINATION_PREFIX)
+            / "gvm"
+            / "data-objects"
+            / "gvmd"
+            / DEFAULT_FEED_VERSION
+            / "scan-configs",
         )
         self.assertEqual(
             values["scan-configs-url"],
-            f"{DEFAULT_RSYNC_URL}{DEFAULT_SCAN_CONFIGS_URL_PATH}",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_VERSION}/scan-configs/",
         )
         self.assertEqual(
             values["port-lists-destination"],
-            Path(DEFAULT_DESTINATION_PREFIX) / DEFAULT_PORT_LISTS_PATH,
+            Path(DEFAULT_DESTINATION_PREFIX)
+            / "gvm"
+            / "data-objects"
+            / "gvmd"
+            / DEFAULT_FEED_VERSION
+            / "port-lists",
         )
         self.assertEqual(
             values["port-lists-url"],
-            f"{DEFAULT_RSYNC_URL}{DEFAULT_PORT_LISTS_URL_PATH}",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_VERSION}/port-lists/",
         )
         self.assertEqual(
             values["gvmd-lock-file"],
@@ -141,6 +146,7 @@ class ConfigTestCase(unittest.TestCase):
             values["greenbone-enterprise-feed-key"],
             Path(DEFAULT_ENTERPRISE_KEY_PATH),
         )
+        self.assertEqual(values["feed-version"], DEFAULT_FEED_VERSION)
 
     def test_config_file(self):
         content = """[greenbone-feed-sync]
@@ -174,6 +180,7 @@ rsync-timeout = 120
 group = "foo"
 user = "bar"
 greenbone-enterprise-feed-key = "/srv/feed.key"
+feed-version = "1.2.3"
 """
         path_mock = MagicMock(spec=Path)
         path_mock.read_text.return_value = content
@@ -239,6 +246,7 @@ greenbone-enterprise-feed-key = "/srv/feed.key"
         self.assertEqual(
             values["greenbone-enterprise-feed-key"], Path("/srv/feed.key")
         )
+        self.assertEqual(values["feed-version"], "1.2.3")
 
     def test_destination_prefix(self):
         content = """[greenbone-feed-sync]
@@ -253,7 +261,7 @@ destination-prefix = "/opt/lib/"
         self.assertEqual(values["destination-prefix"], Path("/opt/lib"))
         self.assertEqual(
             values["gvmd-data-destination"],
-            Path(f"/opt/lib/gvm/data-objects/gvmd/{DEFAULT_VERSION}"),
+            Path(f"/opt/lib/gvm/data-objects/gvmd/{DEFAULT_FEED_VERSION}"),
         )
         self.assertEqual(values["notus-destination"], Path("/opt/lib/notus"))
         self.assertEqual(
@@ -268,19 +276,19 @@ destination-prefix = "/opt/lib/"
         self.assertEqual(
             values["report-formats-destination"],
             Path(
-                f"/opt/lib/gvm/data-objects/gvmd/{DEFAULT_VERSION}/report-formats"
+                f"/opt/lib/gvm/data-objects/gvmd/{DEFAULT_FEED_VERSION}/report-formats"
             ),
         )
         self.assertEqual(
             values["scan-configs-destination"],
             Path(
-                f"/opt/lib/gvm/data-objects/gvmd/{DEFAULT_VERSION}/scan-configs"
+                f"/opt/lib/gvm/data-objects/gvmd/{DEFAULT_FEED_VERSION}/scan-configs"
             ),
         )
         self.assertEqual(
             values["port-lists-destination"],
             Path(
-                f"/opt/lib/gvm/data-objects/gvmd/{DEFAULT_VERSION}/port-lists"
+                f"/opt/lib/gvm/data-objects/gvmd/{DEFAULT_FEED_VERSION}/port-lists"
             ),
         )
         self.assertEqual(
@@ -303,35 +311,35 @@ feed-url = "rsync://foo.bar"
         self.assertEqual(values["feed-url"], "rsync://foo.bar")
         self.assertEqual(
             values["gvmd-data-url"],
-            f"rsync://foo.bar/data-feed/{DEFAULT_VERSION}/",
+            f"rsync://foo.bar/data-feed/{DEFAULT_FEED_VERSION}/",
         )
         self.assertEqual(
             values["notus-url"],
-            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_VERSION}/vt-data/notus/",
+            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/notus/",
         )
         self.assertEqual(
             values["nasl-url"],
-            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_VERSION}/vt-data/nasl/",
+            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/nasl/",
         )
         self.assertEqual(
             values["scap-data-url"],
-            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_VERSION}/scap-data/",
+            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_FEED_VERSION}/scap-data/",
         )
         self.assertEqual(
             values["cert-data-url"],
-            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_VERSION}/cert-data/",
+            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_FEED_VERSION}/cert-data/",
         )
         self.assertEqual(
             values["report-formats-url"],
-            f"rsync://foo.bar/data-feed/{DEFAULT_VERSION}/report-formats/",
+            f"rsync://foo.bar/data-feed/{DEFAULT_FEED_VERSION}/report-formats/",
         )
         self.assertEqual(
             values["scan-configs-url"],
-            f"rsync://foo.bar/data-feed/{DEFAULT_VERSION}/scan-configs/",
+            f"rsync://foo.bar/data-feed/{DEFAULT_FEED_VERSION}/scan-configs/",
         )
         self.assertEqual(
             values["port-lists-url"],
-            f"rsync://foo.bar/data-feed/{DEFAULT_VERSION}/port-lists/",
+            f"rsync://foo.bar/data-feed/{DEFAULT_FEED_VERSION}/port-lists/",
         )
 
     @patch.dict(
@@ -367,6 +375,7 @@ feed-url = "rsync://foo.bar"
             "GREENBONE_FEED_SYNC_GROUP": "123",
             "GREENBONE_FEED_SYNC_USER": "321",
             "GREENBONE_FEED_SYNC_ENTERPRISE_FEED_KEY": "/tmp/some.key",
+            "GREENBONE_FEED_SYNC_FEED_VERSION": "1.2.3",
         },
     )
     def test_environment(self):
@@ -428,6 +437,7 @@ feed-url = "rsync://foo.bar"
         self.assertEqual(
             values["greenbone-enterprise-feed-key"], Path("/tmp/some.key")
         )
+        self.assertEqual(values["feed-version"], "1.2.3")
 
     @patch.dict(
         "os.environ",
@@ -460,6 +470,7 @@ feed-url = "rsync://foo.bar"
             "GREENBONE_FEED_SYNC_FAIL_FAST": "1",
             "GREENBONE_FEED_SYNC_RSYNC_TIMEOUT": "120",
             "GREENBONE_FEED_SYNC_ENTERPRISE_FEED_KEY": "/tmp/some.key",
+            "GREENBONE_FEED_SYNC_FEED_VERSION": "1.2.3",
         },
     )
     def test_environment_overrides_config_file(self):
@@ -492,6 +503,7 @@ verbose = 99
 fail-fast = false
 rsync-timeout = 360
 greenbone-enterprise-feed-key = "/srv/feed.key"
+feed-version = "2.3.4"
 """
         path_mock = MagicMock(spec=Path)
         path_mock.read_text.return_value = content
@@ -551,6 +563,102 @@ greenbone-enterprise-feed-key = "/srv/feed.key"
         self.assertEqual(values["rsync-timeout"], 120)
         self.assertEqual(
             values["greenbone-enterprise-feed-key"], Path("/tmp/some.key")
+        )
+        self.assertEqual(values["feed-version"], "1.2.3")
+
+    def test_feed_version(self):
+        feed_version = "1.2.3"
+        content = f"""[greenbone-feed-sync]
+feed-version = "{feed_version}"
+"""
+        path_mock = MagicMock(spec=Path)
+        path_mock.read_text.return_value = content
+
+        values = Config.load(path_mock)
+
+        self.assertEqual(
+            values["gvmd-data-destination"],
+            Path(DEFAULT_DESTINATION_PREFIX)
+            / "gvm"
+            / "data-objects"
+            / "gvmd"
+            / feed_version,
+        )
+        self.assertEqual(
+            values["gvmd-data-url"],
+            f"{DEFAULT_RSYNC_URL}/data-feed/{feed_version}/",
+        )
+        self.assertEqual(values["feed-url"], DEFAULT_RSYNC_URL)
+        self.assertEqual(
+            values["notus-destination"],
+            Path(DEFAULT_DESTINATION_PREFIX) / "notus",
+        )
+        self.assertEqual(
+            values["notus-url"],
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{feed_version}/vt-data/notus/",
+        )
+        self.assertEqual(
+            values["nasl-destination"],
+            Path(DEFAULT_DESTINATION_PREFIX) / "openvas" / "plugins",
+        )
+        self.assertEqual(
+            values["nasl-url"],
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{feed_version}/vt-data/nasl/",
+        )
+        self.assertEqual(
+            values["scap-data-destination"],
+            Path(DEFAULT_DESTINATION_PREFIX) / "gvm" / "scap-data",
+        )
+        self.assertEqual(
+            values["scap-data-url"],
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{feed_version}/scap-data/",
+        )
+        self.assertEqual(
+            values["cert-data-destination"],
+            Path(DEFAULT_DESTINATION_PREFIX) / "gvm" / "cert-data",
+        )
+        self.assertEqual(
+            values["cert-data-url"],
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{feed_version}/cert-data/",
+        )
+        self.assertEqual(
+            values["report-formats-destination"],
+            Path(DEFAULT_DESTINATION_PREFIX)
+            / "gvm"
+            / "data-objects"
+            / "gvmd"
+            / feed_version
+            / "report-formats",
+        )
+        self.assertEqual(
+            values["report-formats-url"],
+            f"{DEFAULT_RSYNC_URL}/data-feed/{feed_version}/report-formats/",
+        )
+        self.assertEqual(
+            values["scan-configs-destination"],
+            Path(DEFAULT_DESTINATION_PREFIX)
+            / "gvm"
+            / "data-objects"
+            / "gvmd"
+            / feed_version
+            / "scan-configs",
+        )
+        self.assertEqual(
+            values["scan-configs-url"],
+            f"{DEFAULT_RSYNC_URL}/data-feed/{feed_version}/scan-configs/",
+        )
+        self.assertEqual(
+            values["port-lists-destination"],
+            Path(DEFAULT_DESTINATION_PREFIX)
+            / "gvm"
+            / "data-objects"
+            / "gvmd"
+            / feed_version
+            / "port-lists",
+        )
+        self.assertEqual(
+            values["port-lists-url"],
+            f"{DEFAULT_RSYNC_URL}/data-feed/{feed_version}/port-lists/",
         )
 
     def test_invalid_toml(self):
