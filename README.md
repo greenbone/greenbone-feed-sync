@@ -260,7 +260,7 @@ is only required for experts and testing purposes.
 | Config Variable      | feed-url                                                                                                                                                                                                                         |
 | Environment Variable | `GREENBONE_FEED_SYNC_URL`                                                                                                                                                                                                        |
 | Default Value        | `rsync://feed.community.greenbone.net/community`                                                                                                                                                                                 |
-| Description          | URL to download the feed data from. Other URLs will be relative to this URL by default. For example using `rsync://example.com` as feed url the notus url will be `rsync://example.com/vulnerability-feed/22.04/vt-data/notus/`. |
+| Description          | URL to download the feed data from. Other URLs will be relative to this URL by default. For example using `rsync://example.com` as feed url the notus url will be `rsync://example.com/vulnerability-feed/$FEED_VERSION/vt-data/notus/`. |
 
 ### feed-version
 
@@ -270,7 +270,7 @@ is only required for experts and testing purposes.
 | Config Variable      | feed-version                          |
 | Environment Variable | `GREENBONE_FEED_SYNC_FEED_VERSION`    |
 | Default Value        | `22.04`                               |
-| Description          | Version of the feed to be downloaded. |
+| Description          | Version of the feed to be downloaded. Download destinations and URLs will use this variable. |
 
 ### destination-prefix
 
@@ -284,13 +284,13 @@ is only required for experts and testing purposes.
 
 ### gvmd-data-destination
 
-| Name                 | Value                                       |
-| -------------------- | ------------------------------------------- |
-| CLI Argument         | `--gvmd-data-destination`                   |
-| Config Variable      | gvmd-data-destination                       |
-| Environment Variable | `GREENBONE_FEED_SYNC_GVMD_DATA_DESTINATION` |
-| Default Value        | `/var/lib/gvm/data-objects/gvmd/22.04/`     |
-| Description          | Destination of the downloaded gvmd data.    |
+| Name                 | Value                                                      |
+| -------------------- | ---------------------------------------------------------- |
+| CLI Argument         | `--gvmd-data-destination`                                  |
+| Config Variable      | gvmd-data-destination                                      |
+| Environment Variable | `GREENBONE_FEED_SYNC_GVMD_DATA_DESTINATION`                |
+| Default Value        | `$DESTINATION_PREFIX/gvm/data-objects/gvmd/$FEED_VERSION/` |
+| Description          | Destination of the downloaded gvmd data.                   |
 
 ### gvmd-data-url
 
@@ -299,7 +299,7 @@ is only required for experts and testing purposes.
 | CLI Argument         | `--gvmd-data-url`                                                                              |
 | Config Variable      | gvmd-data-url                                                                                  |
 | Environment Variable | `GREENBONE_FEED_SYNC_GVMD_DATA_URL`                                                            |
-| Default Value        | `rsync://feed.community.greenbone.net/community/data-feed/22.04/`                              |
+| Default Value        | `$FEED_URL/data-feed/$FEED_VERSION/`                                                           |
 | Description          | URL to download the gvmd data from. This includes scan-configs, report-formats and port-lists. |
 
 ### notus-destination
@@ -309,18 +309,18 @@ is only required for experts and testing purposes.
 | CLI Argument         | `--notus-destination`                     |
 | Config Variable      | notus-destination                         |
 | Environment Variable | `GREENBONE_FEED_SYNC_NOTUS_DESTINATION`   |
-| Default Value        | `/var/lib/notus`                          |
+| Default Value        | `$DESTINATION_PREFIX/notus`               |
 | Description          | Destination of the downloaded notus data. |
 
 ### notus-url
 
 | Name                 | Value                                                                                    |
-| -------------------- | ---------------------------------------------------------------------------------------- |
-| CLI Argument         | `--notus-url`                                                                            |
-| Config Variable      | notus-url                                                                                |
-| Environment Variable | `GREENBONE_FEED_SYNC_NOTUS_URL`                                                          |
-| Default Value        | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/vt-data/notus/` |
-| Description          | URL to download the notus data from.                                                     |
+| -------------------- | ------------------------------------------------------------|
+| CLI Argument         | `--notus-url`                                               |
+| Config Variable      | notus-url                                                   |
+| Environment Variable | `GREENBONE_FEED_SYNC_NOTUS_URL`                             |
+| Default Value        | `$FEED_URL/vulnerability-feed/$FEED_VERSION/vt-data/notus/` |
+| Description          | URL to download the notus data from.                        |
 
 ### nasl-destination
 
@@ -329,18 +329,18 @@ is only required for experts and testing purposes.
 | CLI Argument         | `--nasl-destination`                     |
 | Config Variable      | nasl-destination                         |
 | Environment Variable | `GREENBONE_FEED_SYNC_NASL_DESTINATION`   |
-| Default Value        | `/var/lib/openvas/plugins`               |
+| Default Value        | `$DESTINATION_PREFIX/openvas/plugins`    |
 | Description          | Destination of the downloaded nasl data. |
 
 ### nasl-url
 
 | Name                 | Value                                                                                   |
-| -------------------- | --------------------------------------------------------------------------------------- |
-| CLI Argument         | `--nasl-url`                                                                            |
-| Config Variable      | nasl-url                                                                                |
-| Environment Variable | `GREENBONE_FEED_SYNC_NASL_URL`                                                          |
-| Default Value        | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/vt-data/nasl/` |
-| Description          | URL to download the nasl data from.                                                     |
+| -------------------- | -----------------------------------------------------------|
+| CLI Argument         | `--nasl-url`                                               |
+| Config Variable      | nasl-url                                                   |
+| Environment Variable | `GREENBONE_FEED_SYNC_NASL_URL`                             |
+| Default Value        | `$FEED_URL/vulnerability-feed/$FEED_VERSION/vt-data/nasl/` |
+| Description          | URL to download the nasl data from.                        |
 
 ### scap-data-destination
 
@@ -349,18 +349,18 @@ is only required for experts and testing purposes.
 | CLI Argument         | `--scap-data-destination`                   |
 | Config Variable      | scap-data-destination                       |
 | Environment Variable | `GREENBONE_FEED_SYNC_SCAP_DATA_DESTINATION` |
-| Default Value        | `/var/lib/gvm/scap-data`                    |
+| Default Value        | `$DESTINATION_PREFIX/gvm/scap-data`         |
 | Description          | Destination of the downloaded SCAP data.    |
 
 ### scap-data-url
 
-| Name                 | Value                                                                               |
-| -------------------- | ----------------------------------------------------------------------------------- |
-| CLI Argument         | `--scap-data-url`                                                                   |
-| Config Variable      | scap-data-url                                                                       |
-| Environment Variable | `GREENBONE_FEED_SYNC_SCAP_DATA_URL`                                                 |
-| Default Value        | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/scap-data` |
-| Description          | URL to download the SCAP data from.                                                 |
+| Name                 | Value                                                  |
+| -------------------- | -------------------------------------------------------|
+| CLI Argument         | `--scap-data-url`                                      |
+| Config Variable      | scap-data-url                                          |
+| Environment Variable | `GREENBONE_FEED_SYNC_SCAP_DATA_URL`                    |
+| Default Value        | `$FEED_URL/vulnerability-feed/$FEED_VERSION/scap-data` |
+| Description          | URL to download the SCAP data from.                    |
 
 ### cert-data-destination
 
@@ -369,97 +369,97 @@ is only required for experts and testing purposes.
 | CLI Argument         | `--cert-data-destination`                   |
 | Config Variable      | cert-data-destination                       |
 | Environment Variable | `GREENBONE_FEED_SYNC_CERT_DATA_DESTINATION` |
-| Default Value        | `/var/lib/gvm/cert-data`                    |
+| Default Value        | `$DESTINATION_PREFIX/gvm/cert-data`         |
 | Description          | Destination of the downloaded CERT data.    |
 
 ### cert-data-url
 
-| Name                 | Value                                                                               |
-| -------------------- | ----------------------------------------------------------------------------------- |
-| CLI Argument         | `--cert-data-url`                                                                   |
-| Config Variable      | cert-data-url                                                                       |
-| Environment Variable | `GREENBONE_FEED_SYNC_CERT_DATA_URL`                                                 |
-| Default Value        | `rsync://feed.community.greenbone.net/community/vulnerability-feed/22.04/cert-data` |
-| Description          | URL to download the CERT data from.                                                 |
+| Name                 | Value                                                  |
+| -------------------- | -------------------------------------------------------|
+| CLI Argument         | `--cert-data-url`                                      |
+| Config Variable      | cert-data-url                                          |
+| Environment Variable | `GREENBONE_FEED_SYNC_CERT_DATA_URL`                    |
+| Default Value        | `$FEED_URL/vulnerability-feed/$FEED_VERSION/cert-data` |
+| Description          | URL to download the CERT data from.                    |
 
 ### report-formats-destination
 
-| Name                 | Value                                                 |
-| -------------------- | ----------------------------------------------------- |
-| CLI Argument         | `--report-formats-destination`                        |
-| Config Variable      | report-formats-destination                            |
-| Environment Variable | `GREENBONE_FEED_SYNC_REPORT_FORMATS_DESTINATION`      |
-| Default Value        | `/var/lib/gvm/data-objects/gvmd/22.04/report-formats` |
-| Description          | Destination of the downloaded report format data.     |
+| Name                 | Value                                                                    |
+| -------------------- | ------------------------------------------------------------------------ |
+| CLI Argument         | `--report-formats-destination`                                           |
+| Config Variable      | report-formats-destination                                               |
+| Environment Variable | `GREENBONE_FEED_SYNC_REPORT_FORMATS_DESTINATION`                         |
+| Default Value        | `$DESTINATION_PREFIX/gvm/data-objects/gvmd/$FEED_VERSION/report-formats` |
+| Description          | Destination of the downloaded report format data.                        |
 
 ### report-formats-url
 
-| Name                 | Value                                                                           |
-| -------------------- | ------------------------------------------------------------------------------- |
-| CLI Argument         | `--report-formats-url`                                                          |
-| Config Variable      | report-formats-url                                                              |
-| Environment Variable | `GREENBONE_FEED_SYNC_REPORT_FORMATS_URL`                                        |
-| Default Value        | `rsync://feed.community.greenbone.net/community/data-feed/22.04/report-formats` |
-| Description          | URL to download the report format data from.                                    |
+| Name                 | Value                                              |
+| -------------------- | ---------------------------------------------------|
+| CLI Argument         | `--report-formats-url`                             |
+| Config Variable      | report-formats-url                                 |
+| Environment Variable | `GREENBONE_FEED_SYNC_REPORT_FORMATS_URL`           |
+| Default Value        | `$FEED_URL/data-feed/$FEED_VERSION/report-formats` |
+| Description          | URL to download the report format data from.       |
 
 ### scan-configs-destination
 
-| Name                 | Value                                               |
-| -------------------- | --------------------------------------------------- |
-| CLI Argument         | `--scan-configs-destination`                        |
-| Config Variable      | scan-configs-destination                            |
-| Environment Variable | `GREENBONE_FEED_SYNC_SCAN_CONFIGS_DESTINATION`      |
-| Default Value        | `/var/lib/gvm/data-objects/gvmd/22.04/scan-configs` |
-| Description          | Destination of the downloaded scan config data.     |
+| Name                 | Value                                                                  |
+| -------------------- | ---------------------------------------------------------------------- |
+| CLI Argument         | `--scan-configs-destination`                                           |
+| Config Variable      | scan-configs-destination                                               |
+| Environment Variable | `GREENBONE_FEED_SYNC_SCAN_CONFIGS_DESTINATION`                         |
+| Default Value        | `$DESTINATION_PREFIX/gvm/data-objects/gvmd/$FEED_VERSION/scan-configs` |
+| Description          | Destination of the downloaded scan config data.                        |
 
 ### scan-configs-url
 
 | Name                 | Value                                                                         |
-| -------------------- | ----------------------------------------------------------------------------- |
-| CLI Argument         | `--scan-configs-url`                                                          |
-| Config Variable      | scan-configs-url                                                              |
-| Environment Variable | `GREENBONE_FEED_SYNC_SCAN_CONFIGS_URL`                                        |
-| Default Value        | `rsync://feed.community.greenbone.net/community/data-feed/22.04/scan-configs` |
-| Description          | URL to download the scan config data from.                                    |
+| -------------------- | -------------------------------------------------|
+| CLI Argument         | `--scan-configs-url`                             |
+| Config Variable      | scan-configs-url                                 |
+| Environment Variable | `GREENBONE_FEED_SYNC_SCAN_CONFIGS_URL`           |
+| Default Value        | `$FEED_URL/data-feed/$FEED_VERSION/scan-configs` |
+| Description          | URL to download the scan config data from.       |
 
 ### port-lists-destination
 
-| Name                 | Value                                             |
-| -------------------- | ------------------------------------------------- |
-| CLI Argument         | `--port-lists-destination`                        |
-| Config Variable      | port-lists-destination                            |
-| Environment Variable | `GREENBONE_FEED_SYNC_PORT_LISTS_DESTINATION`      |
-| Default Value        | `/var/lib/gvm/data-objects/gvmd/22.04/port-lists` |
-| Description          | Destination of the downloaded port list data.     |
+| Name                 | Value                                                                |
+| -------------------- | -------------------------------------------------------------------- |
+| CLI Argument         | `--port-lists-destination`                                           |
+| Config Variable      | port-lists-destination                                               |
+| Environment Variable | `GREENBONE_FEED_SYNC_PORT_LISTS_DESTINATION`                         |
+| Default Value        | `$DESTINATION_PREFIX/gvm/data-objects/gvmd/$FEED_VERSION/port-lists` |
+| Description          | Destination of the downloaded port list data.                        |
 
 ### port-lists-url
 
-| Name                 | Value                                                                       |
-| -------------------- | --------------------------------------------------------------------------- |
-| CLI Argument         | `--port-lists-url`                                                          |
-| Config Variable      | port-lists-url                                                              |
-| Environment Variable | `GREENBONE_FEED_SYNC_PORT_LISTS_URL`                                        |
-| Default Value        | `rsync://feed.community.greenbone.net/community/data-feed/22.04/port-lists` |
-| Description          | URL to download the port list data from.                                    |
+| Name                 | Value                                          |
+| -------------------- | -----------------------------------------------|
+| CLI Argument         | `--port-lists-url`                             |
+| Config Variable      | port-lists-url                                 |
+| Environment Variable | `GREENBONE_FEED_SYNC_PORT_LISTS_URL`           |
+| Default Value        | `$FEED_URL/data-feed/$FEED_VERSION/port-lists` |
+| Description          | URL to download the port list data from.       |
 
 ### gvmd-lock-file
 
-| Name                 | Value                                                                                                                                                                  |
-| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CLI Argument         | `--gvmd-lock-file`                                                                                                                                                     |
-| Config Variable      | gvmd-lock-file                                                                                                                                                         |
-| Environment Variable | `GREENBONE_FEED_SYNC_GVMD_LOCK_FILE`                                                                                                                                   |
-| Default Value        | `/var/lib/gvm/feed-update.lock`                                                                                                                                        |
+| Name                 | Value                                      |
+| -------------------- | ------------------------------------------ |
+| CLI Argument         | `--gvmd-lock-file`                         |
+| Config Variable      | gvmd-lock-file                             |
+| Environment Variable | `GREENBONE_FEED_SYNC_GVMD_LOCK_FILE`       |
+| Default Value        | `$DESTINATION_PREFIX/gvm/feed-update.lock` |
 | Description          | File to use for locking the feed synchronization for data loaded by the gvmd daemon. Used to avoid that more then one process accesses the feed data at the same time. |
 
 ### openvas-lock-file
 
-| Name                 | Value                                                                                                                                                                      |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CLI Argument         | `--openvas-lock-file`                                                                                                                                                      |
-| Config Variable      | openvas-lock-file                                                                                                                                                          |
-| Environment Variable | `GREENBONE_FEED_SYNC_OPENVAS_LOCK_FILE`                                                                                                                                    |
-| Default Value        | `/var/lib/openvas/feed-update.lock`                                                                                                                                        |
+| Name                 | Value                                          |
+| -------------------- | ---------------------------------------------- |
+| CLI Argument         | `--openvas-lock-file`                          |
+| Config Variable      | openvas-lock-file                              |
+| Environment Variable | `GREENBONE_FEED_SYNC_OPENVAS_LOCK_FILE`        |
+| Default Value        | `$DESTINATION_PREFIX/openvas/feed-update.lock` |
 | Description          | File to use for locking the feed synchronization for data loaded by the openvas scanner. Used to avoid that more then one process accesses the feed data at the same time. |
 
 ### fail-fast
@@ -494,12 +494,12 @@ is only required for experts and testing purposes.
 
 ### rsync-timeout
 
-| Name                 | Value                                                                                                                                                                                  |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CLI Argument         | `--rsync-timeout`                                                                                                                                                                      |
-| Config Variable      | rsync-timeout                                                                                                                                                                          |
-| Environment Variable | `GREENBONE_FEED_SYNC_RSYNC_TIMEOUT`                                                                                                                                                    |
-| Default Value        |                                                                                                                                                                                        |
+| Name                 | Value                               |
+| -------------------- | ----------------------------------- |
+| CLI Argument         | `--rsync-timeout`                   |
+| Config Variable      | rsync-timeout                       |
+| Environment Variable | `GREENBONE_FEED_SYNC_RSYNC_TIMEOUT` |
+| Default Value        |                                     |
 | Description          | Maximum I/O timeout in seconds used for rsync. If no data is transferred for the specified time then rsync will exit. By default no timeout is set and the rsync default will be used. |
 
 ### group
@@ -524,12 +524,12 @@ is only required for experts and testing purposes.
 
 ### greenbone-enterprise-feed-key
 
-| Name                 | Value                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CLI Argument         | `--greenbone-enterprise-feed-key`                                                                                                                                                                                                                                                                                                                                                                                     |
-| Config Variable      | greenbone-enterprise-feed-key                                                                                                                                                                                                                                                                                                                                                                                         |
-| Environment Variable | `GREENBONE_FEED_SYNC_ENTERPRISE_FEED_KEY`                                                                                                                                                                                                                                                                                                                                                                             |
-| Default Value        | /etc/gvm/greenbone-enterprise-feed-key                                                                                                                                                                                                                                                                                                                                                                                |
+| Name                 | Value                                     |
+| -------------------- | ----------------------------------------- |
+| CLI Argument         | `--greenbone-enterprise-feed-key`         |
+| Config Variable      | greenbone-enterprise-feed-key             |
+| Environment Variable | `GREENBONE_FEED_SYNC_ENTERPRISE_FEED_KEY` |
+| Default Value        | /etc/gvm/greenbone-enterprise-feed-key    |
 | Description          | File to read the Greenbone Enterprise Feed key from. The key gives access to additional vulnerability tests for enterprise software among other advantages. See [Greenbone Enterprise Feed and Greenbone Community Feed in Comparison](https://www.greenbone.net/en/feed-comparison/) for more details. The default URLs are adjusted according to the data in the key. If the key file does not exist it is ignored. |
 
 ## Config
