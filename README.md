@@ -9,6 +9,7 @@ date components of the Greenbone Community Edition by default. It is highly
 configurable and can be adjusted easily for downloading different feed versions.
 
 - [Installation](#installation)
+  - [Version](#version)
   - [Requirements](#requirements)
   - [Install using pipx](#install-using-pipx)
   - [Install using pip](#install-using-pip)
@@ -57,6 +58,12 @@ configurable and can be adjusted easily for downloading different feed versions.
 - [License](#license)
 
 ## Installation
+
+### Version
+
+`greenbone-feed-sync` uses [semantic versioning](https://semver.org/).
+
+Versions prior to 25.0.0 used [calendar versioning](https://calver.org/).
 
 ### Requirements
 
