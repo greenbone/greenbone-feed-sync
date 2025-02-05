@@ -212,6 +212,7 @@ class CliParserTestCase(unittest.TestCase):
             args.greenbone_enterprise_feed_key,
             Path(DEFAULT_ENTERPRISE_KEY_PATH),
         )
+        self.assertEqual(args.feed_version, DEFAULT_FEED_VERSION)
 
     def test_help(self):
         parser = CliParser()
@@ -830,3 +831,45 @@ sed diam nonumy eirmod tempor
         args = parser.parse_arguments([])
 
         self.assertEqual(args.type, "cert")
+
+    def test_feed_version(self):
+        parser = CliParser()
+        feed_version = "1.2.3"
+        args = parser.parse_arguments(["--feed-version", feed_version])
+        self.assertTrue(args.feed_version, "1.2.3")
+
+        self.assertEqual(
+            args.feed_url, "rsync://feed.community.greenbone.net/community"
+        )
+        self.assertEqual(
+            args.gvmd_data_url,
+            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_version}/",
+        )
+        self.assertEqual(
+            args.port_lists_url,
+            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_version}/port-lists/",
+        )
+        self.assertEqual(
+            args.report_formats_url,
+            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_version}/report-formats/",
+        )
+        self.assertEqual(
+            args.scan_configs_url,
+            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_version}/scan-configs/",
+        )
+        self.assertEqual(
+            args.notus_url,
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_version}/vt-data/notus/",
+        )
+        self.assertEqual(
+            args.nasl_url,
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_version}/vt-data/nasl/",
+        )
+        self.assertEqual(
+            args.scap_data_url,
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_version}/scap-data/",
+        )
+        self.assertEqual(
+            args.cert_data_url,
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_version}/cert-data/",
+        )

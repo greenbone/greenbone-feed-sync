@@ -118,6 +118,10 @@ class CliParser:
             help="Select which feed should be synced. (Default: %(default)s)",
         )
         parser.add_argument(
+            "--feed-version",
+            help="Version of the Feed to download. (Default: %(default)s)",
+        )
+        parser.add_argument(
             "--gvmd-data-destination",
             type=Path,
             help="Destination of the downloaded gvmd data. "
@@ -125,8 +129,7 @@ class CliParser:
         )
         parser.add_argument(
             "--gvmd-data-url",
-            help="URL to download the gvmd data from. "
-            "(Default: %(default)s)",
+            help="URL to download the gvmd data from. (Default: %(default)s)",
         )
         nvts_destination_group = parser.add_argument_group()
         nvts_destination_group.add_argument(
@@ -138,8 +141,7 @@ class CliParser:
         nvts_url_group = parser.add_argument_group()
         nvts_url_group.add_argument(
             "--notus-url",
-            help="URL to download the notus data from. "
-            "(Default: %(default)s)",
+            help="URL to download the notus data from. (Default: %(default)s)",
         )
         nvts_destination_group.add_argument(
             "--nasl-destination",
@@ -149,8 +151,7 @@ class CliParser:
         )
         nvts_url_group.add_argument(
             "--nasl-url",
-            help="URL to download the nasl data from. "
-            "(Default: %(default)s)",
+            help="URL to download the nasl data from. (Default: %(default)s)",
         )
 
         secinfo_destination_group = parser.add_argument_group()
@@ -163,8 +164,7 @@ class CliParser:
         secinfo_url_group = parser.add_argument_group()
         secinfo_url_group.add_argument(
             "--scap-data-url",
-            help="URL to download the SCAP data from. "
-            "(Default: %(default)s)",
+            help="URL to download the SCAP data from. (Default: %(default)s)",
         )
         secinfo_destination_group.add_argument(
             "--cert-data-destination",
@@ -174,8 +174,7 @@ class CliParser:
         )
         secinfo_url_group.add_argument(
             "--cert-data-url",
-            help="URL to download the CERT data from. "
-            "(Default: %(default)s)",
+            help="URL to download the CERT data from. (Default: %(default)s)",
         )
 
         data_objects_destination_group = parser.add_argument_group()
@@ -341,6 +340,9 @@ class CliParser:
             config["greenbone-enterprise-feed-key"] = (
                 known_args.greenbone_enterprise_feed_key
             )
+
+        if known_args.feed_version:
+            config["feed-version"] = known_args.feed_version
 
         if self.parser.prog == "greenbone-nvt-sync":
             config["type"] = "nvt"
