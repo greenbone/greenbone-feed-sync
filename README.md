@@ -278,12 +278,12 @@ is only required for experts and testing purposes.
 
 ### destination-prefix
 
-| Name                 | Value                                                                                                                                                                                                                                                               |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CLI Argument         |                                                                                                                                                                                                                                                                     |
-| Config Variable      | destination-prefix                                                                                                                                                                                                                                                  |
-| Environment Variable | `GREENBONE_FEED_SYNC_DESTINATION_PREFIX`                                                                                                                                                                                                                            |
-| Default Value        | `/var/lib/`                                                                                                                                                                                                                                                         |
+| Name                 | Value                                    |
+| -------------------- | ---------------------------------------- |
+| CLI Argument         | `--destination-prefix`                   |
+| Config Variable      | destination-prefix                       |
+| Environment Variable | `GREENBONE_FEED_SYNC_DESTINATION_PREFIX` |
+| Default Value        | `/var/lib/`                              |
 | Description          | Directory prefix to use for default feed data download destinations. Other download destinations will be relative to this path by default. For example using `/opt/lib` as destination prefix will change the default of the notus destination to `/opt/lib/notus`. |
 
 ### gvmd-data-destination
@@ -318,7 +318,7 @@ is only required for experts and testing purposes.
 
 ### notus-url
 
-| Name                 | Value                                                                                    |
+| Name                 | Value                                                       |
 | -------------------- | ------------------------------------------------------------|
 | CLI Argument         | `--notus-url`                                               |
 | Config Variable      | notus-url                                                   |
@@ -338,7 +338,7 @@ is only required for experts and testing purposes.
 
 ### nasl-url
 
-| Name                 | Value                                                                                   |
+| Name                 | Value                                                      |
 | -------------------- | -----------------------------------------------------------|
 | CLI Argument         | `--nasl-url`                                               |
 | Config Variable      | nasl-url                                                   |

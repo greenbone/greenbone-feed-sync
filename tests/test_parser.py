@@ -873,3 +873,72 @@ sed diam nonumy eirmod tempor
             args.cert_data_url,
             f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_version}/cert-data/",
         )
+
+    def test_destination_prefix(self):
+        parser = CliParser()
+        destination_prefix = "/tmp/foo/bar"
+        args = parser.parse_arguments(
+            ["--destination-prefix", destination_prefix]
+        )
+
+        self.assertEqual(args.type, "all")
+        self.assertEqual(args.destination_prefix, Path(destination_prefix))
+        self.assertEqual(
+            args.gvmd_data_destination,
+            Path(destination_prefix)
+            / "gvm"
+            / "data-objects"
+            / "gvmd"
+            / DEFAULT_FEED_VERSION,
+        )
+        self.assertEqual(
+            args.notus_destination,
+            Path(destination_prefix) / "notus",
+        )
+        self.assertEqual(
+            args.nasl_destination,
+            Path(destination_prefix) / "openvas" / "plugins",
+        )
+        self.assertEqual(
+            args.scap_data_destination,
+            Path(destination_prefix) / "gvm" / "scap-data",
+        )
+        self.assertEqual(
+            args.cert_data_destination,
+            Path(destination_prefix) / "gvm" / "cert-data",
+        )
+        self.assertEqual(
+            args.report_formats_destination,
+            Path(destination_prefix)
+            / "gvm"
+            / "data-objects"
+            / "gvmd"
+            / DEFAULT_FEED_VERSION
+            / "report-formats",
+        )
+        self.assertEqual(
+            args.scan_configs_destination,
+            Path(destination_prefix)
+            / "gvm"
+            / "data-objects"
+            / "gvmd"
+            / DEFAULT_FEED_VERSION
+            / "scan-configs",
+        )
+        self.assertEqual(
+            args.port_lists_destination,
+            Path(destination_prefix)
+            / "gvm"
+            / "data-objects"
+            / "gvmd"
+            / DEFAULT_FEED_VERSION
+            / "port-lists",
+        )
+        self.assertEqual(
+            args.gvmd_lock_file,
+            Path(destination_prefix) / DEFAULT_GVMD_LOCK_FILE_PATH,
+        )
+        self.assertEqual(
+            args.openvas_lock_file,
+            Path(destination_prefix) / DEFAULT_OPENVAS_LOCK_FILE_PATH,
+        )

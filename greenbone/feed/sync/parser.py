@@ -122,6 +122,11 @@ class CliParser:
             help="Version of the Feed to download. (Default: %(default)s)",
         )
         parser.add_argument(
+            "--destination-prefix",
+            type=Path,
+            help="Prefix for the destination directories. (Default: %(default)s)",
+        )
+        parser.add_argument(
             "--gvmd-data-destination",
             type=Path,
             help="Destination of the downloaded gvmd data. "
@@ -343,6 +348,9 @@ class CliParser:
 
         if known_args.feed_version:
             config["feed-version"] = known_args.feed_version
+
+        if known_args.destination_prefix:
+            config["destination-prefix"] = known_args.destination_prefix
 
         if self.parser.prog == "greenbone-nvt-sync":
             config["type"] = "nvt"
