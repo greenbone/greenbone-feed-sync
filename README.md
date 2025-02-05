@@ -63,19 +63,25 @@ within the `PATH`.
 
 On Debian based Distributions like Ubuntu and Kali `rsync` can be installed via
 
-    sudo apt install rsync
+```sh
+sudo apt install rsync
+```
 
 ### Install using pipx
 
 You can install the latest release of **greenbone-feed-sync** from the Python
 Package Index (pypi) using [pipx]
 
-    python3 -m pipx install greenbone-feed-sync
+```sh
+python3 -m pipx install greenbone-feed-sync
+```
 
 On Debian based Distributions like Ubuntu and Kali `pipx` itself can be
 installed via
 
-    sudo apt install pipx
+```sh
+sudo apt install pipx
+```
 
 ### Install using pip
 
@@ -86,7 +92,9 @@ Please use the [installation via pipx](#install-using-pipx) instead.
 You can install the latest release of **greenbone-feed-sync** from the
 Python Package Index ([pypi]) using [pip]
 
-    python3 -m pip install greenbone-feed-sync
+```sh
+python3 -m pip install greenbone-feed-sync
+```
 
 ## Usage
 
@@ -95,27 +103,35 @@ download the new data for all necessary feed types
 
 **NOTE:** See details about [usage on Kali Linux](#usage-on-kali-linux)
 
-    sudo greenbone-feed-sync
+```sh
+sudo greenbone-feed-sync
+```
 
 To get verbose progress output during the data download you might increase the
 verbosity
 
-    sudo greenbone-feed-sync -vvv
-
+```sh
+ sudo greenbone-feed-sync -vvv
+```
 
 If the script is run in a cron job the output can be turned off via
 
-    sudo greenbone-feed-sync --quiet
-
+```sh
+sudo greenbone-feed-sync --quiet
+```
 
 To download only a specific feed content the `--type` argument can be used
 
-    sudo greenbone-feed-sync --type nvt
+```sh
+sudo greenbone-feed-sync --type nvt
+```
 
 Run `--help` to get information about all possible types and additional argument
 options
 
-    greenbone-feed-sync --help
+```sh
+greenbone-feed-sync --help
+````
 
 ## Usage on Kali Linux
 
@@ -131,14 +147,16 @@ a different user and group are used. They are both named `_gvm` instead.
 Therefore the [group](#group) and [user](#user) settings need to be adjusted.
 This can be done by using a [config file](#config-1).
 
-    sudo mkdir /etc/gvm
-    sudo chmod +r /etc/gvm
-    cat <<EOF | sudo tee /etc/gvm/greenbone-feed-sync.toml
-    [greenbone-feed-sync]
-    user="_gvm"
-    group="_gvm"
-    EOF
-    sudo chmod +r /etc/gvm/greenbone-feed-sync.toml
+```sh
+sudo mkdir /etc/gvm
+sudo chmod +r /etc/gvm
+cat <<EOF | sudo tee /etc/gvm/greenbone-feed-sync.toml
+[greenbone-feed-sync]
+user="_gvm"
+group="_gvm"
+EOF
+sudo chmod +r /etc/gvm/greenbone-feed-sync.toml
+```
 
 ## Command Completion
 
@@ -538,11 +556,15 @@ build process.
 
 First install poetry via pipx
 
-    python3 -m pipx install poetry
+```sh
+python3 -m pipx install poetry
+```
 
 Afterwards run
 
-    poetry install
+```sh
+poetry install
+```
 
 in the checkout directory of **greenbone-feed-sync** (the directory containing
 the `pyproject.toml` file) to install all dependencies including the packages
@@ -551,11 +573,15 @@ only required for development.
 Afterwards activate the git hooks for auto-formatting and linting via
 [autohooks].
 
-    poetry run autohooks activate
+```sh
+poetry run autohooks activate
+```
 
 Validate the activated git hooks by running
 
-    poetry run autohooks check
+```sh
+poetry run autohooks check
+```
 
 ## Maintainer
 
