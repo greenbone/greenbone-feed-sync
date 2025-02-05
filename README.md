@@ -269,7 +269,7 @@ is only required for experts and testing purposes.
 | CLI Argument         | `--feed-version`                      |
 | Config Variable      | feed-version                          |
 | Environment Variable | `GREENBONE_FEED_SYNC_FEED_VERSION`    |
-| Default Value        | `22.04`                               |
+| Default Value        | `24.10`                               |
 | Description          | Version of the feed to be downloaded. Download destinations and URLs will use this variable. |
 
 ### destination-prefix
