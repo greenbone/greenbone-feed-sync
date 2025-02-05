@@ -1,4 +1,4 @@
-FROM debian:stable-slim as builder
+FROM debian:stable-slim AS builder
 
 COPY . /source
 
@@ -20,9 +20,9 @@ RUN rm -rf dist && /root/.local/bin/poetry build -f wheel
 
 FROM debian:stable-slim
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-ENV PIP_NO_CACHE_DIR off
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PIP_NO_CACHE_DIR=off
 ENV PATH="/root/.local/bin:${PATH}"
 
 WORKDIR /greenbone-feed-sync
@@ -38,7 +38,7 @@ RUN apt-get update && \
   apt-get remove --purge --auto-remove -y && \
   rm -rf /var/lib/apt/lists/*
 
-RUN PIPX_HOME=/var/lib/pipx PIPX_BIN_DIR=/usr/bin 
+RUN PIPX_HOME=/var/lib/pipx PIPX_BIN_DIR=/usr/bin
 
 RUN addgroup --gid 1001 --system gvm && \
   adduser --no-create-home --shell /bin/false --disabled-password --uid 1001 --system --group gvm
