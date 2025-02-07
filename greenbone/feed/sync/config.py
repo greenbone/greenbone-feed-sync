@@ -5,11 +5,21 @@
 
 import os
 from dataclasses import dataclass
+from multiprocessing import Value
 from pathlib import Path
-from typing import Any, Callable, Iterable, Optional, Protocol, Union
+from typing import (
+    Any,
+    Callable,
+    Generic,
+    Iterable,
+    Optional,
+    Protocol,
+    TypeVar,
+    Union,
+)
 from urllib.parse import urlsplit
 
-from greenbone.feed.sync.errors import ConfigFileError
+from greenbone.feed.sync.errors import ConfigError, ConfigFileError
 from greenbone.feed.sync.helper import DEFAULT_FLOCK_WAIT_INTERVAL
 from greenbone.feed.sync.rsync import (
     DEFAULT_RSYNC_COMPRESSION_LEVEL,
@@ -56,15 +66,36 @@ DEFAULT_USER = "gvm"
 
 DEFAULT_VERBOSITY = 2
 
+T = TypeVar("T")
+ValuesDict = dict[str, Any]
+DefaultValueCallable = Callable[[ValuesDict], Any]
+ValueTypeCallable = Callable[[Any], T]
+
+
+def resolve_gvmd_data_destination(values: ValuesDict) -> str:
+    path = "gvm/data-objects/gvmd"
+    feed_version: str = values.get("feed-version")  # type: ignore[assignment]
+    str_major, str_minor = feed_version.split(".")[:2]
+    try:
+        major, minor = int(str_major), int(str_minor)
+    except ValueError as e:
+        raise ConfigError(f"Invalid feed version format: {feed_version}") from e
+
+    return (
+        f"{values['destination-prefix']}/{path}"
+        if major >= 24 and minor >= 10
+        else f"{values['destination-prefix']}/{path}/{feed_version}"
+    )
+
 
 @dataclass
-class Setting:
+class Setting(Generic[T]):
     config_key: str
     environment_key: str
     default_value: Union[str, int, bool, None]
-    value_type: Callable
+    value_type: ValueTypeCallable[T]
 
-    def resolve(self, values: dict[str, Any]) -> Any:
+    def resolve(self, values: ValuesDict) -> Optional[T]:
         value: Any
         if self.environment_key in os.environ:
             value = os.environ.get(self.environment_key)
@@ -77,13 +108,13 @@ class Setting:
 
 
 @dataclass
-class DependentSetting:
+class DependentSetting(Generic[T]):
     config_key: str
     environment_key: str
-    default_value: Callable
-    value_type: Callable
+    default_value: DefaultValueCallable
+    value_type: ValueTypeCallable[T]
 
-    def resolve(self, values: dict[str, Any]) -> Any:
+    def resolve(self, values: ValuesDict) -> Optional[T]:
         if self.environment_key in os.environ:
             value = os.environ.get(self.environment_key)
         elif self.config_key in values:
@@ -160,12 +191,12 @@ _SETTINGS = (
     ),
 )
 
-# pylint: disable=line-too-long
+
 _DEPENDENT_SETTINGS = (
     DependentSetting(
         "gvmd-data-destination",
         "GREENBONE_FEED_SYNC_GVMD_DATA_DESTINATION",
-        lambda values: f"{values['destination-prefix']}/gvm/data-objects/gvmd/{values['feed-version']}/",  # noqa: E501
+        resolve_gvmd_data_destination,
         Path,
     ),
     DependentSetting(
@@ -225,7 +256,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "report-formats-destination",
         "GREENBONE_FEED_SYNC_REPORT_FORMATS_DESTINATION",
-        lambda values: f"{values['destination-prefix']}/gvm/data-objects/gvmd/{values['feed-version']}/report-formats",  # noqa: E501
+        lambda values: f"{values['gvmd-data-destination']}/report-formats",
         Path,
     ),
     DependentSetting(
@@ -237,7 +268,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "scan-configs-destination",
         "GREENBONE_FEED_SYNC_SCAN_CONFIGS_DESTINATION",
-        lambda values: f"{values['destination-prefix']}/gvm/data-objects/gvmd/{values['feed-version']}/scan-configs",  # noqa: E501
+        lambda values: f"{values['gvmd-data-destination']}/scan-configs",
         Path,
     ),
     DependentSetting(
@@ -249,7 +280,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "port-lists-destination",
         "GREENBONE_FEED_SYNC_PORT_LISTS_DESTINATION",
-        lambda values: f"{values['destination-prefix']}/gvm/data-objects/gvmd/{values['feed-version']}/port-lists",  # noqa: E501
+        lambda values: f"{values['gvmd-data-destination']}/port-lists",
         Path,
     ),
     DependentSetting(
@@ -286,7 +317,7 @@ class Config:
     """
 
     def __init__(self) -> None:
-        self._config: dict[str, Any] = {}
+        self._config: ValuesDict = {}
 
     def load_from_config_file(self, config_file: Path) -> None:
         try:

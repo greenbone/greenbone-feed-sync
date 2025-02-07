@@ -41,11 +41,7 @@ class ConfigTestCase(unittest.TestCase):
         )
         self.assertEqual(
             values["gvmd-data-destination"],
-            Path(DEFAULT_DESTINATION_PREFIX)
-            / "gvm"
-            / "data-objects"
-            / "gvmd"
-            / DEFAULT_FEED_VERSION,
+            Path(DEFAULT_DESTINATION_PREFIX) / "gvm" / "data-objects" / "gvmd",
         )
         self.assertEqual(
             values["gvmd-data-url"],
@@ -90,7 +86,6 @@ class ConfigTestCase(unittest.TestCase):
             / "gvm"
             / "data-objects"
             / "gvmd"
-            / DEFAULT_FEED_VERSION
             / "report-formats",
         )
         self.assertEqual(
@@ -103,7 +98,6 @@ class ConfigTestCase(unittest.TestCase):
             / "gvm"
             / "data-objects"
             / "gvmd"
-            / DEFAULT_FEED_VERSION
             / "scan-configs",
         )
         self.assertEqual(
@@ -116,7 +110,6 @@ class ConfigTestCase(unittest.TestCase):
             / "gvm"
             / "data-objects"
             / "gvmd"
-            / DEFAULT_FEED_VERSION
             / "port-lists",
         )
         self.assertEqual(
@@ -261,7 +254,7 @@ destination-prefix = "/opt/lib/"
         self.assertEqual(values["destination-prefix"], Path("/opt/lib"))
         self.assertEqual(
             values["gvmd-data-destination"],
-            Path(f"/opt/lib/gvm/data-objects/gvmd/{DEFAULT_FEED_VERSION}"),
+            Path("/opt/lib/gvm/data-objects/gvmd/"),
         )
         self.assertEqual(values["notus-destination"], Path("/opt/lib/notus"))
         self.assertEqual(
@@ -275,21 +268,15 @@ destination-prefix = "/opt/lib/"
         )
         self.assertEqual(
             values["report-formats-destination"],
-            Path(
-                f"/opt/lib/gvm/data-objects/gvmd/{DEFAULT_FEED_VERSION}/report-formats"
-            ),
+            Path("/opt/lib/gvm/data-objects/gvmd/report-formats"),
         )
         self.assertEqual(
             values["scan-configs-destination"],
-            Path(
-                f"/opt/lib/gvm/data-objects/gvmd/{DEFAULT_FEED_VERSION}/scan-configs"
-            ),
+            Path("/opt/lib/gvm/data-objects/gvmd/scan-configs"),
         )
         self.assertEqual(
             values["port-lists-destination"],
-            Path(
-                f"/opt/lib/gvm/data-objects/gvmd/{DEFAULT_FEED_VERSION}/port-lists"
-            ),
+            Path("/opt/lib/gvm/data-objects/gvmd/port-lists"),
         )
         self.assertEqual(
             values["openvas-lock-file"],
