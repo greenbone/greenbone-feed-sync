@@ -110,11 +110,7 @@ class CliParserTestCase(unittest.TestCase):
         self.assertEqual(args.feed_url, DEFAULT_RSYNC_URL)
         self.assertEqual(
             args.gvmd_data_destination,
-            Path(DEFAULT_DESTINATION_PREFIX)
-            / "gvm"
-            / "data-objects"
-            / "gvmd"
-            / DEFAULT_FEED_VERSION,
+            Path(DEFAULT_DESTINATION_PREFIX) / "gvm" / "data-objects" / "gvmd",
         )
         self.assertEqual(
             args.gvmd_data_url,
@@ -158,7 +154,6 @@ class CliParserTestCase(unittest.TestCase):
             / "gvm"
             / "data-objects"
             / "gvmd"
-            / DEFAULT_FEED_VERSION
             / "report-formats",
         )
         self.assertEqual(
@@ -171,7 +166,6 @@ class CliParserTestCase(unittest.TestCase):
             / "gvm"
             / "data-objects"
             / "gvmd"
-            / DEFAULT_FEED_VERSION
             / "scan-configs",
         )
         self.assertEqual(
@@ -184,7 +178,6 @@ class CliParserTestCase(unittest.TestCase):
             / "gvm"
             / "data-objects"
             / "gvmd"
-            / DEFAULT_FEED_VERSION
             / "port-lists",
         )
         self.assertEqual(
@@ -885,11 +878,7 @@ sed diam nonumy eirmod tempor
         self.assertEqual(args.destination_prefix, Path(destination_prefix))
         self.assertEqual(
             args.gvmd_data_destination,
-            Path(destination_prefix)
-            / "gvm"
-            / "data-objects"
-            / "gvmd"
-            / DEFAULT_FEED_VERSION,
+            Path(destination_prefix) / "gvm" / "data-objects" / "gvmd",
         )
         self.assertEqual(
             args.notus_destination,
@@ -913,7 +902,6 @@ sed diam nonumy eirmod tempor
             / "gvm"
             / "data-objects"
             / "gvmd"
-            / DEFAULT_FEED_VERSION
             / "report-formats",
         )
         self.assertEqual(
@@ -922,7 +910,6 @@ sed diam nonumy eirmod tempor
             / "gvm"
             / "data-objects"
             / "gvmd"
-            / DEFAULT_FEED_VERSION
             / "scan-configs",
         )
         self.assertEqual(
@@ -931,7 +918,6 @@ sed diam nonumy eirmod tempor
             / "gvm"
             / "data-objects"
             / "gvmd"
-            / DEFAULT_FEED_VERSION
             / "port-lists",
         )
         self.assertEqual(

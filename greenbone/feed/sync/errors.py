@@ -25,7 +25,13 @@ class GreenboneFeedSyncError(Exception):
     """
 
 
-class ConfigFileError(GreenboneFeedSyncError):
+class ConfigError(GreenboneFeedSyncError):
+    """
+    Error while processing a config
+    """
+
+
+class ConfigFileError(ConfigError):
     """
     Error while processing a config file
     """
