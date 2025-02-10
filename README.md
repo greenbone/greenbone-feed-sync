@@ -65,6 +65,17 @@ configurable and can be adjusted easily for downloading different feed versions.
 
 Versions prior to 25.0.0 used [calendar versioning](https://calver.org/).
 
+> [!IMPORTANT]
+> `greenbone-feed-sync` >= 25.0.0 requires [gvmd 25.0.0](https://github.com/greenbone/gvmd/releases/tag/v25.0.0)
+> to work out of the box. If a version of gvmd < 24.0.0 is used, the feed version
+> has to be set to 22.04 via the [config file, the `GREENBONE_FEED_SYNC_FEED_VERSION`
+> environment variable or the `--feed-version` CLI argument](#feed-version).
+> For example run `greenbone-feed-sync --feed-version 22.04`.
+> Alternatively you can downgrade `greenbone-feed-sync` to a release < 25.0.0.
+>
+> Versions of gvmd between 24.0.0 and 25.0.0 have issues with the feed loading
+> and require manual interventions.
+
 ### Requirements
 
 Python 3.9 and later is supported.
