@@ -867,6 +867,94 @@ sed diam nonumy eirmod tempor
             f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_release}/cert-data/",
         )
 
+    def test_feed_version(self):
+        parser = CliParser()
+        feed_release = "1.2.3"
+        args = parser.parse_arguments(["--feed-version", feed_release])
+        self.assertTrue(args.feed_version, "1.2.3")
+        self.assertTrue(args.feed_release, "1.2.3")
+
+        self.assertEqual(
+            args.feed_url, "rsync://feed.community.greenbone.net/community"
+        )
+        self.assertEqual(
+            args.gvmd_data_url,
+            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_release}/",
+        )
+        self.assertEqual(
+            args.port_lists_url,
+            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_release}/port-lists/",
+        )
+        self.assertEqual(
+            args.report_formats_url,
+            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_release}/report-formats/",
+        )
+        self.assertEqual(
+            args.scan_configs_url,
+            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_release}/scan-configs/",
+        )
+        self.assertEqual(
+            args.notus_url,
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_release}/vt-data/notus/",
+        )
+        self.assertEqual(
+            args.nasl_url,
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_release}/vt-data/nasl/",
+        )
+        self.assertEqual(
+            args.scap_data_url,
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_release}/scap-data/",
+        )
+        self.assertEqual(
+            args.cert_data_url,
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_release}/cert-data/",
+        )
+
+    def test_feed_release_overrules_version(self):
+        parser = CliParser()
+        feed_release = "1.2.3"
+        args = parser.parse_arguments(
+            ["--feed-version", "2.3.4", "--feed-release", feed_release]
+        )
+        self.assertTrue(args.feed_version, "2.3.4")
+        self.assertTrue(args.feed_release, "1.2.3")
+
+        self.assertEqual(
+            args.feed_url, "rsync://feed.community.greenbone.net/community"
+        )
+        self.assertEqual(
+            args.gvmd_data_url,
+            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_release}/",
+        )
+        self.assertEqual(
+            args.port_lists_url,
+            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_release}/port-lists/",
+        )
+        self.assertEqual(
+            args.report_formats_url,
+            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_release}/report-formats/",
+        )
+        self.assertEqual(
+            args.scan_configs_url,
+            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_release}/scan-configs/",
+        )
+        self.assertEqual(
+            args.notus_url,
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_release}/vt-data/notus/",
+        )
+        self.assertEqual(
+            args.nasl_url,
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_release}/vt-data/nasl/",
+        )
+        self.assertEqual(
+            args.scap_data_url,
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_release}/scap-data/",
+        )
+        self.assertEqual(
+            args.cert_data_url,
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_release}/cert-data/",
+        )
+
     def test_destination_prefix(self):
         parser = CliParser()
         destination_prefix = "/tmp/foo/bar"

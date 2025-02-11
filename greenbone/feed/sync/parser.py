@@ -118,6 +118,10 @@ class CliParser:
             help="Select which feed should be synced. (Default: %(default)s)",
         )
         parser.add_argument(
+            "--feed-version",
+            help="Deprecated. Use --feed-release instead.",
+        )
+        parser.add_argument(
             "--feed-release",
             help="Release series of the feed to download for example 22.04 or 24.10. (Default: %(default)s)",
         )
@@ -345,6 +349,9 @@ class CliParser:
             config["greenbone-enterprise-feed-key"] = (
                 known_args.greenbone_enterprise_feed_key
             )
+
+        if known_args.feed_version:
+            config["feed-release"] = known_args.feed_version
 
         if known_args.feed_release:
             config["feed-release"] = known_args.feed_release
