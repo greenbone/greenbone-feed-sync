@@ -15,7 +15,7 @@ from pontos.testing import temp_file
 from greenbone.feed.sync.config import (
     DEFAULT_DESTINATION_PREFIX,
     DEFAULT_ENTERPRISE_KEY_PATH,
-    DEFAULT_FEED_VERSION,
+    DEFAULT_FEED_RELEASE,
     DEFAULT_GROUP,
     DEFAULT_GVMD_LOCK_FILE_PATH,
     DEFAULT_OPENVAS_LOCK_FILE_PATH,
@@ -45,7 +45,7 @@ class ConfigTestCase(unittest.TestCase):
         )
         self.assertEqual(
             values["gvmd-data-url"],
-            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_VERSION}/",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/",
         )
         self.assertEqual(values["feed-url"], DEFAULT_RSYNC_URL)
         self.assertEqual(
@@ -54,7 +54,7 @@ class ConfigTestCase(unittest.TestCase):
         )
         self.assertEqual(
             values["notus-url"],
-            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/notus/",
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/notus/",
         )
         self.assertEqual(
             values["nasl-destination"],
@@ -62,7 +62,7 @@ class ConfigTestCase(unittest.TestCase):
         )
         self.assertEqual(
             values["nasl-url"],
-            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/nasl/",
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/nasl/",
         )
         self.assertEqual(
             values["scap-data-destination"],
@@ -70,7 +70,7 @@ class ConfigTestCase(unittest.TestCase):
         )
         self.assertEqual(
             values["scap-data-url"],
-            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_VERSION}/scap-data/",
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/scap-data/",
         )
         self.assertEqual(
             values["cert-data-destination"],
@@ -78,7 +78,7 @@ class ConfigTestCase(unittest.TestCase):
         )
         self.assertEqual(
             values["cert-data-url"],
-            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_VERSION}/cert-data/",
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/cert-data/",
         )
         self.assertEqual(
             values["report-formats-destination"],
@@ -90,7 +90,7 @@ class ConfigTestCase(unittest.TestCase):
         )
         self.assertEqual(
             values["report-formats-url"],
-            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_VERSION}/report-formats/",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/report-formats/",
         )
         self.assertEqual(
             values["scan-configs-destination"],
@@ -102,7 +102,7 @@ class ConfigTestCase(unittest.TestCase):
         )
         self.assertEqual(
             values["scan-configs-url"],
-            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_VERSION}/scan-configs/",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/scan-configs/",
         )
         self.assertEqual(
             values["port-lists-destination"],
@@ -114,7 +114,7 @@ class ConfigTestCase(unittest.TestCase):
         )
         self.assertEqual(
             values["port-lists-url"],
-            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_VERSION}/port-lists/",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/port-lists/",
         )
         self.assertEqual(
             values["gvmd-lock-file"],
@@ -139,7 +139,7 @@ class ConfigTestCase(unittest.TestCase):
             values["greenbone-enterprise-feed-key"],
             Path(DEFAULT_ENTERPRISE_KEY_PATH),
         )
-        self.assertEqual(values["feed-version"], DEFAULT_FEED_VERSION)
+        self.assertEqual(values["feed-release"], DEFAULT_FEED_RELEASE)
 
     def test_config_file(self):
         content = """[greenbone-feed-sync]
@@ -173,7 +173,7 @@ rsync-timeout = 120
 group = "foo"
 user = "bar"
 greenbone-enterprise-feed-key = "/srv/feed.key"
-feed-version = "1.2.3"
+feed-release = "1.2.3"
 """
         path_mock = MagicMock(spec=Path)
         path_mock.read_text.return_value = content
@@ -239,7 +239,7 @@ feed-version = "1.2.3"
         self.assertEqual(
             values["greenbone-enterprise-feed-key"], Path("/srv/feed.key")
         )
-        self.assertEqual(values["feed-version"], "1.2.3")
+        self.assertEqual(values["feed-release"], "1.2.3")
 
     def test_destination_prefix(self):
         content = """[greenbone-feed-sync]
@@ -298,35 +298,35 @@ feed-url = "rsync://foo.bar"
         self.assertEqual(values["feed-url"], "rsync://foo.bar")
         self.assertEqual(
             values["gvmd-data-url"],
-            f"rsync://foo.bar/data-feed/{DEFAULT_FEED_VERSION}/",
+            f"rsync://foo.bar/data-feed/{DEFAULT_FEED_RELEASE}/",
         )
         self.assertEqual(
             values["notus-url"],
-            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/notus/",
+            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/notus/",
         )
         self.assertEqual(
             values["nasl-url"],
-            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/nasl/",
+            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/nasl/",
         )
         self.assertEqual(
             values["scap-data-url"],
-            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_FEED_VERSION}/scap-data/",
+            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_FEED_RELEASE}/scap-data/",
         )
         self.assertEqual(
             values["cert-data-url"],
-            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_FEED_VERSION}/cert-data/",
+            f"rsync://foo.bar/vulnerability-feed/{DEFAULT_FEED_RELEASE}/cert-data/",
         )
         self.assertEqual(
             values["report-formats-url"],
-            f"rsync://foo.bar/data-feed/{DEFAULT_FEED_VERSION}/report-formats/",
+            f"rsync://foo.bar/data-feed/{DEFAULT_FEED_RELEASE}/report-formats/",
         )
         self.assertEqual(
             values["scan-configs-url"],
-            f"rsync://foo.bar/data-feed/{DEFAULT_FEED_VERSION}/scan-configs/",
+            f"rsync://foo.bar/data-feed/{DEFAULT_FEED_RELEASE}/scan-configs/",
         )
         self.assertEqual(
             values["port-lists-url"],
-            f"rsync://foo.bar/data-feed/{DEFAULT_FEED_VERSION}/port-lists/",
+            f"rsync://foo.bar/data-feed/{DEFAULT_FEED_RELEASE}/port-lists/",
         )
 
     @patch.dict(
@@ -362,7 +362,7 @@ feed-url = "rsync://foo.bar"
             "GREENBONE_FEED_SYNC_GROUP": "123",
             "GREENBONE_FEED_SYNC_USER": "321",
             "GREENBONE_FEED_SYNC_ENTERPRISE_FEED_KEY": "/tmp/some.key",
-            "GREENBONE_FEED_SYNC_FEED_VERSION": "1.2.3",
+            "GREENBONE_FEED_SYNC_FEED_RELEASE": "1.2.3",
         },
     )
     def test_environment(self):
@@ -424,7 +424,7 @@ feed-url = "rsync://foo.bar"
         self.assertEqual(
             values["greenbone-enterprise-feed-key"], Path("/tmp/some.key")
         )
-        self.assertEqual(values["feed-version"], "1.2.3")
+        self.assertEqual(values["feed-release"], "1.2.3")
 
     @patch.dict(
         "os.environ",
@@ -457,7 +457,7 @@ feed-url = "rsync://foo.bar"
             "GREENBONE_FEED_SYNC_FAIL_FAST": "1",
             "GREENBONE_FEED_SYNC_RSYNC_TIMEOUT": "120",
             "GREENBONE_FEED_SYNC_ENTERPRISE_FEED_KEY": "/tmp/some.key",
-            "GREENBONE_FEED_SYNC_FEED_VERSION": "1.2.3",
+            "GREENBONE_FEED_SYNC_FEED_RELEASE": "1.2.3",
         },
     )
     def test_environment_overrides_config_file(self):
@@ -490,7 +490,7 @@ verbose = 99
 fail-fast = false
 rsync-timeout = 360
 greenbone-enterprise-feed-key = "/srv/feed.key"
-feed-version = "2.3.4"
+feed-release = "2.3.4"
 """
         path_mock = MagicMock(spec=Path)
         path_mock.read_text.return_value = content
@@ -551,12 +551,12 @@ feed-version = "2.3.4"
         self.assertEqual(
             values["greenbone-enterprise-feed-key"], Path("/tmp/some.key")
         )
-        self.assertEqual(values["feed-version"], "1.2.3")
+        self.assertEqual(values["feed-release"], "1.2.3")
 
-    def test_feed_version(self):
-        feed_version = "1.2.3"
+    def test_feed_release(self):
+        feed_release = "1.2.3"
         content = f"""[greenbone-feed-sync]
-feed-version = "{feed_version}"
+feed-release = "{feed_release}"
 """
         path_mock = MagicMock(spec=Path)
         path_mock.read_text.return_value = content
@@ -569,11 +569,11 @@ feed-version = "{feed_version}"
             / "gvm"
             / "data-objects"
             / "gvmd"
-            / feed_version,
+            / feed_release,
         )
         self.assertEqual(
             values["gvmd-data-url"],
-            f"{DEFAULT_RSYNC_URL}/data-feed/{feed_version}/",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{feed_release}/",
         )
         self.assertEqual(values["feed-url"], DEFAULT_RSYNC_URL)
         self.assertEqual(
@@ -582,7 +582,7 @@ feed-version = "{feed_version}"
         )
         self.assertEqual(
             values["notus-url"],
-            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{feed_version}/vt-data/notus/",
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{feed_release}/vt-data/notus/",
         )
         self.assertEqual(
             values["nasl-destination"],
@@ -590,7 +590,7 @@ feed-version = "{feed_version}"
         )
         self.assertEqual(
             values["nasl-url"],
-            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{feed_version}/vt-data/nasl/",
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{feed_release}/vt-data/nasl/",
         )
         self.assertEqual(
             values["scap-data-destination"],
@@ -598,7 +598,7 @@ feed-version = "{feed_version}"
         )
         self.assertEqual(
             values["scap-data-url"],
-            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{feed_version}/scap-data/",
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{feed_release}/scap-data/",
         )
         self.assertEqual(
             values["cert-data-destination"],
@@ -606,7 +606,7 @@ feed-version = "{feed_version}"
         )
         self.assertEqual(
             values["cert-data-url"],
-            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{feed_version}/cert-data/",
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{feed_release}/cert-data/",
         )
         self.assertEqual(
             values["report-formats-destination"],
@@ -614,12 +614,12 @@ feed-version = "{feed_version}"
             / "gvm"
             / "data-objects"
             / "gvmd"
-            / feed_version
+            / feed_release
             / "report-formats",
         )
         self.assertEqual(
             values["report-formats-url"],
-            f"{DEFAULT_RSYNC_URL}/data-feed/{feed_version}/report-formats/",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{feed_release}/report-formats/",
         )
         self.assertEqual(
             values["scan-configs-destination"],
@@ -627,12 +627,12 @@ feed-version = "{feed_version}"
             / "gvm"
             / "data-objects"
             / "gvmd"
-            / feed_version
+            / feed_release
             / "scan-configs",
         )
         self.assertEqual(
             values["scan-configs-url"],
-            f"{DEFAULT_RSYNC_URL}/data-feed/{feed_version}/scan-configs/",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{feed_release}/scan-configs/",
         )
         self.assertEqual(
             values["port-lists-destination"],
@@ -640,12 +640,12 @@ feed-version = "{feed_version}"
             / "gvm"
             / "data-objects"
             / "gvmd"
-            / feed_version
+            / feed_release
             / "port-lists",
         )
         self.assertEqual(
             values["port-lists-url"],
-            f"{DEFAULT_RSYNC_URL}/data-feed/{feed_version}/port-lists/",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{feed_release}/port-lists/",
         )
 
     def test_invalid_toml(self):

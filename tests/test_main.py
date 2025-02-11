@@ -10,7 +10,7 @@ from unittest.mock import MagicMock, call, patch
 
 from pontos.testing import temp_directory
 
-from greenbone.feed.sync.config import DEFAULT_FEED_VERSION
+from greenbone.feed.sync.config import DEFAULT_FEED_RELEASE
 from greenbone.feed.sync.errors import GreenboneFeedSyncError, RsyncError
 from greenbone.feed.sync.main import (
     Sync,
@@ -113,12 +113,12 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
             [
                 call(
                     url="rsync://feed.community.greenbone.net/community/"
-                    f"vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/notus/",
+                    f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/notus/",
                     destination=temp_dir / "notus",
                 ),
                 call(
                     url="rsync://feed.community.greenbone.net/community/"
-                    f"vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/nasl/",
+                    f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/nasl/",
                     destination=temp_dir / "openvas/plugins",
                 ),
             ]
@@ -174,12 +174,12 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
                 [
                     call(
                         url="rsync://feed.community.greenbone.net/community/"
-                        f"vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/notus/",
+                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/notus/",
                         destination=temp_dir / "notus",
                     ),
                     call(
                         url="rsync://feed.community.greenbone.net/community/"
-                        f"vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/nasl/",
+                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/nasl/",
                         destination=temp_dir / "openvas/plugins",
                     ),
                 ]
@@ -223,14 +223,14 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
                     call(
                         "Downloading Notus files from "
                         "rsync://feed.community.greenbone.net/community/"
-                        f"vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/notus/ "
+                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/notus/ "
                         f"to {temp_dir}/notus"
                     ),
                     call(),
                     call(
                         "Downloading NASL files from "
                         "rsync://feed.community.greenbone.net/community/"
-                        f"vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/nasl/ "
+                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/nasl/ "
                         f"to {temp_dir}/openvas/plugins"
                     ),
                     call(),
@@ -245,12 +245,12 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
                 [
                     call(
                         url="rsync://feed.community.greenbone.net/community/"
-                        f"vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/notus/",
+                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/notus/",
                         destination=temp_dir / "notus",
                     ),
                     call(
                         url="rsync://feed.community.greenbone.net/community/"
-                        f"vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/nasl/",
+                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/nasl/",
                         destination=temp_dir / "openvas/plugins",
                     ),
                 ]
@@ -288,12 +288,12 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
                 [
                     call(
                         url="rsync://feed.community.greenbone.net/community/"
-                        f"vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/notus/",
+                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/notus/",
                         destination=temp_dir / "notus",
                     ),
                     call(
                         url="rsync://feed.community.greenbone.net/community/"
-                        f"vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/nasl/",
+                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/nasl/",
                         destination=temp_dir / "openvas/plugins",
                     ),
                 ]
@@ -348,7 +348,7 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
                 [
                     call(
                         url="rsync://feed.community.greenbone.net/community/"
-                        f"vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/notus/",
+                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/notus/",
                         destination=temp_dir / "notus",
                     ),
                 ]
@@ -409,12 +409,12 @@ class MainFunctionTestCase(unittest.TestCase):
                 [
                     call(
                         url="rsync://feed.community.greenbone.net/community/"
-                        f"vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/notus/",
+                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/notus/",
                         destination=temp_dir / "notus",
                     ),
                     call(
                         url="rsync://feed.community.greenbone.net/community/"
-                        f"vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/nasl/",
+                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/nasl/",
                         destination=temp_dir / "openvas/plugins",
                     ),
                 ]
@@ -474,7 +474,7 @@ class MainFunctionTestCase(unittest.TestCase):
                 [
                     call(
                         url="rsync://feed.community.greenbone.net/community/"
-                        f"vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/notus/",
+                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/notus/",
                         destination=temp_dir / "notus",
                     ),
                 ]
