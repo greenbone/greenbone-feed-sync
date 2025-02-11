@@ -4,9 +4,10 @@
 
 Tool for downloading the Greenbone Community Feed.
 
-`greenbone-feed-sync` assumes you are using the latest feed version and up to
+`greenbone-feed-sync` assumes you are using the latest feed release and up to
 date components of the Greenbone Community Edition by default. It is highly
-configurable and can be adjusted easily for downloading different feed versions.
+configurable and can be adjusted easily for downloading different feed releases
+and types.
 
 - [Installation](#installation)
   - [Version](#version)
@@ -24,7 +25,7 @@ configurable and can be adjusted easily for downloading different feed versions.
   - [compression-level](#compression-level)
   - [type](#type)
   - [feed-url](#feed-url)
-  - [feed-version](#feed-version)
+  - [feed-release](#feed-release)
   - [destination-prefix](#destination-prefix)
   - [gvmd-data-destination](#gvmd-data-destination)
   - [gvmd-data-url](#gvmd-data-url)
@@ -65,13 +66,12 @@ configurable and can be adjusted easily for downloading different feed versions.
 
 Versions prior to 25.0.0 used [calendar versioning](https://calver.org/).
 
-> [!IMPORTANT]
-> `greenbone-feed-sync` >= 25.0.0 requires [gvmd 25.0.0](https://github.com/greenbone/gvmd/releases/tag/v25.0.0)
-> to work out of the box. If a version of gvmd < 24.0.0 is used, the feed version
-> has to be set to 22.04 via the [config file, the `GREENBONE_FEED_SYNC_FEED_VERSION`
-> environment variable or the `--feed-version` CLI argument](#feed-version).
-> For example run `greenbone-feed-sync --feed-version 22.04`.
-> Alternatively you can downgrade `greenbone-feed-sync` to a release < 25.0.0.
+> [!IMPORTANT] `greenbone-feed-sync` >= 25.0.0 requires [gvmd 25.0.0](https://github.com/greenbone/gvmd/releases/tag/v25.0.0)
+> to work out of the box. If a version of gvmd < 24.0.0 is used, the feed release
+> has to be set to 22.04 via the [config file, the `GREENBONE_FEED_SYNC_FEED_RELEASE`
+> environment variable or the `--feed-release` CLI argument](#feed-release).
+> For example run `greenbone-feed-sync --feed-release 22.04`.
+> Alternatively you can downgrade `greenbone-feed-sync` to a release version < 25.0.0.
 >
 > Versions of gvmd between 24.0.0 and 25.0.0 have issues with the feed loading
 > and require manual interventions.
@@ -153,7 +153,7 @@ options
 
 ```sh
 greenbone-feed-sync --help
-````
+```
 
 ## Usage on Kali Linux
 
@@ -226,13 +226,13 @@ is only required for experts and testing purposes.
 
 ### quiet
 
-| Name                 | Value                                                                                    |
-| -------------------- | ---------------------------------------------------------------------------------------- |
-| CLI Argument         | `--quiet`                                                                                |
-| Config Variable      |                                                                                          |
-| Environment Variable |                                                                                          |
-| Default Value        |                                                                                          |
-| Description          | Disable all log output. Same as setting `verbose` or  `GREENBONE_FEED_SYNC_VERBOSE` to 0 |
+| Name                 | Value                                                                                   |
+| -------------------- | --------------------------------------------------------------------------------------- |
+| CLI Argument         | `--quiet`                                                                               |
+| Config Variable      |                                                                                         |
+| Environment Variable |                                                                                         |
+| Default Value        |                                                                                         |
+| Description          | Disable all log output. Same as setting `verbose` or `GREENBONE_FEED_SYNC_VERBOSE` to 0 |
 
 ### config
 
@@ -276,32 +276,32 @@ is only required for experts and testing purposes.
 
 ### feed-url
 
-| Name                 | Value                                                                                                                                                                                                                            |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CLI Argument         |                                                                                                                                                                                                                                  |
-| Config Variable      | feed-url                                                                                                                                                                                                                         |
-| Environment Variable | `GREENBONE_FEED_SYNC_URL`                                                                                                                                                                                                        |
-| Default Value        | `rsync://feed.community.greenbone.net/community`                                                                                                                                                                                 |
+| Name                 | Value                                                                                                                                                                                                                                    |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CLI Argument         |                                                                                                                                                                                                                                          |
+| Config Variable      | feed-url                                                                                                                                                                                                                                 |
+| Environment Variable | `GREENBONE_FEED_SYNC_URL`                                                                                                                                                                                                                |
+| Default Value        | `rsync://feed.community.greenbone.net/community`                                                                                                                                                                                         |
 | Description          | URL to download the feed data from. Other URLs will be relative to this URL by default. For example using `rsync://example.com` as feed url the notus url will be `rsync://example.com/vulnerability-feed/$FEED_VERSION/vt-data/notus/`. |
 
-### feed-version
+### feed-release
 
-| Name                 |                                       |
-| -------------------- |---------------------------------------|
-| CLI Argument         | `--feed-version`                      |
-| Config Variable      | feed-version                          |
-| Environment Variable | `GREENBONE_FEED_SYNC_FEED_VERSION`    |
-| Default Value        | `24.10`                               |
-| Description          | Version of the feed to be downloaded. Download destinations and URLs will use this variable. |
+| Name                 |                                                                                                     |
+| -------------------- | --------------------------------------------------------------------------------------------------- |
+| CLI Argument         | `--feed-release`                                                                                    |
+| Config Variable      | feed-release                                                                                        |
+| Environment Variable | `GREENBONE_FEED_SYNC_FEED_RELEASE`                                                                  |
+| Default Value        | `24.10`                                                                                             |
+| Description          | Release series of the feed to be downloaded. Download destinations and URLs will use this variable. |
 
 ### destination-prefix
 
-| Name                 | Value                                    |
-| -------------------- | ---------------------------------------- |
-| CLI Argument         | `--destination-prefix`                   |
-| Config Variable      | destination-prefix                       |
-| Environment Variable | `GREENBONE_FEED_SYNC_DESTINATION_PREFIX` |
-| Default Value        | `/var/lib/`                              |
+| Name                 | Value                                                                                                                                                                                                                                                               |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CLI Argument         | `--destination-prefix`                                                                                                                                                                                                                                              |
+| Config Variable      | destination-prefix                                                                                                                                                                                                                                                  |
+| Environment Variable | `GREENBONE_FEED_SYNC_DESTINATION_PREFIX`                                                                                                                                                                                                                            |
+| Default Value        | `/var/lib/`                                                                                                                                                                                                                                                         |
 | Description          | Directory prefix to use for default feed data download destinations. Other download destinations will be relative to this path by default. For example using `/opt/lib` as destination prefix will change the default of the notus destination to `/opt/lib/notus`. |
 
 ### gvmd-data-destination
@@ -337,7 +337,7 @@ is only required for experts and testing purposes.
 ### notus-url
 
 | Name                 | Value                                                       |
-| -------------------- | ------------------------------------------------------------|
+| -------------------- | ----------------------------------------------------------- |
 | CLI Argument         | `--notus-url`                                               |
 | Config Variable      | notus-url                                                   |
 | Environment Variable | `GREENBONE_FEED_SYNC_NOTUS_URL`                             |
@@ -357,7 +357,7 @@ is only required for experts and testing purposes.
 ### nasl-url
 
 | Name                 | Value                                                      |
-| -------------------- | -----------------------------------------------------------|
+| -------------------- | ---------------------------------------------------------- |
 | CLI Argument         | `--nasl-url`                                               |
 | Config Variable      | nasl-url                                                   |
 | Environment Variable | `GREENBONE_FEED_SYNC_NASL_URL`                             |
@@ -377,7 +377,7 @@ is only required for experts and testing purposes.
 ### scap-data-url
 
 | Name                 | Value                                                  |
-| -------------------- | -------------------------------------------------------|
+| -------------------- | ------------------------------------------------------ |
 | CLI Argument         | `--scap-data-url`                                      |
 | Config Variable      | scap-data-url                                          |
 | Environment Variable | `GREENBONE_FEED_SYNC_SCAP_DATA_URL`                    |
@@ -397,7 +397,7 @@ is only required for experts and testing purposes.
 ### cert-data-url
 
 | Name                 | Value                                                  |
-| -------------------- | -------------------------------------------------------|
+| -------------------- | ------------------------------------------------------ |
 | CLI Argument         | `--cert-data-url`                                      |
 | Config Variable      | cert-data-url                                          |
 | Environment Variable | `GREENBONE_FEED_SYNC_CERT_DATA_URL`                    |
@@ -417,7 +417,7 @@ is only required for experts and testing purposes.
 ### report-formats-url
 
 | Name                 | Value                                              |
-| -------------------- | ---------------------------------------------------|
+| -------------------- | -------------------------------------------------- |
 | CLI Argument         | `--report-formats-url`                             |
 | Config Variable      | report-formats-url                                 |
 | Environment Variable | `GREENBONE_FEED_SYNC_REPORT_FORMATS_URL`           |
@@ -436,8 +436,8 @@ is only required for experts and testing purposes.
 
 ### scan-configs-url
 
-| Name                 | Value                                                                         |
-| -------------------- | -------------------------------------------------|
+| Name                 | Value                                            |
+| -------------------- | ------------------------------------------------ |
 | CLI Argument         | `--scan-configs-url`                             |
 | Config Variable      | scan-configs-url                                 |
 | Environment Variable | `GREENBONE_FEED_SYNC_SCAN_CONFIGS_URL`           |
@@ -457,7 +457,7 @@ is only required for experts and testing purposes.
 ### port-lists-url
 
 | Name                 | Value                                          |
-| -------------------- | -----------------------------------------------|
+| -------------------- | ---------------------------------------------- |
 | CLI Argument         | `--port-lists-url`                             |
 | Config Variable      | port-lists-url                                 |
 | Environment Variable | `GREENBONE_FEED_SYNC_PORT_LISTS_URL`           |
@@ -466,22 +466,22 @@ is only required for experts and testing purposes.
 
 ### gvmd-lock-file
 
-| Name                 | Value                                      |
-| -------------------- | ------------------------------------------ |
-| CLI Argument         | `--gvmd-lock-file`                         |
-| Config Variable      | gvmd-lock-file                             |
-| Environment Variable | `GREENBONE_FEED_SYNC_GVMD_LOCK_FILE`       |
-| Default Value        | `$DESTINATION_PREFIX/gvm/feed-update.lock` |
+| Name                 | Value                                                                                                                                                                  |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CLI Argument         | `--gvmd-lock-file`                                                                                                                                                     |
+| Config Variable      | gvmd-lock-file                                                                                                                                                         |
+| Environment Variable | `GREENBONE_FEED_SYNC_GVMD_LOCK_FILE`                                                                                                                                   |
+| Default Value        | `$DESTINATION_PREFIX/gvm/feed-update.lock`                                                                                                                             |
 | Description          | File to use for locking the feed synchronization for data loaded by the gvmd daemon. Used to avoid that more then one process accesses the feed data at the same time. |
 
 ### openvas-lock-file
 
-| Name                 | Value                                          |
-| -------------------- | ---------------------------------------------- |
-| CLI Argument         | `--openvas-lock-file`                          |
-| Config Variable      | openvas-lock-file                              |
-| Environment Variable | `GREENBONE_FEED_SYNC_OPENVAS_LOCK_FILE`        |
-| Default Value        | `$DESTINATION_PREFIX/openvas/feed-update.lock` |
+| Name                 | Value                                                                                                                                                                      |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CLI Argument         | `--openvas-lock-file`                                                                                                                                                      |
+| Config Variable      | openvas-lock-file                                                                                                                                                          |
+| Environment Variable | `GREENBONE_FEED_SYNC_OPENVAS_LOCK_FILE`                                                                                                                                    |
+| Default Value        | `$DESTINATION_PREFIX/openvas/feed-update.lock`                                                                                                                             |
 | Description          | File to use for locking the feed synchronization for data loaded by the openvas scanner. Used to avoid that more then one process accesses the feed data at the same time. |
 
 ### fail-fast
@@ -516,12 +516,12 @@ is only required for experts and testing purposes.
 
 ### rsync-timeout
 
-| Name                 | Value                               |
-| -------------------- | ----------------------------------- |
-| CLI Argument         | `--rsync-timeout`                   |
-| Config Variable      | rsync-timeout                       |
-| Environment Variable | `GREENBONE_FEED_SYNC_RSYNC_TIMEOUT` |
-| Default Value        |                                     |
+| Name                 | Value                                                                                                                                                                                  |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CLI Argument         | `--rsync-timeout`                                                                                                                                                                      |
+| Config Variable      | rsync-timeout                                                                                                                                                                          |
+| Environment Variable | `GREENBONE_FEED_SYNC_RSYNC_TIMEOUT`                                                                                                                                                    |
+| Default Value        |                                                                                                                                                                                        |
 | Description          | Maximum I/O timeout in seconds used for rsync. If no data is transferred for the specified time then rsync will exit. By default no timeout is set and the rsync default will be used. |
 
 ### group
@@ -546,12 +546,12 @@ is only required for experts and testing purposes.
 
 ### greenbone-enterprise-feed-key
 
-| Name                 | Value                                     |
-| -------------------- | ----------------------------------------- |
-| CLI Argument         | `--greenbone-enterprise-feed-key`         |
-| Config Variable      | greenbone-enterprise-feed-key             |
-| Environment Variable | `GREENBONE_FEED_SYNC_ENTERPRISE_FEED_KEY` |
-| Default Value        | /etc/gvm/greenbone-enterprise-feed-key    |
+| Name                 | Value                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CLI Argument         | `--greenbone-enterprise-feed-key`                                                                                                                                                                                                                                                                                                                                                                                     |
+| Config Variable      | greenbone-enterprise-feed-key                                                                                                                                                                                                                                                                                                                                                                                         |
+| Environment Variable | `GREENBONE_FEED_SYNC_ENTERPRISE_FEED_KEY`                                                                                                                                                                                                                                                                                                                                                                             |
+| Default Value        | /etc/gvm/greenbone-enterprise-feed-key                                                                                                                                                                                                                                                                                                                                                                                |
 | Description          | File to read the Greenbone Enterprise Feed key from. The key gives access to additional vulnerability tests for enterprise software among other advantages. See [Greenbone Enterprise Feed and Greenbone Community Feed in Comparison](https://www.greenbone.net/en/feed-comparison/) for more details. The default URLs are adjusted according to the data in the key. If the key file does not exist it is ignored. |
 
 ## Config

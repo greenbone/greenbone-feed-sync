@@ -43,7 +43,7 @@ def maybe_int(value: Optional[str]) -> Union[int, str, None]:
     return value
 
 
-DEFAULT_FEED_VERSION = "24.10"
+DEFAULT_FEED_RELEASE = "24.10"
 
 DEFAULT_DESTINATION_PREFIX = "/var/lib/"
 
@@ -73,17 +73,17 @@ ValueTypeCallable = Callable[[Any], T]
 
 def resolve_gvmd_data_destination(values: ValuesDict) -> str:
     path = "gvm/data-objects/gvmd"
-    feed_version: str = values.get("feed-version")  # type: ignore[assignment]
-    str_major, str_minor = feed_version.split(".")[:2]
+    feed_release: str = values.get("feed-release")  # type: ignore[assignment]
+    str_major, str_minor = feed_release.split(".")[:2]
     try:
         major, minor = int(str_major), int(str_minor)
     except ValueError as e:
-        raise ConfigError(f"Invalid feed version format: {feed_version}") from e
+        raise ConfigError(f"Invalid feed release format: {feed_release}") from e
 
     return (
         f"{values['destination-prefix']}/{path}"
         if major >= 24 and minor >= 10
-        else f"{values['destination-prefix']}/{path}/{feed_version}"
+        else f"{values['destination-prefix']}/{path}/{feed_release}"
     )
 
 
@@ -183,9 +183,9 @@ _SETTINGS = (
         Path,
     ),
     Setting(
-        "feed-version",
-        "GREENBONE_FEED_SYNC_FEED_VERSION",
-        DEFAULT_FEED_VERSION,
+        "feed-release",
+        "GREENBONE_FEED_SYNC_FEED_RELEASE",
+        DEFAULT_FEED_RELEASE,
         str,
     ),
 )
@@ -201,7 +201,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "gvmd-data-url",
         "GREENBONE_FEED_SYNC_GVMD_DATA_URL",
-        lambda values: f"{values['feed-url']}/data-feed/{values['feed-version']}/",
+        lambda values: f"{values['feed-url']}/data-feed/{values['feed-release']}/",
         str,
     ),
     DependentSetting(
@@ -213,7 +213,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "notus-url",
         "GREENBONE_FEED_SYNC_NOTUS_URL",
-        lambda values: f"{values['feed-url']}/vulnerability-feed/{values['feed-version']}/vt-data/notus/",
+        lambda values: f"{values['feed-url']}/vulnerability-feed/{values['feed-release']}/vt-data/notus/",
         str,
     ),
     DependentSetting(
@@ -225,7 +225,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "nasl-url",
         "GREENBONE_FEED_SYNC_NASL_URL",
-        lambda values: f"{values['feed-url']}/vulnerability-feed/{values['feed-version']}/vt-data/nasl/",
+        lambda values: f"{values['feed-url']}/vulnerability-feed/{values['feed-release']}/vt-data/nasl/",
         str,
     ),
     DependentSetting(
@@ -237,7 +237,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "scap-data-url",
         "GREENBONE_FEED_SYNC_SCAP_DATA_URL",
-        lambda values: f"{values['feed-url']}/vulnerability-feed/{values['feed-version']}/scap-data/",
+        lambda values: f"{values['feed-url']}/vulnerability-feed/{values['feed-release']}/scap-data/",
         str,
     ),
     DependentSetting(
@@ -249,7 +249,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "cert-data-url",
         "GREENBONE_FEED_SYNC_CERT_DATA_URL",
-        lambda values: f"{values['feed-url']}/vulnerability-feed/{values['feed-version']}/cert-data/",
+        lambda values: f"{values['feed-url']}/vulnerability-feed/{values['feed-release']}/cert-data/",
         str,
     ),
     DependentSetting(
@@ -261,7 +261,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "report-formats-url",
         "GREENBONE_FEED_SYNC_REPORT_FORMATS_URL",
-        lambda values: f"{values['feed-url']}/data-feed/{values['feed-version']}/report-formats/",  # noqa: E501
+        lambda values: f"{values['feed-url']}/data-feed/{values['feed-release']}/report-formats/",  # noqa: E501
         str,
     ),
     DependentSetting(
@@ -273,7 +273,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "scan-configs-url",
         "GREENBONE_FEED_SYNC_SCAN_CONFIGS_URL",
-        lambda values: f"{values['feed-url']}/data-feed/{values['feed-version']}/scan-configs/",  # noqa: E501
+        lambda values: f"{values['feed-url']}/data-feed/{values['feed-release']}/scan-configs/",  # noqa: E501
         str,
     ),
     DependentSetting(
@@ -285,7 +285,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "port-lists-url",
         "GREENBONE_FEED_SYNC_PORT_LISTS_URL",
-        lambda values: f"{values['feed-url']}/data-feed/{values['feed-version']}/port-lists/",  # noqa: E501
+        lambda values: f"{values['feed-url']}/data-feed/{values['feed-release']}/port-lists/",  # noqa: E501
         str,
     ),
     DependentSetting(

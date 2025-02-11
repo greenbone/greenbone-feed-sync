@@ -18,7 +18,7 @@ from greenbone.feed.sync.config import (
     DEFAULT_CONFIG_FILE,
     DEFAULT_DESTINATION_PREFIX,
     DEFAULT_ENTERPRISE_KEY_PATH,
-    DEFAULT_FEED_VERSION,
+    DEFAULT_FEED_RELEASE,
     DEFAULT_GVMD_LOCK_FILE_PATH,
     DEFAULT_OPENVAS_LOCK_FILE_PATH,
     DEFAULT_USER_CONFIG_FILE,
@@ -114,7 +114,7 @@ class CliParserTestCase(unittest.TestCase):
         )
         self.assertEqual(
             args.gvmd_data_url,
-            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_VERSION}/",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/",
         )
         self.assertEqual(
             args.notus_destination,
@@ -122,7 +122,7 @@ class CliParserTestCase(unittest.TestCase):
         )
         self.assertEqual(
             args.notus_url,
-            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/notus/",
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/notus/",
         )
         self.assertEqual(
             args.nasl_destination,
@@ -130,7 +130,7 @@ class CliParserTestCase(unittest.TestCase):
         )
         self.assertEqual(
             args.nasl_url,
-            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/nasl/",
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/nasl/",
         )
         self.assertEqual(
             args.scap_data_destination,
@@ -138,7 +138,7 @@ class CliParserTestCase(unittest.TestCase):
         )
         self.assertEqual(
             args.scap_data_url,
-            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_VERSION}/scap-data/",
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/scap-data/",
         )
         self.assertEqual(
             args.cert_data_destination,
@@ -146,7 +146,7 @@ class CliParserTestCase(unittest.TestCase):
         )
         self.assertEqual(
             args.cert_data_url,
-            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_VERSION}/cert-data/",
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/cert-data/",
         )
         self.assertEqual(
             args.report_formats_destination,
@@ -158,7 +158,7 @@ class CliParserTestCase(unittest.TestCase):
         )
         self.assertEqual(
             args.report_formats_url,
-            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_VERSION}/report-formats/",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/report-formats/",
         )
         self.assertEqual(
             args.scan_configs_destination,
@@ -170,7 +170,7 @@ class CliParserTestCase(unittest.TestCase):
         )
         self.assertEqual(
             args.scan_configs_url,
-            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_VERSION}/scan-configs/",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/scan-configs/",
         )
         self.assertEqual(
             args.port_lists_destination,
@@ -182,7 +182,7 @@ class CliParserTestCase(unittest.TestCase):
         )
         self.assertEqual(
             args.port_lists_url,
-            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_VERSION}/port-lists/",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/port-lists/",
         )
         self.assertEqual(
             args.gvmd_lock_file,
@@ -205,7 +205,7 @@ class CliParserTestCase(unittest.TestCase):
             args.greenbone_enterprise_feed_key,
             Path(DEFAULT_ENTERPRISE_KEY_PATH),
         )
-        self.assertEqual(args.feed_version, DEFAULT_FEED_VERSION)
+        self.assertEqual(args.feed_release, DEFAULT_FEED_RELEASE)
 
     def test_help(self):
         parser = CliParser()
@@ -731,35 +731,35 @@ sed diam nonumy eirmod tempor
             )
             self.assertEqual(
                 args.gvmd_data_url,
-                f"ssh://a_user@some.feed.server/enterprise/data-feed/{DEFAULT_FEED_VERSION}/",
+                f"ssh://a_user@some.feed.server/enterprise/data-feed/{DEFAULT_FEED_RELEASE}/",
             )
             self.assertEqual(
                 args.port_lists_url,
-                f"ssh://a_user@some.feed.server/enterprise/data-feed/{DEFAULT_FEED_VERSION}/port-lists/",
+                f"ssh://a_user@some.feed.server/enterprise/data-feed/{DEFAULT_FEED_RELEASE}/port-lists/",
             )
             self.assertEqual(
                 args.report_formats_url,
-                f"ssh://a_user@some.feed.server/enterprise/data-feed/{DEFAULT_FEED_VERSION}/report-formats/",
+                f"ssh://a_user@some.feed.server/enterprise/data-feed/{DEFAULT_FEED_RELEASE}/report-formats/",
             )
             self.assertEqual(
                 args.scan_configs_url,
-                f"ssh://a_user@some.feed.server/enterprise/data-feed/{DEFAULT_FEED_VERSION}/scan-configs/",
+                f"ssh://a_user@some.feed.server/enterprise/data-feed/{DEFAULT_FEED_RELEASE}/scan-configs/",
             )
             self.assertEqual(
                 args.notus_url,
-                f"ssh://a_user@some.feed.server/enterprise/vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/notus/",
+                f"ssh://a_user@some.feed.server/enterprise/vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/notus/",
             )
             self.assertEqual(
                 args.nasl_url,
-                f"ssh://a_user@some.feed.server/enterprise/vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/nasl/",
+                f"ssh://a_user@some.feed.server/enterprise/vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/nasl/",
             )
             self.assertEqual(
                 args.scap_data_url,
-                f"ssh://a_user@some.feed.server/enterprise/vulnerability-feed/{DEFAULT_FEED_VERSION}/scap-data/",
+                f"ssh://a_user@some.feed.server/enterprise/vulnerability-feed/{DEFAULT_FEED_RELEASE}/scap-data/",
             )
             self.assertEqual(
                 args.cert_data_url,
-                f"ssh://a_user@some.feed.server/enterprise/vulnerability-feed/{DEFAULT_FEED_VERSION}/cert-data/",
+                f"ssh://a_user@some.feed.server/enterprise/vulnerability-feed/{DEFAULT_FEED_RELEASE}/cert-data/",
             )
 
     def test_ignore_non_existing_enterprise_feed_key(self):
@@ -773,35 +773,35 @@ sed diam nonumy eirmod tempor
         )
         self.assertEqual(
             args.gvmd_data_url,
-            f"rsync://feed.community.greenbone.net/community/data-feed/{DEFAULT_FEED_VERSION}/",
+            f"rsync://feed.community.greenbone.net/community/data-feed/{DEFAULT_FEED_RELEASE}/",
         )
         self.assertEqual(
             args.port_lists_url,
-            f"rsync://feed.community.greenbone.net/community/data-feed/{DEFAULT_FEED_VERSION}/port-lists/",
+            f"rsync://feed.community.greenbone.net/community/data-feed/{DEFAULT_FEED_RELEASE}/port-lists/",
         )
         self.assertEqual(
             args.report_formats_url,
-            f"rsync://feed.community.greenbone.net/community/data-feed/{DEFAULT_FEED_VERSION}/report-formats/",
+            f"rsync://feed.community.greenbone.net/community/data-feed/{DEFAULT_FEED_RELEASE}/report-formats/",
         )
         self.assertEqual(
             args.scan_configs_url,
-            f"rsync://feed.community.greenbone.net/community/data-feed/{DEFAULT_FEED_VERSION}/scan-configs/",
+            f"rsync://feed.community.greenbone.net/community/data-feed/{DEFAULT_FEED_RELEASE}/scan-configs/",
         )
         self.assertEqual(
             args.notus_url,
-            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/notus/",
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/notus/",
         )
         self.assertEqual(
             args.nasl_url,
-            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{DEFAULT_FEED_VERSION}/vt-data/nasl/",
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/nasl/",
         )
         self.assertEqual(
             args.scap_data_url,
-            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{DEFAULT_FEED_VERSION}/scap-data/",
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{DEFAULT_FEED_RELEASE}/scap-data/",
         )
         self.assertEqual(
             args.cert_data_url,
-            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{DEFAULT_FEED_VERSION}/cert-data/",
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{DEFAULT_FEED_RELEASE}/cert-data/",
         )
 
     @patch.object(sys, "argv", ["greenbone-nvt-sync"])
@@ -825,46 +825,46 @@ sed diam nonumy eirmod tempor
 
         self.assertEqual(args.type, "cert")
 
-    def test_feed_version(self):
+    def test_feed_release(self):
         parser = CliParser()
-        feed_version = "1.2.3"
-        args = parser.parse_arguments(["--feed-version", feed_version])
-        self.assertTrue(args.feed_version, "1.2.3")
+        feed_release = "1.2.3"
+        args = parser.parse_arguments(["--feed-release", feed_release])
+        self.assertTrue(args.feed_release, "1.2.3")
 
         self.assertEqual(
             args.feed_url, "rsync://feed.community.greenbone.net/community"
         )
         self.assertEqual(
             args.gvmd_data_url,
-            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_version}/",
+            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_release}/",
         )
         self.assertEqual(
             args.port_lists_url,
-            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_version}/port-lists/",
+            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_release}/port-lists/",
         )
         self.assertEqual(
             args.report_formats_url,
-            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_version}/report-formats/",
+            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_release}/report-formats/",
         )
         self.assertEqual(
             args.scan_configs_url,
-            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_version}/scan-configs/",
+            f"rsync://feed.community.greenbone.net/community/data-feed/{feed_release}/scan-configs/",
         )
         self.assertEqual(
             args.notus_url,
-            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_version}/vt-data/notus/",
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_release}/vt-data/notus/",
         )
         self.assertEqual(
             args.nasl_url,
-            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_version}/vt-data/nasl/",
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_release}/vt-data/nasl/",
         )
         self.assertEqual(
             args.scap_data_url,
-            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_version}/scap-data/",
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_release}/scap-data/",
         )
         self.assertEqual(
             args.cert_data_url,
-            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_version}/cert-data/",
+            f"rsync://feed.community.greenbone.net/community/vulnerability-feed/{feed_release}/cert-data/",
         )
 
     def test_destination_prefix(self):
