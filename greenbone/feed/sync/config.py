@@ -74,8 +74,8 @@ ValueTypeCallable = Callable[[Any], T]
 def resolve_gvmd_data_destination(values: ValuesDict) -> str:
     path = "gvm/data-objects/gvmd"
     feed_release: str = values.get("feed-release")  # type: ignore[assignment]
-    str_major, str_minor = feed_release.split(".")[:2]
     try:
+        str_major, str_minor = feed_release.split(".")[:2]
         major, minor = int(str_major), int(str_minor)
     except ValueError as e:
         raise ConfigError(f"Invalid feed release format: {feed_release}") from e

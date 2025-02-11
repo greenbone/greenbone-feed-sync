@@ -23,7 +23,7 @@ from greenbone.feed.sync.config import (
     Config,
     EnterpriseSettings,
 )
-from greenbone.feed.sync.errors import ConfigFileError
+from greenbone.feed.sync.errors import ConfigError, ConfigFileError
 from greenbone.feed.sync.helper import DEFAULT_FLOCK_WAIT_INTERVAL
 from greenbone.feed.sync.rsync import (
     DEFAULT_RSYNC_COMPRESSION_LEVEL,
@@ -647,6 +647,31 @@ feed-release = "{feed_release}"
             values["port-lists-url"],
             f"{DEFAULT_RSYNC_URL}/data-feed/{feed_release}/port-lists/",
         )
+
+    def test_invalid_feed_release(self):
+        feed_release = "abc"
+        content = f"""[greenbone-feed-sync]
+feed-release = "{feed_release}"
+"""
+        path_mock = MagicMock(spec=Path)
+        path_mock.read_text.return_value = content
+
+        with self.assertRaisesRegex(
+            ConfigError, "Invalid feed release format: abc"
+        ):
+            Config.load(path_mock)
+
+        feed_release = "a.b"
+        content = f"""[greenbone-feed-sync]
+feed-release = "{feed_release}"
+"""
+        path_mock = MagicMock(spec=Path)
+        path_mock.read_text.return_value = content
+
+        with self.assertRaisesRegex(
+            ConfigError, "Invalid feed release format: a.b"
+        ):
+            Config.load(path_mock)
 
     def test_invalid_toml(self):
         content = "This is not TOML"
