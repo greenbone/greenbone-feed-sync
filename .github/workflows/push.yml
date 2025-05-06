@@ -27,3 +27,5 @@ jobs:
       ref-name: ${{ inputs.ref-name }}
       service: greenbone-feed-sync
     secrets: inherit
+    permissions:
+        pull-requests: write
