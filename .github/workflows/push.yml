@@ -16,7 +16,7 @@ on:
 jobs:
   push:
     name: Build and push to self-hosted harbor
-    uses: greenbone/workflows/.github/workflows/container-build-push-2nd-gen.yml@main
+    uses: greenbone/workflows/.github/workflows/container-build-push-2nd-gen.yml@url-image-openvas
     with:
       build-docker-file: .docker/Dockerfile
       image-labels: |
