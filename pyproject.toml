@@ -5,7 +5,7 @@ description = "A tool for downloading the Greenbone Community Feed"
 authors = [
   {name = "Björn Ricks", email = "bjoern.ricks@greenbone.net"}
 ]
-license = "GPL-3.0-or-later"
+license = {text = "GPL-3.0-or-later"}
 readme = "README.md"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
@@ -36,7 +36,7 @@ name = "greenbone-feed-sync"
 version = "25.1.4.dev1"
 description = "A tool for downloading the Greenbone Community Feed"
 authors = ["Björn Ricks <bjoern.ricks@greenbone.net>"]
-license = "GPL-3.0-or-later"
+license = {text = "GPL-3.0-or-later"}
 readme = "README.md"
 
 classifiers = [
@@ -79,8 +79,8 @@ greenbone-scapdata-sync = 'greenbone.feed.sync.main:main'
 greenbone-certdata-sync = 'greenbone.feed.sync.main:main'
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [tool.black]
 line-length = 80
