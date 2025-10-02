@@ -14,4 +14,4 @@ jobs:
       url: https://pypi.org/project/greenbone-feed-sync/
     steps:
       - name: Build and publish to PyPI
-        uses: greenbone/actions/pypi-upload@v3
+        uses: greenbone/actions/pypi-upload@pypi-upload-fix
