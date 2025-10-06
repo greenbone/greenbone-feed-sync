@@ -5,7 +5,7 @@ description = "A tool for downloading the Greenbone Community Feed"
 authors = [
   {name = "Björn Ricks", email = "bjoern.ricks@greenbone.net"}
 ]
-license = {text = "GPL-3.0-or-later"}
+license = "GPL-3.0-or-later"
 readme = "README.md"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
