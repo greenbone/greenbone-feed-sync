@@ -36,7 +36,7 @@ name = "greenbone-feed-sync"
 version = "25.1.4.dev1"
 description = "A tool for downloading the Greenbone Community Feed"
 authors = ["Björn Ricks <bjoern.ricks@greenbone.net>"]
-license = {text = "GPL-3.0-or-later"}
+license = "GPL-3.0-or-later"
 readme = "README.md"
 
 classifiers = [
