@@ -79,8 +79,8 @@ greenbone-scapdata-sync = 'greenbone.feed.sync.main:main'
 greenbone-certdata-sync = 'greenbone.feed.sync.main:main'
 
 [build-system]
-requires = ["setuptools>=61", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 80
