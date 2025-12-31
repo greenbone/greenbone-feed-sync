@@ -25,7 +25,7 @@ jobs:
         org.opencontainers.image.base.name=debian:stable-slim
       image-url: community/greenbone-feed-sync
       ref-name: ${{ inputs.ref-name }}
-      service: greenbone-feed-sync
+      service: openvas-feed-sync
     secrets: inherit
     permissions:
         pull-requests: write
