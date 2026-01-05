@@ -49,7 +49,6 @@ COPY .docker/entrypoint.sh /usr/local/bin/entrypoint
 RUN python3 -m pip install --break-system-packages /greenbone-feed-sync/*
 
 RUN chown -R gvm:gvm /greenbone-feed-sync && \
-  chown -R gvm:gvm /var/lib/ && \
   chmod 755 /usr/local/bin/entrypoint
 
 ENTRYPOINT [ "/usr/local/bin/entrypoint" ]
