@@ -78,7 +78,7 @@ Versions prior to 25.0.0 used [calendar versioning](https://calver.org/).
 
 ### Requirements
 
-Python 3.9 and later is supported.
+Python 3.10 and later is supported.
 
 `greenbone-feed-sync` requires the `rsync` tool being installed and available
 within the `PATH`.
@@ -619,7 +619,7 @@ first.
 
 ## License
 
-Copyright (C) 2022-2025 [Greenbone AG][Greenbone Networks]
+Copyright (C) 2022-2026 [Greenbone AG][Greenbone Networks]
 
 Licensed under the [GNU General Public License v3.0 or later](LICENSE).
 
