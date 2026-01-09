@@ -34,7 +34,7 @@ shtab = ">=1.6.5"
 
 [tool.poetry.group.dev.dependencies]
 autohooks-plugin-black = ">=22.11.0"
-autohooks-plugin-ruff = ">=23.6.0"
+autohooks-plugin-ruff = ">=25.2.0"
 autohooks-plugin-mypy = ">=23.3.0"
 pontos = ">=22.12.2"
 coverage = { extras = ["toml"], version = ">=7.1.0" }
@@ -50,28 +50,8 @@ greenbone-certdata-sync = 'greenbone.feed.sync.main:main'
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.black]
-line-length = 80
-target-version = ['py310', 'py311', 'py312', 'py313', 'py314']
-exclude = '''
-/(
-    \.git
-  | \.venv
-  | \.github
-  | \.vscode
-  | _build
-  | build
-  | dist
-  | docs
-)/
-'''
-
 [tool.autohooks]
-pre-commit = [
-  'autohooks.plugins.black',
-  'autohooks.plugins.ruff',
-  'autohooks.plugins.mypy',
-]
+pre-commit = ['autohooks.plugins.mypy', "autohooks.plugins.ruff.check", "autohooks.plugins.ruff.format"]
 mode = "poetry"
 
 [tool.pontos.version]
@@ -83,7 +63,11 @@ line_length = 80
 
 [tool.ruff]
 line-length = 80
-target-version = "py39"
+target-version = "py310"
+extend-exclude = ["build/*"]
+
+[tool.ruff.format]
+docstring-code-format = true
 
 [tool.ruff.lint]
 extend-select = ["I", "PLE", "PLW"]
