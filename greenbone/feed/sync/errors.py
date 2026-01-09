@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from typing import Iterable, Optional
+from collections.abc import Iterable
 
 
 class GreenboneFeedSyncError(Exception):
@@ -47,8 +47,8 @@ class ExecProcessError(GreenboneFeedSyncError):
         returncode: int,
         cmd: Iterable[str],
         *,
-        stdout: Optional[bytes] = None,
-        stderr: Optional[bytes] = None,
+        stdout: bytes | None = None,
+        stderr: bytes | None = None,
     ) -> None:
         self.returncode = returncode
         self.cmd = cmd
@@ -73,7 +73,7 @@ class RsyncError(ExecProcessError):
         self,
         returncode: int,
         args: Iterable[str],
-        stderr: Optional[bytes] = None,
+        stderr: bytes | None = None,
     ) -> None:
         super().__init__(returncode, cmd=["rsync", *list(args)], stderr=stderr)
 
