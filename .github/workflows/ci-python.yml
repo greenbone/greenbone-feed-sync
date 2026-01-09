@@ -21,6 +21,7 @@ jobs:
     with:
       lint-packages: "greenbone tests"
       linter: ruff check
+      formatter: ruff format --diff
       python-version: ${{ matrix.python-version }}
 
   test:
