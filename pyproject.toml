@@ -11,10 +11,11 @@ classifiers = [
   "Development Status :: 5 - Production/Stable",
   "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)", # pylint: disable=line-too-long
   "Environment :: Console",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Operating System :: OS Independent",
   "Topic :: Utilities",
 ]
@@ -26,7 +27,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 rich = ">=13.2.0"
 tomli = { version = ">=2.0.1", python = "<3.11" }
 shtab = ">=1.6.5"
@@ -51,7 +52,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 80
-target-version = ['py39', 'py310', 'py311', 'py312']
+target-version = ['py310', 'py311', 'py312', 'py313', 'py314']
 exclude = '''
 /(
     \.git
@@ -173,7 +174,7 @@ commit_parsers = [
   { message = "^[d|D]oc", group = "<!-- 5 -->:books: Documentation" },
   { message = "^[t|T]est", group = "<!-- 6 -->:white_check_mark: Testing" },
   { message = "^[c|C]hore", group = "<!-- 7 -->:wrench: Miscellaneous" },
-  { message = "^[c|C]i", group = "<!-- 7 -->️:wrench: Miscellaneous" },
+  { message = "^[c|C]i", group = "<!-- 7 -->:wrench: Miscellaneous" },
   { message = "^[m|M]isc", group = "<!-- 7 -->:wrench: Miscellaneous" },
   { message = "^[d|D]eps", group = "<!-- 8 -->:ship: Dependencies" },
 ]
