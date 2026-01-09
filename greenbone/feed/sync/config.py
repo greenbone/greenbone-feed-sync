@@ -231,7 +231,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "scap-data-destination",
         "GREENBONE_FEED_SYNC_SCAP_DATA_DESTINATION",
-        lambda values: f"{values['destination-prefix']}/{DEFAULT_SCAP_DATA_PATH}",  # noqa: E501
+        lambda values: f"{values['destination-prefix']}/{DEFAULT_SCAP_DATA_PATH}",
         Path,
     ),
     DependentSetting(
@@ -243,7 +243,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "cert-data-destination",
         "GREENBONE_FEED_SYNC_CERT_DATA_DESTINATION",
-        lambda values: f"{values['destination-prefix']}/{DEFAULT_CERT_DATA_PATH}",  # noqa: E501
+        lambda values: f"{values['destination-prefix']}/{DEFAULT_CERT_DATA_PATH}",
         Path,
     ),
     DependentSetting(
@@ -261,7 +261,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "report-formats-url",
         "GREENBONE_FEED_SYNC_REPORT_FORMATS_URL",
-        lambda values: f"{values['feed-url']}/data-feed/{values['feed-release']}/report-formats/",  # noqa: E501
+        lambda values: f"{values['feed-url']}/data-feed/{values['feed-release']}/report-formats/",
         str,
     ),
     DependentSetting(
@@ -273,7 +273,7 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "scan-configs-url",
         "GREENBONE_FEED_SYNC_SCAN_CONFIGS_URL",
-        lambda values: f"{values['feed-url']}/data-feed/{values['feed-release']}/scan-configs/",  # noqa: E501
+        lambda values: f"{values['feed-url']}/data-feed/{values['feed-release']}/scan-configs/",
         str,
     ),
     DependentSetting(
@@ -285,19 +285,19 @@ _DEPENDENT_SETTINGS = (
     DependentSetting(
         "port-lists-url",
         "GREENBONE_FEED_SYNC_PORT_LISTS_URL",
-        lambda values: f"{values['feed-url']}/data-feed/{values['feed-release']}/port-lists/",  # noqa: E501
+        lambda values: f"{values['feed-url']}/data-feed/{values['feed-release']}/port-lists/",
         str,
     ),
     DependentSetting(
         "gvmd-lock-file",
         "GREENBONE_FEED_SYNC_GVMD_LOCK_FILE",
-        lambda values: f"{values['destination-prefix']}/{DEFAULT_GVMD_LOCK_FILE_PATH}",  # noqa: E501
+        lambda values: f"{values['destination-prefix']}/{DEFAULT_GVMD_LOCK_FILE_PATH}",
         Path,
     ),
     DependentSetting(
         "openvas-lock-file",
         "GREENBONE_FEED_SYNC_OPENVAS_LOCK_FILE",
-        lambda values: f"{values['destination-prefix']}/{DEFAULT_OPENVAS_LOCK_FILE_PATH}",  # noqa: E501
+        lambda values: f"{values['destination-prefix']}/{DEFAULT_OPENVAS_LOCK_FILE_PATH}",
         Path,
     ),
 )

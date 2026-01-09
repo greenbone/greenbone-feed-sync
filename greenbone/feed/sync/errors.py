@@ -75,7 +75,7 @@ class RsyncError(ExecProcessError):
         args: Iterable[str],
         stderr: Optional[bytes] = None,
     ) -> None:
-        super().__init__(returncode, cmd=["rsync"] + list(args), stderr=stderr)
+        super().__init__(returncode, cmd=["rsync", *list(args)], stderr=stderr)
 
 
 class FileLockingError(GreenboneFeedSyncError):

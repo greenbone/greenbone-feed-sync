@@ -217,7 +217,7 @@ class ExecRsyncTestCase(unittest.IsolatedAsyncioTestCase):
             "--partial",
             "--progress",
             "-e",
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p 24 -i '/tmp/ssh.key'",  # pylint: disable=line-too-long # noqa: E501
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p 24 -i '/tmp/ssh.key'",  # pylint: disable=line-too-long
             "-q",
             "--compress-level=9",
             "--delete",
