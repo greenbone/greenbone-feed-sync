@@ -4,7 +4,6 @@
 #
 
 # pylint: disable=line-too-long
-# ruff: noqa: E501
 
 import unittest
 from pathlib import Path
