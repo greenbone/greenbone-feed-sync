@@ -20,8 +20,8 @@ jobs:
     uses: greenbone/workflows/.github/workflows/lint-python.yml@main
     with:
       lint-packages: "greenbone tests"
-      linter: ruff check
-      formatter: ruff format --diff
+      linter: make lint
+      formatter: make format
       python-version: ${{ matrix.python-version }}
 
   test:
