@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
+import sys
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from typing import Any, Optional, Sequence
@@ -49,7 +50,7 @@ class CliParser:
     """
 
     def __init__(self) -> None:
-        parser = ArgumentParser(add_help=False)
+        parser = ArgumentParser(prog=Path(sys.argv[0]).name, add_help=False)
         shtab.add_argument_to(parser)
         parser.add_argument(
             "--version",
