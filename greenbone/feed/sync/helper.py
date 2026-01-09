@@ -8,10 +8,10 @@ import errno
 import fcntl
 import os
 import shutil
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from pathlib import Path
 from types import TracebackType
-from typing import AsyncGenerator, Optional, Type, Union
 
 from rich.console import Console
 from rich.live import Live
@@ -31,10 +31,10 @@ def is_root() -> bool:
 
 @asynccontextmanager
 async def flock_wait(
-    path: Union[str, Path],
+    path: str | Path,
     *,
-    console: Optional[Console] = None,
-    wait_interval: Optional[Union[int, float]] = DEFAULT_FLOCK_WAIT_INTERVAL,
+    console: Console | None = None,
+    wait_interval: int | float | None = DEFAULT_FLOCK_WAIT_INTERVAL,
 ) -> AsyncGenerator[None, None]:
     """
     Try to lock a file and wait if it is already locked
@@ -128,16 +128,14 @@ class Spinner:
 
     def __exit__(
         self,
-        exc_type: Optional[Type[BaseException]],
-        exc_val: Optional[BaseException],
-        exc_tb: Optional[TracebackType],
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
     ) -> None:
         self._live.stop()
 
 
-def change_user_and_group(
-    user: Union[str, int], group: Union[str, int]
-) -> None:
+def change_user_and_group(user: str | int, group: str | int) -> None:
     """
     Change effective user or group of the current running process
 

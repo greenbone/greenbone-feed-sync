@@ -5,8 +5,9 @@
 
 import sys
 from argparse import ArgumentParser, Namespace
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Optional, Sequence
+from typing import Any
 
 import shtab
 
@@ -299,7 +300,7 @@ class CliParser:
 
     def _determine_enterprise_settings(
         self, enterprise_key: Path
-    ) -> Optional[EnterpriseSettings]:
+    ) -> EnterpriseSettings | None:
         if not enterprise_key or not enterprise_key.exists():
             return None
 
@@ -332,9 +333,7 @@ class CliParser:
     def _set_defaults(self, config: ConfigDict) -> None:
         self.parser.set_defaults(**_to_defaults(config))
 
-    def parse_arguments(
-        self, args: Optional[Sequence[str]] = None
-    ) -> Namespace:
+    def parse_arguments(self, args: Sequence[str] | None = None) -> Namespace:
         """
         Parse CLI arguments
         """

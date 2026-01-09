@@ -5,8 +5,8 @@
 
 import asyncio
 import os
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable, Optional, Union
 from urllib.parse import urlsplit
 
 from greenbone.feed.sync.errors import RsyncError
@@ -30,7 +30,7 @@ async def exec_rsync(*args: str) -> None:
 
 DEFAULT_RSYNC_URL = "rsync://feed.community.greenbone.net/community"
 DEFAULT_RSYNC_COMPRESSION_LEVEL = 9
-DEFAULT_RSYNC_TIMEOUT: Optional[int] = (
+DEFAULT_RSYNC_TIMEOUT: int | None = (
     None  # in seconds. 0 means no timeout and None use rsync default
 )
 DEFAULT_RSYNC_SSH_PORT = 24
@@ -38,7 +38,7 @@ DEFAULT_RSYNC_SSH_OPTS = (
     "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 )
 
-PathLike = Union[os.PathLike, str]
+PathLike = os.PathLike | str
 
 
 class Rsync:
@@ -61,11 +61,11 @@ class Rsync:
         self,
         *,
         verbose: bool = False,
-        private_subdir: Optional[PathLike] = None,
-        compression_level: Optional[int] = DEFAULT_RSYNC_COMPRESSION_LEVEL,
-        timeout: Optional[int] = DEFAULT_RSYNC_TIMEOUT,
-        ssh_key: Optional[PathLike] = None,
-        exclude: Optional[Iterable[PathLike]] = None,
+        private_subdir: PathLike | None = None,
+        compression_level: int | None = DEFAULT_RSYNC_COMPRESSION_LEVEL,
+        timeout: int | None = DEFAULT_RSYNC_TIMEOUT,
+        ssh_key: PathLike | None = None,
+        exclude: Iterable[PathLike] | None = None,
     ) -> None:
         self.verbose = verbose
         self.private_subdir = private_subdir

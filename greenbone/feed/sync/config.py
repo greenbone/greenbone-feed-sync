@@ -4,17 +4,14 @@
 #
 
 import os
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import (
     Any,
-    Callable,
     Generic,
-    Iterable,
-    Optional,
     Protocol,
     TypeVar,
-    Union,
 )
 from urllib.parse import urlsplit
 
@@ -31,7 +28,7 @@ except ImportError:
     import tomli as tomllib  # type: ignore[no-redef]
 
 
-def maybe_int(value: Optional[str]) -> Union[int, str, None]:
+def maybe_int(value: str | None) -> int | str | None:
     """
     Convert string into int if possible
     """
@@ -91,10 +88,10 @@ def resolve_gvmd_data_destination(values: ValuesDict) -> str:
 class Setting(Generic[T]):
     config_key: str
     environment_key: str
-    default_value: Union[str, int, bool, None]
+    default_value: str | int | bool | None
     value_type: ValueTypeCallable[T]
 
-    def resolve(self, values: ValuesDict) -> Optional[T]:
+    def resolve(self, values: ValuesDict) -> T | None:
         value: Any
         if self.environment_key in os.environ:
             value = os.environ.get(self.environment_key)
@@ -113,7 +110,7 @@ class DependentSetting(Generic[T]):
     default_value: DefaultValueCallable
     value_type: ValueTypeCallable[T]
 
-    def resolve(self, values: ValuesDict) -> Optional[T]:
+    def resolve(self, values: ValuesDict) -> T | None:
         if self.environment_key in os.environ:
             value = os.environ.get(self.environment_key)
         elif self.config_key in values:
@@ -126,8 +123,8 @@ class DependentSetting(Generic[T]):
 
 @dataclass
 class EnterpriseSettings:
-    user: Optional[str]
-    host: Optional[str]
+    user: str | None
+    host: str | None
     key: Path
 
     @classmethod
@@ -323,7 +320,7 @@ class Config:
             content = config_file.read_text(encoding="utf-8")
             config_data = tomllib.loads(content)
             self._config = config_data.get("greenbone-feed-sync", {})
-        except IOError as e:
+        except OSError as e:
             raise ConfigFileError(
                 f"Can't load config file {config_file.absolute()}. "
                 f"Error was {e}."
@@ -343,7 +340,7 @@ class Config:
             self._config[setting.config_key] = setting.resolve(self._config)
 
     @classmethod
-    def load(cls, config_file: Optional[Path] = None) -> "Config":
+    def load(cls, config_file: Path | None = None) -> "Config":
         """
         Load config values from config_file and apply all settings
         """

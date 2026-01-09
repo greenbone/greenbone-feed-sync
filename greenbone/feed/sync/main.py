@@ -6,8 +6,9 @@
 import asyncio
 import subprocess
 import sys
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Iterable, NoReturn
+from typing import NoReturn
 
 from rich.console import Console
 
