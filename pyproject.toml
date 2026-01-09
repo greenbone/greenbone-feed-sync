@@ -1,53 +1,55 @@
-[tool.poetry]
+[project]
 name = "greenbone-feed-sync"
-version = "25.2.1.dev1"
 description = "A tool for downloading the Greenbone Community Feed"
-authors = ["Björn Ricks <bjoern.ricks@greenbone.net>"]
-license = "GPL-3.0-or-later"
+authors = [{ name = "Björn Ricks", email = "bjoern.ricks@greenbone.net" }]
+requires-python = ">=3.10,<4"
 readme = "README.md"
-
+license = "GPL-3.0-or-later"
 classifiers = [
-  # Full list: https://pypi.org/pypi?%3Aaction=list_classifiers
-  "Development Status :: 5 - Production/Stable",
-  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)", # pylint: disable=line-too-long
-  "Environment :: Console",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
-  "Programming Language :: Python :: 3.13",
-  "Programming Language :: Python :: 3.14",
-  "Operating System :: OS Independent",
-  "Topic :: Utilities",
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Environment :: Console",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Operating System :: OS Independent",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "rich>=13.2.0",
+    "tomli>=2.0.1 ; python_version < '3.11'",
+    "shtab>=1.6.5",
+]
+dynamic = ["version"]
+
+[project.scripts]
+greenbone-feed-sync = "greenbone.feed.sync.main:main"
+greenbone-nvt-sync = "greenbone.feed.sync.main:main"
+greenbone-scapdata-sync = "greenbone.feed.sync.main:main"
+greenbone-certdata-sync = "greenbone.feed.sync.main:main"
+
+[dependency-groups]
+dev = [
+    "autohooks-plugin-ruff>=25.2.0",
+    "autohooks-plugin-mypy>=23.3.0",
+    "pontos>=22.12.2",
+    "coverage[toml]>=7.1.0",
+    "git-cliff>=2.8.0,<3",
 ]
 
+[tool.poetry]
+version = "25.2.1.dev1"
+requires-poetry = ">=2.0"
 packages = [
   { include = "greenbone" },
   { include = "tests", format = "sdist" },
   { include = "poetry.lock", format = "sdist" },
 ]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-rich = ">=13.2.0"
-tomli = { version = ">=2.0.1", python = "<3.11" }
-shtab = ">=1.6.5"
-
-[tool.poetry.group.dev.dependencies]
-autohooks-plugin-black = ">=22.11.0"
-autohooks-plugin-ruff = ">=25.2.0"
-autohooks-plugin-mypy = ">=23.3.0"
-pontos = ">=22.12.2"
-coverage = { extras = ["toml"], version = ">=7.1.0" }
-git-cliff = "^2.8.0"
-
-[tool.poetry.scripts]
-greenbone-feed-sync = 'greenbone.feed.sync.main:main'
-greenbone-nvt-sync = 'greenbone.feed.sync.main:main'
-greenbone-scapdata-sync = 'greenbone.feed.sync.main:main'
-greenbone-certdata-sync = 'greenbone.feed.sync.main:main'
-
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.autohooks]
@@ -56,10 +58,6 @@ mode = "poetry"
 
 [tool.pontos.version]
 version-module-file = "greenbone/feed/sync/__version__.py"
-
-[tool.isort]
-profile = "black"
-line_length = 80
 
 [tool.ruff]
 line-length = 80
