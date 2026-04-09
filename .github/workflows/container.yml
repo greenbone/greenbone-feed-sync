@@ -31,7 +31,7 @@ jobs:
       dockerfile: .docker/Dockerfile
       images: |
         ghcr.io/${{ github.repository }},enable=true
-        ${{ vars.GREENBONE_REGISTRY }}/community/${{ github.event.repository.name }},enable=${{ github.event_name != 'pull_request' }}
+        ${{ vars.GREENBONE_REGISTRY }}/community/${{ github.event.repository.name }},enable=${{ github.event_name != 'pull_request' && github.ref_type == 'tag' }}
       labels: |
         org.opencontainers.image.vendor=Greenbone
         org.opencontainers.image.base.name=debian/stable-slim
