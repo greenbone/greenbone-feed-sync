@@ -9,6 +9,7 @@ on:
 jobs:
   linting:
     name: Linting
+    runs-on: "ubuntu-latest"
     strategy:
       matrix:
         python-version:
@@ -17,15 +18,20 @@ jobs:
           - "3.12"
           - "3.13"
           - "3.14"
-    uses: greenbone/workflows/.github/workflows/lint-python.yml@main
-    with:
-      lint-packages: "greenbone tests"
-      linter: ruff check
-      formatter: ruff format --diff
-      python-version: ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Check and lint python packages
+        uses: greenbone/actions/lint-python@v3
+        with:
+          package-manager: uv
+          packages: greenbone tests
+          python-version: ${{ matrix.python-version }}
+          linter: ruff check --diff
+          formatter: ruff format --check --diff
 
   test:
     name: Run all tests
+    runs-on: "ubuntu-latest"
     strategy:
       matrix:
         python-version:
@@ -34,25 +40,37 @@ jobs:
           - "3.12"
           - "3.13"
           - "3.14"
-    uses: greenbone/workflows/.github/workflows/test-python.yml@main
-    with:
-      python-version: ${{ matrix.python-version }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: greenbone/actions/uv@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run unit test
+        run: |
+          uv run python -m unittest -v
 
   codecov:
     name: Upload coverage to codecov.io
     runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Install and calculate and upload coverage to codecov.io
         uses: greenbone/actions/coverage-python@v3
         with:
           python-version: "3.10"
+          package-manager: uv
           token: ${{ secrets.CODECOV_TOKEN }}
 
   mypy:
     name: Check type information
-    uses: greenbone/workflows/.github/workflows/typing-python.yml@main
-
-  versioning:
-    name: Check versioning
-    uses: greenbone/workflows/.github/workflows/check-version.yml@main
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: greenbone/actions/uv@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run mypy
+        run: |
+          uv run mypy

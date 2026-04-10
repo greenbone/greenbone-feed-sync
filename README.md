@@ -573,36 +573,26 @@ no-wait = true
 
 ## Development
 
-**greenbone-feed-sync** uses [poetry] for its own dependency management and
+**greenbone-feed-sync** uses [uv] for its own dependency management and
 build process.
 
 First install poetry via pipx
 
 ```sh
-python3 -m pipx install poetry
+python3 -m pipx install uv
 ```
-
-Afterwards run
-
-```sh
-poetry install
-```
-
-in the checkout directory of **greenbone-feed-sync** (the directory containing
-the `pyproject.toml` file) to install all dependencies including the packages
-only required for development.
 
 Afterwards activate the git hooks for auto-formatting and linting via
 [autohooks].
 
 ```sh
-poetry run autohooks activate
+uv run autohooks activate
 ```
 
 Validate the activated git hooks by running
 
 ```sh
-poetry run autohooks check
+uv run autohooks check
 ```
 
 ## Maintainer
@@ -624,9 +614,9 @@ Copyright (C) 2022-2026 [Greenbone AG][Greenbone Networks]
 Licensed under the [GNU General Public License v3.0 or later](LICENSE).
 
 [Greenbone Networks]: https://www.greenbone.net/
-[poetry]: https://python-poetry.org/
 [pip]: https://pip.pypa.io/
 [pipx]: https://pypa.github.io/pipx/
 [autohooks]: https://github.com/greenbone/autohooks
 [TOML]: https://toml.io/
 [pypi]: https://pypi.org
+[uv]: https://docs.astral.sh/uv/

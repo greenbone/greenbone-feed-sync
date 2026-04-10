@@ -1,5 +1,6 @@
 [project]
 name = "greenbone-feed-sync"
+version = "25.2.1.dev1"
 description = "A tool for downloading the Greenbone Community Feed"
 authors = [{ name = "Björn Ricks", email = "bjoern.ricks@greenbone.net" }]
 requires-python = ">=3.10,<4"
@@ -7,7 +8,6 @@ readme = "README.md"
 license = "GPL-3.0-or-later"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
-    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     "Environment :: Console",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -22,13 +22,25 @@ dependencies = [
     "tomli>=2.0.1 ; python_version < '3.11'",
     "shtab>=1.6.5",
 ]
-dynamic = ["version"]
 
 [project.scripts]
 greenbone-feed-sync = "greenbone.feed.sync.main:main"
 greenbone-nvt-sync = "greenbone.feed.sync.main:main"
 greenbone-scapdata-sync = "greenbone.feed.sync.main:main"
 greenbone-certdata-sync = "greenbone.feed.sync.main:main"
+
+[tool.uv]
+
+[tool.uv.build-backend]
+module-name = ["greenbone", "tests"]
+module-root = ""
+namespace = true
+source-include = ["uv.lock"]
+wheel-exclude = ["tests"]
+
+[build-system]
+requires = ["uv_build>=0.11.6,<0.12.0"]
+build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
@@ -39,22 +51,13 @@ dev = [
     "git-cliff>=2.8.0,<3",
 ]
 
-[tool.poetry]
-version = "25.2.1.dev1"
-requires-poetry = ">=2.0"
-packages = [
-  { include = "greenbone" },
-  { include = "tests", format = "sdist" },
-  { include = "poetry.lock", format = "sdist" },
-]
-
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
-
 [tool.autohooks]
-pre-commit = ['autohooks.plugins.mypy', "autohooks.plugins.ruff.check", "autohooks.plugins.ruff.format"]
-mode = "poetry"
+pre-commit = [
+    'autohooks.plugins.mypy',
+    "autohooks.plugins.ruff.check",
+    "autohooks.plugins.ruff.format",
+]
+mode = "uv"
 
 [tool.pontos.version]
 version-module-file = "greenbone/feed/sync/__version__.py"
@@ -143,22 +146,22 @@ filter_unconventional = false
 split_commits = false
 # regex for preprocessing the commit messages
 commit_preprocessors = [
-  # remove issue numbers from commits
-  { pattern = '\((\w+\s)?#([0-9]+)\)', replace = "" },
+    # remove issue numbers from commits
+    { pattern = '\((\w+\s)?#([0-9]+)\)', replace = "" },
 ]
 # regex for parsing and grouping commits
 commit_parsers = [
-  { message = "^[a|A]dd", group = "<!-- 1 -->:sparkles: Added" },
-  { message = "^[c|C]hange", group = "<!-- 2 -->:construction_worker: Changed" },
-  { message = "^[f|F]ix", group = "<!-- 3 -->:bug: Bug Fixes" },
-  { message = "^[r|R]emove", group = "<!-- 4 -->:fire: Removed" },
-  { message = "^[d|D]rop", group = "<!-- 4 -->:fire: Removed" },
-  { message = "^[d|D]oc", group = "<!-- 5 -->:books: Documentation" },
-  { message = "^[t|T]est", group = "<!-- 6 -->:white_check_mark: Testing" },
-  { message = "^[c|C]hore", group = "<!-- 7 -->:wrench: Miscellaneous" },
-  { message = "^[c|C]i", group = "<!-- 7 -->:wrench: Miscellaneous" },
-  { message = "^[m|M]isc", group = "<!-- 7 -->:wrench: Miscellaneous" },
-  { message = "^[d|D]eps", group = "<!-- 8 -->:ship: Dependencies" },
+    { message = "^[a|A]dd", group = "<!-- 1 -->:sparkles: Added" },
+    { message = "^[c|C]hange", group = "<!-- 2 -->:construction_worker: Changed" },
+    { message = "^[f|F]ix", group = "<!-- 3 -->:bug: Bug Fixes" },
+    { message = "^[r|R]emove", group = "<!-- 4 -->:fire: Removed" },
+    { message = "^[d|D]rop", group = "<!-- 4 -->:fire: Removed" },
+    { message = "^[d|D]oc", group = "<!-- 5 -->:books: Documentation" },
+    { message = "^[t|T]est", group = "<!-- 6 -->:white_check_mark: Testing" },
+    { message = "^[c|C]hore", group = "<!-- 7 -->:wrench: Miscellaneous" },
+    { message = "^[c|C]i", group = "<!-- 7 -->:wrench: Miscellaneous" },
+    { message = "^[m|M]isc", group = "<!-- 7 -->:wrench: Miscellaneous" },
+    { message = "^[d|D]eps", group = "<!-- 8 -->:ship: Dependencies" },
 ]
 # filter out the commits that are not matched by commit parsers
 filter_commits = true
