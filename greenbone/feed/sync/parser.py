@@ -270,6 +270,17 @@ class CliParser:
             "default no timeout is set and the rsync default will be used.",
         )
 
+        parser.add_argument(
+            "--no-perms",
+            action="store_true",
+            help="Do not preserve permissions and skip normalizing the feed "
+            "tree via rsync's --perms and --chmod options. By default "
+            "permissions are preserved. Use this for storage that allows "
+            "writing files but rejects changing their modes, for example some "
+            "bind mounts, network filesystems or container volumes where rsync "
+            "would otherwise fail with a permission error.",
+        )
+
         permissions_group = parser.add_argument_group()
         permissions_group.add_argument(
             "--user",

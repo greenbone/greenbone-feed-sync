@@ -105,6 +105,7 @@ async def feed_sync(console: Console, error_console: Console) -> int:
         verbose=verbose >= 3,
         compression_level=args.compression_level,
         ssh_key=args.greenbone_enterprise_feed_key,
+        perms=not args.no_perms,
     )
 
     openvas_syncs = filter_syncs(

@@ -109,6 +109,34 @@ class RsyncTestCase(unittest.IsolatedAsyncioTestCase):
         )
 
     @patch("greenbone.feed.sync.rsync.exec_rsync", autospec=True)
+    async def test_rsync_with_no_perms(self, exec_mock: AsyncMock):
+        rsync = Rsync(perms=False)
+        await rsync.sync("rsync://foo.bar/baz", "/tmp/baz")
+
+        exec_mock.assert_awaited_once_with(
+            "--links",
+            "--times",
+            "--omit-dir-times",
+            "--recursive",
+            "--partial",
+            "--progress",
+            "-q",
+            "--compress-level=9",
+            "--delete",
+            "--no-perms",
+            "--copy-unsafe-links",
+            "--hard-links",
+            "rsync://foo.bar/baz",
+            "/tmp/baz",
+        )
+
+        args = exec_mock.await_args.args
+        self.assertNotIn("--perms", args)
+        self.assertFalse(
+            any(arg.startswith("--chmod") for arg in args),
+        )
+
+    @patch("greenbone.feed.sync.rsync.exec_rsync", autospec=True)
     async def test_rsync_with_exclude(self, exec_mock: AsyncMock):
         rsync = Rsync(exclude=["foo", Path("exclude/this")])
         await rsync.sync("rsync://foo.bar/baz", "/tmp/baz")

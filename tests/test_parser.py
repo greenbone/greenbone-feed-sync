@@ -194,6 +194,7 @@ class CliParserTestCase(unittest.TestCase):
         )
         self.assertEqual(args.wait_interval, DEFAULT_FLOCK_WAIT_INTERVAL)
         self.assertFalse(args.no_wait)
+        self.assertFalse(args.no_perms)
         self.assertEqual(
             args.compression_level, DEFAULT_RSYNC_COMPRESSION_LEVEL
         )
@@ -425,6 +426,11 @@ class CliParserTestCase(unittest.TestCase):
         parser = CliParser()
         args = parser.parse_arguments(["--no-wait"])
         self.assertTrue(args.no_wait)
+
+    def test_no_perms(self):
+        parser = CliParser()
+        args = parser.parse_arguments(["--no-perms"])
+        self.assertTrue(args.no_perms)
 
     def test_wait_interval(self):
         parser = CliParser()
