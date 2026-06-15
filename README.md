@@ -49,6 +49,7 @@ and types.
   - [no-wait](#no-wait)
   - [wait-interval](#wait-interval)
   - [rsync-timeout](#rsync-timeout)
+  - [no-perms](#no-perms)
   - [group](#group)
   - [user](#user)
   - [greenbone-enterprise-feed-key](#greenbone-enterprise-feed-key)
@@ -523,6 +524,16 @@ is only required for experts and testing purposes.
 | Environment Variable | `GREENBONE_FEED_SYNC_RSYNC_TIMEOUT`                                                                                                                                                    |
 | Default Value        |                                                                                                                                                                                        |
 | Description          | Maximum I/O timeout in seconds used for rsync. If no data is transferred for the specified time then rsync will exit. By default no timeout is set and the rsync default will be used. |
+
+### no-perms
+
+| Name                 | Value                                                                                                                                                                                          |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CLI Argument         | `--no-perms`                                                                                                                                                                                    |
+| Config Variable      | no-perms                                                                                                                                                                                        |
+| Environment Variable | `GREENBONE_FEED_SYNC_NO_PERMS`                                                                                                                                                                  |
+| Default Value        | false                                                                                                                                                                                          |
+| Description          | Do not transfer permissions of the synced files and directories. By default rsync sets explicit permissions (`--perms --chmod=...`) on the destination. Enable this to pass `--no-perms` to rsync, for example when syncing to storage that denies changing permissions (such as object storage gateways). |
 
 ### group
 

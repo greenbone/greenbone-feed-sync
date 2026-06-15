@@ -54,6 +54,11 @@ class Rsync:
             used of not set explicitly. 0 for no timeout.
         ssh_key: SSH key for using ssh as rsync transport protocol.
         exclude: An iterable of directories to exclude from the sync.
+        perms: Preserve permissions and normalize the feed tree via
+            ``--perms`` and ``--chmod``. Enabled by default. Set to ``False``
+            to pass ``--no-perms`` instead, for storage that allows writing
+            files but rejects changing their modes (for example some bind
+            mounts, network filesystems or container volumes).
 
     """
 
@@ -66,6 +71,7 @@ class Rsync:
         timeout: int | None = DEFAULT_RSYNC_TIMEOUT,
         ssh_key: PathLike | None = None,
         exclude: Iterable[PathLike] | None = None,
+        perms: bool = True,
     ) -> None:
         self.verbose = verbose
         self.private_subdir = private_subdir
@@ -73,6 +79,7 @@ class Rsync:
         self.timeout = timeout
         self.ssh_key = ssh_key
         self.exclude = exclude
+        self.perms = perms
 
     async def sync(self, url: str, destination: PathLike) -> None:
         """
@@ -126,10 +133,16 @@ class Rsync:
             "--delete",
         ]
 
-        rsync_chmod = [
-            "--perms",
-            "--chmod=Fugo+r,Fug+w,Dugo-s,Dugo+rx,Dug+w",
-        ]
+        rsync_chmod = (
+            [
+                "--perms",
+                "--chmod=Fugo+r,Fug+w,Dugo-s,Dugo+rx,Dug+w",
+            ]
+            if self.perms
+            else [
+                "--no-perms",
+            ]
+        )
 
         rsync_links = [
             "--copy-unsafe-links",

@@ -96,6 +96,7 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
             verbose=False,
             compression_level=9,
             ssh_key=Path("/etc/gvm/greenbone-enterprise-feed-key"),
+            perms=True,
         )
         console.print.assert_has_calls(
             [
@@ -123,6 +124,38 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
                 ),
             ]
         )
+
+    @patch("greenbone.feed.sync.main.Rsync", autospec=True)
+    async def test_no_perms(self, rsync_mock: MagicMock):
+        console = MagicMock()
+
+        with (
+            temp_directory() as temp_dir,
+            patch.dict(
+                "os.environ",
+                {"GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir)},
+            ),
+            patch.object(
+                sys,
+                "argv",
+                [
+                    "greenbone-feed-sync",
+                    "--type",
+                    "nvt",
+                    "--no-perms",
+                ],
+            ),
+        ):
+            ret = await feed_sync(console=console, error_console=console)
+            self.assertEqual(ret, 0)
+
+            rsync_mock.assert_called_once_with(
+                private_subdir=None,
+                verbose=False,
+                compression_level=9,
+                ssh_key=Path("/etc/gvm/greenbone-enterprise-feed-key"),
+                perms=False,
+            )
 
     @patch("greenbone.feed.sync.main.Rsync", autospec=True)
     async def test_sync_nvts(self, rsync_mock: MagicMock):
@@ -153,6 +186,7 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
                 verbose=False,
                 compression_level=9,
                 ssh_key=Path("/etc/gvm/greenbone-enterprise-feed-key"),
+                perms=True,
             )
             console.print.assert_has_calls(
                 [
@@ -210,6 +244,7 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
                 verbose=True,
                 compression_level=9,
                 ssh_key=Path("/etc/gvm/greenbone-enterprise-feed-key"),
+                perms=True,
             )
             console.print.assert_has_calls(
                 [
@@ -281,6 +316,7 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
                 verbose=False,
                 compression_level=9,
                 ssh_key=Path("/etc/gvm/greenbone-enterprise-feed-key"),
+                perms=True,
             )
             console.print.assert_not_called()
 
@@ -327,6 +363,7 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
                 verbose=False,
                 compression_level=9,
                 ssh_key=Path("/etc/gvm/greenbone-enterprise-feed-key"),
+                perms=True,
             )
             console.print.assert_has_calls(
                 [
@@ -388,6 +425,7 @@ class MainFunctionTestCase(unittest.TestCase):
                 verbose=False,
                 compression_level=9,
                 ssh_key=Path("/etc/gvm/greenbone-enterprise-feed-key"),
+                perms=True,
             )
             console_mock_instance.print.assert_has_calls(
                 [
@@ -453,6 +491,7 @@ class MainFunctionTestCase(unittest.TestCase):
                 verbose=False,
                 compression_level=9,
                 ssh_key=Path("/etc/gvm/greenbone-enterprise-feed-key"),
+                perms=True,
             )
             console_mock_instance.print.assert_has_calls(
                 [
