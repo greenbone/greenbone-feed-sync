@@ -125,7 +125,7 @@ class ConfigTestCase(unittest.TestCase):
         )
         self.assertEqual(values["wait-interval"], DEFAULT_FLOCK_WAIT_INTERVAL)
         self.assertFalse(values["no-wait"])
-        self.assertFalse(values["no-perms"])
+        self.assertFalse(values["no-permission-change"])
         self.assertEqual(
             values["compression-level"], DEFAULT_RSYNC_COMPRESSION_LEVEL
         )
@@ -165,7 +165,7 @@ openvas-lock-file = "/usr/lib/openvas.lock"
 gvmd-lock-file = "/usr/lib/gvmd.lock"
 wait-interval = 100
 no-wait = true
-no-perms = true
+no-permission-change = true
 compression-level = 1
 private-directory = "keep-this"
 verbose = 5
@@ -230,7 +230,7 @@ feed-release = "1.2.3"
         self.assertEqual(values["gvmd-lock-file"], Path("/usr/lib/gvmd.lock"))
         self.assertEqual(values["wait-interval"], 100)
         self.assertTrue(values["no-wait"])
-        self.assertTrue(values["no-perms"])
+        self.assertTrue(values["no-permission-change"])
         self.assertEqual(values["compression-level"], 1)
         self.assertEqual(values["private-directory"], Path("keep-this"))
         self.assertEqual(values["verbose"], 5)
@@ -361,7 +361,7 @@ feed-url = "rsync://foo.bar"
             "GREENBONE_FEED_SYNC_VERBOSE": "5",
             "GREENBONE_FEED_SYNC_FAIL_FAST": "1",
             "GREENBONE_FEED_SYNC_RSYNC_TIMEOUT": "120",
-            "GREENBONE_FEED_SYNC_NO_PERMS": "1",
+            "GREENBONE_FEED_SYNC_NO_PERMISSION_CHANGE": "1",
             "GREENBONE_FEED_SYNC_GROUP": "123",
             "GREENBONE_FEED_SYNC_USER": "321",
             "GREENBONE_FEED_SYNC_ENTERPRISE_FEED_KEY": "/tmp/some.key",
@@ -417,7 +417,7 @@ feed-url = "rsync://foo.bar"
         self.assertEqual(values["gvmd-lock-file"], Path("/usr/lib/gvmd.lock"))
         self.assertEqual(values["wait-interval"], 100)
         self.assertTrue(values["no-wait"])
-        self.assertTrue(values["no-perms"])
+        self.assertTrue(values["no-permission-change"])
         self.assertEqual(values["compression-level"], 1)
         self.assertEqual(values["private-directory"], Path("keep-this"))
         self.assertEqual(values["verbose"], 5)

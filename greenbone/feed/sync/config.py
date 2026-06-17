@@ -159,7 +159,12 @@ _SETTINGS = (
         int,
     ),
     Setting("no-wait", "GREENBONE_FEED_SYNC_NO_WAIT", False, bool),
-    Setting("no-perms", "GREENBONE_FEED_SYNC_NO_PERMS", False, bool),
+    Setting(
+        "no-permission-change",
+        "GREENBONE_FEED_SYNC_NO_PERMISSION_CHANGE",
+        False,
+        bool,
+    ),
     Setting(
         "compression-level",
         "GREENBONE_FEED_SYNC_COMPRESSION_LEVEL",

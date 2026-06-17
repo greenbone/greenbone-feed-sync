@@ -271,7 +271,7 @@ class CliParser:
         )
 
         parser.add_argument(
-            "--no-perms",
+            "--no-permission-change",
             action="store_true",
             help="Do not preserve permissions and skip normalizing the feed "
             "tree via rsync's --perms and --chmod options. By default "

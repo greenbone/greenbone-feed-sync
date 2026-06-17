@@ -109,8 +109,8 @@ class RsyncTestCase(unittest.IsolatedAsyncioTestCase):
         )
 
     @patch("greenbone.feed.sync.rsync.exec_rsync", autospec=True)
-    async def test_rsync_with_no_perms(self, exec_mock: AsyncMock):
-        rsync = Rsync(perms=False)
+    async def test_rsync_with_no_permission_change(self, exec_mock: AsyncMock):
+        rsync = Rsync(change_permissions=False)
         await rsync.sync("rsync://foo.bar/baz", "/tmp/baz")
 
         exec_mock.assert_awaited_once_with(
