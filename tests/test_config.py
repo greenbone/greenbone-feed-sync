@@ -34,7 +34,7 @@ class ConfigTestCase(unittest.TestCase):
     def test_defaults(self):
         values = Config.load()
 
-        self.assertEqual(len(values), 32)
+        self.assertEqual(len(values), 34)
         self.assertEqual(
             values["destination-prefix"], Path(DEFAULT_DESTINATION_PREFIX)
         )
@@ -104,6 +104,18 @@ class ConfigTestCase(unittest.TestCase):
             f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/scan-configs/",
         )
         self.assertEqual(
+            values["scan-config-jsons-destination"],
+            Path(DEFAULT_DESTINATION_PREFIX)
+            / "gvm"
+            / "data-objects"
+            / "gvmd"
+            / "scan-configs-json",
+        )
+        self.assertEqual(
+            values["scan-config-jsons-url"],
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/scan-configs-json/",
+        )
+        self.assertEqual(
             values["port-lists-destination"],
             Path(DEFAULT_DESTINATION_PREFIX)
             / "gvm"
@@ -159,6 +171,8 @@ report-formats-destination = "/usr/lib/report-formats"
 report-formats-url = "rsync://foo.bar/report-formats"
 scan-configs-destination = "/usr/lib/scan-configs"
 scan-configs-url = "rsync://foo.bar/scan-configs"
+scan-config-jsons-destination = "/usr/lib/scan-configs-json"
+scan-config-jsons-url = "rsync://foo.bar/scan-configs-json"
 port-lists-destination = "/usr/lib/port-lists"
 port-lists-url = "rsync://foo.bar/port-lists"
 openvas-lock-file = "/usr/lib/openvas.lock"
@@ -217,6 +231,14 @@ feed-release = "1.2.3"
         )
         self.assertEqual(
             values["scan-configs-url"], "rsync://foo.bar/scan-configs"
+        )
+        self.assertEqual(
+            values["scan-config-jsons-destination"],
+            Path("/usr/lib/scan-configs-json"),
+        )
+        self.assertEqual(
+            values["scan-config-jsons-url"],
+            "rsync://foo.bar/scan-configs-json",
         )
         self.assertEqual(
             values["port-lists-destination"],
@@ -350,6 +372,8 @@ feed-url = "rsync://foo.bar"
             "GREENBONE_FEED_SYNC_REPORT_FORMATS_URL": "rsync://foo.bar/report-formats",
             "GREENBONE_FEED_SYNC_SCAN_CONFIGS_DESTINATION": "/usr/lib/scan-configs",
             "GREENBONE_FEED_SYNC_SCAN_CONFIGS_URL": "rsync://foo.bar/scan-configs",
+            "GREENBONE_FEED_SYNC_SCAN_CONFIG_JSONS_DESTINATION": "/usr/lib/scan-configs-json",
+            "GREENBONE_FEED_SYNC_SCAN_CONFIG_JSONS_URL": "rsync://foo.bar/scan-configs-json",
             "GREENBONE_FEED_SYNC_PORT_LISTS_DESTINATION": "/usr/lib/port-lists",
             "GREENBONE_FEED_SYNC_PORT_LISTS_URL": "rsync://foo.bar/port-lists",
             "GREENBONE_FEED_SYNC_OPENVAS_LOCK_FILE": "/usr/lib/openvas.lock",
