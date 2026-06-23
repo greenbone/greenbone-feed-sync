@@ -298,6 +298,20 @@ _DEPENDENT_SETTINGS = (
         str,
     ),
     DependentSetting(
+        "scan-config-jsons-destination",
+        "GREENBONE_FEED_SYNC_SCAN_CONFIG_JSONS_DESTINATION",
+        lambda values: f"{values['gvmd-data-destination']}/scan-configs-json",
+        Path,
+    ),
+    DependentSetting(
+        "scan-config-jsons-url",
+        "GREENBONE_FEED_SYNC_SCAN_CONFIG_JSONS_URL",
+        lambda values: (
+            f"{values['feed-url']}/data-feed/{values['feed-release']}/scan-configs-json/"
+        ),
+        str,
+    ),
+    DependentSetting(
         "port-lists-destination",
         "GREENBONE_FEED_SYNC_PORT_LISTS_DESTINATION",
         lambda values: f"{values['gvmd-data-destination']}/port-lists",
