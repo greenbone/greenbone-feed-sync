@@ -40,7 +40,7 @@ def maybe_int(value: str | None) -> int | str | None:
     return value
 
 
-DEFAULT_FEED_RELEASE = "24.10"
+DEFAULT_FEED_RELEASE = "25.0"
 
 DEFAULT_DESTINATION_PREFIX = "/var/lib/"
 
@@ -79,7 +79,7 @@ def resolve_gvmd_data_destination(values: ValuesDict) -> str:
 
     return (
         f"{values['destination-prefix']}/{path}"
-        if major >= 24 and minor >= 10
+        if major >= 24 and minor >= 0
         else f"{values['destination-prefix']}/{path}/{feed_release}"
     )
 
