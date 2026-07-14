@@ -125,7 +125,7 @@ class CliParser:
         )
         parser.add_argument(
             "--feed-release",
-            help="Release series of the feed to download for example 22.04 or 24.10. (Default: %(default)s)",
+            help="Release series of the feed to download for example 24.10 or 25.0. (Default: %(default)s)",
         )
         parser.add_argument(
             "--destination-prefix",
