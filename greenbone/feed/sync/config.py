@@ -40,7 +40,7 @@ def maybe_int(value: str | None) -> int | str | None:
     return value
 
 
-DEFAULT_FEED_RELEASE = "24.10"
+DEFAULT_FEED_RELEASE = "25.0"
 
 DEFAULT_DESTINATION_PREFIX = "/var/lib/"
 
