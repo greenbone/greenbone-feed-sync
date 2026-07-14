@@ -26,6 +26,7 @@ jobs:
     name: Build and Push Container Images
     uses: greenbone/workflows/.github/workflows/container-build-push-gea.yml@main
     with:
+      name: default
       ref: ${{ inputs.ref-name }}
       ref-name: ${{ inputs.ref-name }}
       dockerfile: .docker/Dockerfile
@@ -70,5 +71,5 @@ jobs:
       service: openvas-feed-key-service
       url: ${{ vars.GREENBONE_REGISTRY }}/openvas-scan-dev/${{ github.event.repository.name }}
       tag: ${{ github.ref_name }}
-      artifact-pattern: ''
+      artifact-pattern: 'default'
     secrets: inherit
