@@ -292,7 +292,7 @@ is only required for experts and testing purposes.
 | CLI Argument         | `--feed-release`                                                                                    |
 | Config Variable      | feed-release                                                                                        |
 | Environment Variable | `GREENBONE_FEED_SYNC_FEED_RELEASE`                                                                  |
-| Default Value        | `24.10`                                                                                             |
+| Default Value        | `25.0`                                                                                             |
 | Description          | Release series of the feed to be downloaded. Download destinations and URLs will use this variable. |
 
 ### destination-prefix
