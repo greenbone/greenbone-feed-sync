@@ -79,7 +79,7 @@ def resolve_gvmd_data_destination(values: ValuesDict) -> str:
 
     return (
         f"{values['destination-prefix']}/{path}"
-        if major >= 24 and minor >= 10 or major >= 25
+        if (major >= 24 and minor >= 10) or major >= 25
         else f"{values['destination-prefix']}/{path}/{feed_release}"
     )
 
