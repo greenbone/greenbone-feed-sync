@@ -68,7 +68,7 @@ jobs:
     needs: build
     uses: greenbone/workflows/.github/workflows/automatix-service.yml@main
     with:
-      service: openvas-feed-key-service
+      service: openvas-feed-sync
       url: ${{ vars.GREENBONE_REGISTRY }}/openvas-scan-dev/${{ github.event.repository.name }}
       tag: ${{ github.ref_name }}
       artifact-pattern: 'default'
