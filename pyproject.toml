@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "greenbone-feed-sync"
-version = "25.4.1.dev1"
+version = "25.4.1"
 description = "A tool for downloading the Greenbone Community Feed"
 authors = [{ name = "Björn Ricks", email = "bjoern.ricks@greenbone.net" }]
 requires-python = ">=3.10,<4"
