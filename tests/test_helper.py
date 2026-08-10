@@ -154,6 +154,22 @@ class FlockTestCase(unittest.IsolatedAsyncioTestCase):
                 ):
                     pass
 
+    async def test_normal_permission_error(self):
+        with temp_directory() as temp_dir:
+            lock_file = temp_dir / "file.lock"
+            lock_file.touch()
+            some_other_file = temp_dir / "some_other_file"
+            with self.assertRaisesRegex(
+                PermissionError,
+                f"^\[Errno 13\] Permission denied: '{some_other_file.absolute()}'$",  # type: ignore
+            ):
+                async with flock_wait(
+                    lock_file,
+                ):
+                    some_other_file.touch()
+                    some_other_file.chmod(0)
+                    some_other_file.open("w", encoding="utf8")
+
 
 class SpinnerTestCase(unittest.TestCase):
     @patch("greenbone.feed.sync.helper.Live", autospec=True)
