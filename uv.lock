@@ -647,11 +647,11 @@ wheels = [
 
 [[package]]
 name = "packaging"
-version = "26.0"
+version = "26.3"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/65/ee/299d360cdc32edc7d2cf530f3accf79c4fca01e96ffc950d8a52213bd8e4/packaging-26.0.tar.gz", hash = "sha256:00243ae351a257117b6a241061796684b084ed1c516a08c48a3f7e147a9d80b4", size = 143416, upload-time = "2026-01-21T20:50:39.064Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/7d/fa/3944b40b07da9ce895c0e6303a5ab7d53da063554f534556b134a54d6093/packaging-26.3.tar.gz", hash = "sha256:94edc256424af38762eb31306eed28beb9f0efc50a8837492c9d6fd6004aed79", size = 313412, upload-time = "2026-08-04T18:15:28.737Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b7/b9/c538f279a4e237a006a2c98387d081e9eb060d203d8ed34467cc0f0b9b53/packaging-26.0-py3-none-any.whl", hash = "sha256:b36f1fef9334a5588b4166f8bcd26a14e521f2b55e6b9de3aaa80d3ff7a37529", size = 74366, upload-time = "2026-01-21T20:50:37.788Z" },
+    { url = "https://files.pythonhosted.org/packages/63/34/ba1c580383c9eada3711951fef0795c80b829a078d72188184bcab9dd527/packaging-26.3-py3-none-any.whl", hash = "sha256:d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c", size = 129956, upload-time = "2026-08-04T18:15:27.159Z" },
 ]
 
 [[package]]
@@ -665,7 +665,7 @@ wheels = [
 
 [[package]]
 name = "pontos"
-version = "26.5.0"
+version = "26.8.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "colorful" },
@@ -677,10 +677,11 @@ dependencies = [
     { name = "semver" },
     { name = "shtab" },
     { name = "tomlkit" },
+    { name = "typing-extensions", marker = "python_full_version < '3.12'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/84/57/87701a0e0908489c06d4581f7b4f57cfbf68e6424d854f8fb722a52c3f39/pontos-26.5.0.tar.gz", hash = "sha256:2ea68100a803a08cb2136126716fd43c668151c6b461c4c21b283b9a7f5e82a3", size = 353329, upload-time = "2026-05-19T07:28:08.796Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f8/ff/dacf40f0b85751054dbf8a766de1489c463f3fea666230f8c3b8872783a0/pontos-26.8.0.tar.gz", hash = "sha256:c5d16c2505621597d59bfe48680d7f5b302ad78ea73a5da1c29afcf1e255104b", size = 361551, upload-time = "2026-08-24T12:34:33.475Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c7/4e/61992bee585be60f34cf81282e29b722ec33eb844e17436878d7f43794d4/pontos-26.5.0-py3-none-any.whl", hash = "sha256:a14588cdee13199086fce4b0053042e51a76aba6eb1ce811a8213011ecfa6119", size = 250958, upload-time = "2026-05-19T07:28:06.949Z" },
+    { url = "https://files.pythonhosted.org/packages/dc/e7/8a189c740f8be7eaa41d06bd89af3cd2ebdee497b21bf373f24fe72fde22/pontos-26.8.0-py3-none-any.whl", hash = "sha256:da08ca3a302e8a0df610884f69d9345a6a550f4eec9e9f8296fa7946fc9280f5", size = 253088, upload-time = "2026-08-24T12:34:31.76Z" },
 ]
 
 [[package]]
@@ -825,11 +826,11 @@ wheels = [
 
 [[package]]
 name = "tomlkit"
-version = "0.14.0"
+version = "0.15.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/c3/af/14b24e41977adb296d6bd1fb59402cf7d60ce364f90c890bd2ec65c43b5a/tomlkit-0.14.0.tar.gz", hash = "sha256:cf00efca415dbd57575befb1f6634c4f42d2d87dbba376128adb42c121b87064", size = 187167, upload-time = "2026-01-13T01:14:53.304Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/94/96/e07752635b98536177fa1f37671c8f3cdde2e724c6bcf6034b2cfb571565/tomlkit-0.15.1.tar.gz", hash = "sha256:e25bbf38843005246210a12982776f27f99cb9be67160e14434d0c0d21ee1e97", size = 180129, upload-time = "2026-07-17T01:48:04.562Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b5/11/87d6d29fb5d237229d67973a6c9e06e048f01cf4994dee194ab0ea841814/tomlkit-0.14.0-py3-none-any.whl", hash = "sha256:592064ed85b40fa213469f81ac584f67a4f2992509a7c3ea2d632208623a3680", size = 39310, upload-time = "2026-01-13T01:14:51.965Z" },
+    { url = "https://files.pythonhosted.org/packages/13/bc/8c13eb66537dce1d2bd3a57132902f38d0e7f5bb46fa9f4daed9fe9d76ee/tomlkit-0.15.1-py3-none-any.whl", hash = "sha256:177a05aece5a8ca5266fd3c448abb47b8d352f09d477d3ca8332db4d89b24304", size = 49449, upload-time = "2026-07-17T01:48:05.728Z" },
 ]
 
 [[package]]
