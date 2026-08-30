@@ -39,7 +39,13 @@ def feed_type(value: str) -> str:
 
     value = value.replace("_", "-").lower()
 
-    if value in ("nvts", "report-formats", "port-lists", "scan-configs"):
+    if value in (
+        "nvts",
+        "report-formats",
+        "port-lists",
+        "scan-configs",
+        "scan-config-jsons",
+    ):
         return value[:-1]
 
     return value
@@ -113,6 +119,7 @@ class CliParser:
                 "nasl",
                 "report-format",
                 "scan-config",
+                "scan-config-json",
                 "port-list",
             ],
             default="all",
@@ -210,6 +217,17 @@ class CliParser:
         data_objects_url_group.add_argument(
             "--scan-configs-url",
             help="URL to download the scan config data from. "
+            "(Default: %(default)s)",
+        )
+        data_objects_destination_group.add_argument(
+            "--scan-config-jsons-destination",
+            type=Path,
+            help="Destination of the downloaded scan config JSON data. "
+            "(Default: %(default)s)",
+        )
+        data_objects_url_group.add_argument(
+            "--scan-config-jsons-url",
+            help="URL to download the scan config JSON data from. "
             "(Default: %(default)s)",
         )
         data_objects_destination_group.add_argument(

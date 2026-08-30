@@ -158,6 +158,12 @@ async def feed_sync(console: Console, error_console: Console) -> int:
             destination=args.scan_configs_destination,
         ),
         Sync(
+            name="scan config JSONs",
+            types=("scan-config-json",),
+            url=args.scan_config_jsons_url,
+            destination=args.scan_config_jsons_destination,
+        ),
+        Sync(
             name="port lists",
             types=("port-list"),
             url=args.port_lists_url,

@@ -69,6 +69,17 @@ class FeedTypeTestCase(unittest.TestCase):
         self.assertEqual("scan-config", feed_type("SCAN-CONFIG"))
         self.assertEqual("scan-config", feed_type("SCAN-CONFIGS"))
 
+
+def test_scan_config_json(self):
+    self.assertEqual("scan-config-json", feed_type("scan-config-json"))
+    self.assertEqual("scan-config-json", feed_type("scan-config-jsons"))
+    self.assertEqual("scan-config-json", feed_type("scan_config_json"))
+    self.assertEqual("scan-config-json", feed_type("scan_config_jsons"))
+    self.assertEqual("scan-config-json", feed_type("SCAN_CONFIG_JSON"))
+    self.assertEqual("scan-config-json", feed_type("SCAN_CONFIG_JSONS"))
+    self.assertEqual("scan-config-json", feed_type("SCAN-CONFIG-JSON"))
+    self.assertEqual("scan-config-json", feed_type("SCAN-CONFIG-JSONS"))
+
     def test_gvmd_data(self):
         self.assertEqual("gvmd-data", feed_type("gvmd-data"))
         self.assertEqual("gvmd-data", feed_type("gvmd_data"))
@@ -171,6 +182,18 @@ class CliParserTestCase(unittest.TestCase):
         self.assertEqual(
             args.scan_configs_url,
             f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/scan-configs/",
+        )
+        self.assertEqual(
+            args.scan_config_jsons_destination,
+            Path(DEFAULT_DESTINATION_PREFIX)
+            / "gvm"
+            / "data-objects"
+            / "gvmd"
+            / "scan-configs-json",
+        )
+        self.assertEqual(
+            args.scan_config_jsons_url,
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/scan-configs-json/",
         )
         self.assertEqual(
             args.port_lists_destination,
@@ -390,7 +413,24 @@ class CliParserTestCase(unittest.TestCase):
         )
         self.assertEqual(args.scan_configs_url, "rsync://foo.bar/scan-configs")
 
-    def test_port_lists_destination(self):
+    def test_scan_config_jsons_destination(self):
+        parser = CliParser()
+        args = parser.parse_arguments(
+            ["--scan-config-jsons-destination", "foo/bar"]
+        )
+        self.assertEqual(args.scan_config_jsons_destination, Path("foo/bar"))
+
+    def test_scan_config_jsons_url(self):
+        parser = CliParser()
+        args = parser.parse_arguments(
+            ["--scan-config-jsons-url", "rsync://foo.bar/scan-configs-json"]
+        )
+        self.assertEqual(
+            args.scan_config_jsons_url,
+            "rsync://foo.bar/scan-configs-json",
+        )
+
+    def test_port_lists_destinatßion(self):
         parser = CliParser()
         args = parser.parse_arguments(["--port-lists-destination", "foo/bar"])
         self.assertEqual(args.port_lists_destination, Path("foo/bar"))
@@ -678,6 +718,19 @@ wait-interval = 100
         args = parser.parse_arguments(["--type", "SCAN_CONFIGS"])
         self.assertEqual(args.type, "scan-config")
 
+        args = parser.parse_arguments(["--type", "scan-config-json"])
+        self.assertEqual(args.type, "scan-config-json")
+        args = parser.parse_arguments(["--type", "SCAN-CONFIG-JSON"])
+        self.assertEqual(args.type, "scan-config-json")
+        args = parser.parse_arguments(["--type", "scan_config_json"])
+        self.assertEqual(args.type, "scan-config-json")
+        args = parser.parse_arguments(["--type", "SCAN_CONFIG_JSON"])
+        self.assertEqual(args.type, "scan-config-json")
+        args = parser.parse_arguments(["--type", "scan-config-jsons"])
+        self.assertEqual(args.type, "scan-config-json")
+        args = parser.parse_arguments(["--type", "SCAN_CONFIG_JSONS"])
+        self.assertEqual(args.type, "scan-config-json")
+
         args = parser.parse_arguments(["--type", "port-list"])
         self.assertEqual(args.type, "port-list")
         args = parser.parse_arguments(["--type", "PORT-LIST"])
@@ -752,6 +805,10 @@ sed diam nonumy eirmod tempor
                 f"ssh://a_user@some.feed.server/enterprise/data-feed/{DEFAULT_FEED_RELEASE}/scan-configs/",
             )
             self.assertEqual(
+                args.scan_config_jsons_url,
+                f"ssh://a_user@some.feed.server/enterprise/data-feed/{DEFAULT_FEED_RELEASE}/scan-configs-json/",
+            )
+            self.assertEqual(
                 args.notus_url,
                 f"ssh://a_user@some.feed.server/enterprise/vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/notus/",
             )
@@ -792,6 +849,10 @@ sed diam nonumy eirmod tempor
         self.assertEqual(
             args.scan_configs_url,
             f"rsync://feed.community.greenbone.net/community/data-feed/{DEFAULT_FEED_RELEASE}/scan-configs/",
+        )
+        self.assertEqual(
+            args.scan_config_jsons_url,
+            f"rsync://feed.community.greenbone.net/community/data-feed/{DEFAULT_FEED_RELEASE}/scan-configs-json/",
         )
         self.assertEqual(
             args.notus_url,
