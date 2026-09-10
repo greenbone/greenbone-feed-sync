@@ -163,6 +163,12 @@ async def feed_sync(console: Console, error_console: Console) -> int:
             url=args.port_lists_url,
             destination=args.port_lists_destination,
         ),
+        Sync(
+            name="VT technical info",
+            types=("vt-tech-info"),
+            url=args.vt_tech_info_url,
+            destination=args.vt_tech_info_destination,
+        )
     )
 
     has_error = False

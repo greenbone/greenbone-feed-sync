@@ -33,6 +33,8 @@ and types.
   - [notus-url](#notus-url)
   - [nasl-destination](#nasl-destination)
   - [nasl-url](#nasl-url)
+  - [vt-tech-info-destination](#vt-tech-info-destination)
+  - [vt-tech-info-url](#vt-tech-info-url)
   - [scap-data-destination](#scap-data-destination)
   - [scap-data-url](#scap-data-url)
   - [cert-data-destination](#cert-data-destination)
@@ -267,13 +269,13 @@ is only required for experts and testing purposes.
 
 ### type
 
-| Name                 | Value                                                                                                                                                                                                                              |
-| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CLI Argument         | `--type`                                                                                                                                                                                                                           |
-| Config Variable      |                                                                                                                                                                                                                                    |
-| Environment Variable |                                                                                                                                                                                                                                    |
-| Default Value        | all                                                                                                                                                                                                                                |
-| Description          | Specifies which feed data should be downloaded. Possible values are `all`, `nvt`/`nvts`, `gvmd-data`, `scap`, `cert`, `notus`, `nasl`, `report-format`/`report-formats`, `scan-config`/`scan-configs` or `port-list`/`port-lists`. |
+| Name                 | Value                                                                                                                                                                                                                                              |
+| -------------------- |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| CLI Argument         | `--type`                                                                                                                                                                                                                                           |
+| Config Variable      |                                                                                                                                                                                                                                                    |
+| Environment Variable |                                                                                                                                                                                                                                                    |
+| Default Value        | all                                                                                                                                                                                                                                                |
+| Description          | Specifies which feed data should be downloaded. Possible values are `all`, `nvt`/`nvts`, `gvmd-data`, `scap`, `cert`, `notus`, `nasl`, `report-format`/`report-formats`, `scan-config`/`scan-configs`, `port-list`/`port-lists` or `vt-tech-info`. |
 
 ### feed-url
 
@@ -364,6 +366,26 @@ is only required for experts and testing purposes.
 | Environment Variable | `GREENBONE_FEED_SYNC_NASL_URL`                             |
 | Default Value        | `$FEED_URL/vulnerability-feed/$FEED_VERSION/vt-data/nasl/` |
 | Description          | URL to download the nasl data from.                        |
+
+### vt-tech-info-destination
+
+| Name                 | Value                                                   |
+| -------------------- |---------------------------------------------------------|
+| CLI Argument         | `--vt-tech-info-destination`                            |
+| Config Variable      | notus-destination                                       |
+| Environment Variable | `GREENBONE_FEED_SYNC_VT_TECH_INFO_DESTINATION`          |
+| Default Value        | `$DESTINATION_PREFIX/notus`                             |
+| Description          | Destination of the downloaded VT technical information. |
+
+### vt-tech-info-url
+
+| Name                 | Value                                                      |
+| -------------------- |------------------------------------------------------------|
+| CLI Argument         | `--notus-url`                                              |
+| Config Variable      | vt-tech-info-url                                           |
+| Environment Variable | `GREENBONE_FEED_SYNC_VT_TECH_INFO_URL`                     |
+| Default Value        | `$FEED_URL/vulnerability-feed/$FEED_VERSION/vt-tech-info/` |
+| Description          | URL to download the VT technical information from.         |
 
 ### scap-data-destination
 

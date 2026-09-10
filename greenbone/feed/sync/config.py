@@ -312,6 +312,20 @@ _DEPENDENT_SETTINGS = (
         str,
     ),
     DependentSetting(
+        "vt-tech-info-destination",
+        "GREENBONE_FEED_SYNC_VT_TECH_INFO_DESTINATION",
+        lambda values: f"{values['destination-prefix']}/gvm/vt-tech-info",
+        Path,
+    ),
+    DependentSetting(
+        "vt-tech-info-url",
+        "GREENBONE_FEED_SYNC_VT_TECH_INFO_URL",
+        lambda values: (
+            f"{values['feed-url']}/vulnerability-feed/{values['feed-release']}/vt-tech-info/"
+        ),
+        str,
+    ),
+    DependentSetting(
         "gvmd-lock-file",
         "GREENBONE_FEED_SYNC_GVMD_LOCK_FILE",
         lambda values: (
