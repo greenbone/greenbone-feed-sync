@@ -34,7 +34,7 @@ class ConfigTestCase(unittest.TestCase):
     def test_defaults(self):
         values = Config.load()
 
-        self.assertEqual(len(values), 32)
+        self.assertEqual(len(values), 34)
         self.assertEqual(
             values["destination-prefix"], Path(DEFAULT_DESTINATION_PREFIX)
         )
@@ -62,6 +62,14 @@ class ConfigTestCase(unittest.TestCase):
         self.assertEqual(
             values["nasl-url"],
             f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/nasl/",
+        )
+        self.assertEqual(
+            values["vt-tech-info-destination"],
+            Path(DEFAULT_DESTINATION_PREFIX) / "gvm" / "vt-tech-info",
+        )
+        self.assertEqual(
+            values["vt-tech-info-url"],
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-tech-info/",
         )
         self.assertEqual(
             values["scap-data-destination"],

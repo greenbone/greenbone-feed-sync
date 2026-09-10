@@ -133,6 +133,14 @@ class CliParserTestCase(unittest.TestCase):
             f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-data/nasl/",
         )
         self.assertEqual(
+            args.vt_tech_info_destination,
+            Path(DEFAULT_DESTINATION_PREFIX) / "gvm" / "vt-tech-info",
+        )
+        self.assertEqual(
+            args.vt_tech_info_url,
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/vt-tech-info/",
+        )
+        self.assertEqual(
             args.scap_data_destination,
             Path(DEFAULT_DESTINATION_PREFIX) / "gvm" / "scap-data",
         )
@@ -337,6 +345,16 @@ class CliParserTestCase(unittest.TestCase):
         parser = CliParser()
         args = parser.parse_arguments(["--nasl-url", "rsync://foo.bar/nasl"])
         self.assertEqual(args.nasl_url, "rsync://foo.bar/nasl")
+
+    def test_vt_tech_info_destination(self):
+        parser = CliParser()
+        args = parser.parse_arguments(["--vt-tech-info-destination", "foo/bar"])
+        self.assertEqual(args.vt_tech_info_destination, Path("foo/bar"))
+
+    def test_vt_tech_info_url(self):
+        parser = CliParser()
+        args = parser.parse_arguments(["--vt-tech-info-url", "rsync://foo.bar/vt-tech-info"])
+        self.assertEqual(args.vt_tech_info_url, "rsync://foo.bar/vt-tech-info")
 
     def test_scap_data_destination(self):
         parser = CliParser()
@@ -626,6 +644,13 @@ wait-interval = 100
         self.assertEqual(args.type, "nasl")
         args = parser.parse_arguments(["--type", "NaSl"])
         self.assertEqual(args.type, "nasl")
+
+        args = parser.parse_arguments(["--type", "vt-tech-info"])
+        self.assertEqual(args.type, "vt-tech-info")
+        args = parser.parse_arguments(["--type", "VT-TECH-INFO"])
+        self.assertEqual(args.type, "vt-tech-info")
+        args = parser.parse_arguments(["--type", "VT-TeCh-InFo"])
+        self.assertEqual(args.type, "vt-tech-info")
 
         args = parser.parse_arguments(["--type", "scap"])
         self.assertEqual(args.type, "scap")
