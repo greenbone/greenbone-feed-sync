@@ -39,7 +39,13 @@ def feed_type(value: str) -> str:
 
     value = value.replace("_", "-").lower()
 
-    if value in ("nvts", "report-formats", "port-lists", "scan-configs", "web-application-vts"):
+    if value in (
+        "nvts",
+        "report-formats",
+        "port-lists",
+        "scan-configs",
+        "web-application-vts",
+    ):
         return value[:-1]
 
     return value
@@ -169,11 +175,11 @@ class CliParser:
             "--vt-tech-info-destination",
             type=Path,
             help="Destination of the downloaded VT technical information. "
-                 "(Default: %(default)s)",
+            "(Default: %(default)s)",
         )
         vts_url_group.add_argument(
             "--vt-tech-info-url",
-            help = "URL to download the VT technical information from. (Default: %(default)s)",
+            help="URL to download the VT technical information from. (Default: %(default)s)",
         )
 
         secinfo_destination_group = parser.add_argument_group()
