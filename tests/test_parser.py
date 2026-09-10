@@ -353,7 +353,9 @@ class CliParserTestCase(unittest.TestCase):
 
     def test_vt_tech_info_url(self):
         parser = CliParser()
-        args = parser.parse_arguments(["--vt-tech-info-url", "rsync://foo.bar/vt-tech-info"])
+        args = parser.parse_arguments(
+            ["--vt-tech-info-url", "rsync://foo.bar/vt-tech-info"]
+        )
         self.assertEqual(args.vt_tech_info_url, "rsync://foo.bar/vt-tech-info")
 
     def test_scap_data_destination(self):

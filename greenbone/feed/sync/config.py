@@ -73,7 +73,7 @@ def resolve_gvmd_data_destination(values: ValuesDict) -> str:
     feed_release: str = values.get("feed-release")  # type: ignore[assignment]
     try:
         str_major, str_minor = feed_release.split(".")[:2]
-        major, minor = int(str_major), int(str_minor)
+        major, _minor = int(str_major), int(str_minor)
     except ValueError as e:
         raise ConfigError(f"Invalid feed release format: {feed_release}") from e
 

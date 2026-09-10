@@ -168,7 +168,7 @@ async def feed_sync(console: Console, error_console: Console) -> int:
             types=("vt-tech-info"),
             url=args.vt_tech_info_url,
             destination=args.vt_tech_info_destination,
-        )
+        ),
     )
 
     has_error = False
