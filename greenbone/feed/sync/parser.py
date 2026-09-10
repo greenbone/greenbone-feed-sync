@@ -39,7 +39,7 @@ def feed_type(value: str) -> str:
 
     value = value.replace("_", "-").lower()
 
-    if value in ("nvts", "report-formats", "port-lists", "scan-configs"):
+    if value in ("nvts", "report-formats", "port-lists", "scan-configs", "web-application-vts"):
         return value[:-1]
 
     return value
@@ -114,6 +114,7 @@ class CliParser:
                 "report-format",
                 "scan-config",
                 "port-list",
+                "vt-tech-info",
             ],
             default="all",
             type=feed_type,
@@ -142,27 +143,37 @@ class CliParser:
             "--gvmd-data-url",
             help="URL to download the gvmd data from. (Default: %(default)s)",
         )
-        nvts_destination_group = parser.add_argument_group()
-        nvts_destination_group.add_argument(
+        vts_destination_group = parser.add_argument_group()
+        vts_destination_group.add_argument(
             "--notus-destination",
             type=Path,
             help="Destination of the downloaded notus data. "
             "(Default: %(default)s)",
         )
-        nvts_url_group = parser.add_argument_group()
-        nvts_url_group.add_argument(
+        vts_url_group = parser.add_argument_group()
+        vts_url_group.add_argument(
             "--notus-url",
             help="URL to download the notus data from. (Default: %(default)s)",
         )
-        nvts_destination_group.add_argument(
+        vts_destination_group.add_argument(
             "--nasl-destination",
             type=Path,
             help="Destination of the downloaded nasl data. "
             "(Default: %(default)s)",
         )
-        nvts_url_group.add_argument(
+        vts_url_group.add_argument(
             "--nasl-url",
             help="URL to download the nasl data from. (Default: %(default)s)",
+        )
+        vts_destination_group.add_argument(
+            "--vt-tech-info-destination",
+            type=Path,
+            help="Destination of the downloaded VT technical information. "
+                 "(Default: %(default)s)",
+        )
+        vts_url_group.add_argument(
+            "--vt-tech-info-url",
+            help = "URL to download the VT technical information from. (Default: %(default)s)",
         )
 
         secinfo_destination_group = parser.add_argument_group()
