@@ -41,6 +41,8 @@ and types.
   - [report-formats-url](#report-formats-url)
   - [scan-configs-destination](#scan-configs-destination)
   - [scan-configs-url](#scan-configs-url)
+  - [scan-config-jsons-destination](#scan-config-jsons-destination)
+  - [scan-config-jsons-url](#scan-config-jsons-url)
   - [port-lists-destination](#port-lists-destination)
   - [port-lists-url](#port-lists-url)
   - [gvmd-lock-file](#gvmd-lock-file)
@@ -273,7 +275,7 @@ is only required for experts and testing purposes.
 | Config Variable      |                                                                                                                                                                                                                                    |
 | Environment Variable |                                                                                                                                                                                                                                    |
 | Default Value        | all                                                                                                                                                                                                                                |
-| Description          | Specifies which feed data should be downloaded. Possible values are `all`, `nvt`/`nvts`, `gvmd-data`, `scap`, `cert`, `notus`, `nasl`, `report-format`/`report-formats`, `scan-config`/`scan-configs` or `port-list`/`port-lists`. |
+| Description          | Specifies which feed data should be downloaded. Possible values are `all`, `nvt`/`nvts`, `gvmd-data`, `scap`, `cert`, `notus`, `nasl`, `report-format`/`report-formats`, `scan-config`/`scan-configs`, `scan-config-json`/`scan-config-jsons` or `port-list`/`port-lists`. |
 
 ### feed-url
 
@@ -444,6 +446,26 @@ is only required for experts and testing purposes.
 | Environment Variable | `GREENBONE_FEED_SYNC_SCAN_CONFIGS_URL`           |
 | Default Value        | `$FEED_URL/data-feed/$FEED_VERSION/scan-configs` |
 | Description          | URL to download the scan config data from.       |
+
+### scan-config-jsons-destination
+
+| Name                 | Value                                                                       |
+| -------------------- | --------------------------------------------------------------------------- |
+| CLI Argument         | `--scan-config-jsons-destination`                                           |
+| Config Variable      | scan-config-jsons-destination                                               |
+| Environment Variable | `GREENBONE_FEED_SYNC_SCAN_CONFIG_JSONS_DESTINATION`                         |
+| Default Value        | `$DESTINATION_PREFIX/gvm/data-objects/gvmd/$FEED_VERSION/scan-configs-json` |
+| Description          | Destination of the downloaded scan config JSON data.                        |
+
+### scan-config-jsons-url
+
+| Name                 | Value                                                 |
+| -------------------- | ----------------------------------------------------- |
+| CLI Argument         | `--scan-config-jsons-url`                             |
+| Config Variable      | scan-config-jsons-url                                 |
+| Environment Variable | `GREENBONE_FEED_SYNC_SCAN_CONFIG_JSONS_URL`           |
+| Default Value        | `$FEED_URL/data-feed/$FEED_VERSION/scan-configs-json` |
+| Description          | URL to download the scan config JSON data from.       |
 
 ### port-lists-destination
 
