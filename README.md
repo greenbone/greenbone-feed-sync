@@ -372,16 +372,16 @@ is only required for experts and testing purposes.
 | Name                 | Value                                                   |
 | -------------------- |---------------------------------------------------------|
 | CLI Argument         | `--vt-tech-info-destination`                            |
-| Config Variable      | notus-destination                                       |
+| Config Variable      | vt-tech-info-destination                                |
 | Environment Variable | `GREENBONE_FEED_SYNC_VT_TECH_INFO_DESTINATION`          |
-| Default Value        | `$DESTINATION_PREFIX/notus`                             |
+| Default Value        | `$DESTINATION_PREFIX/gvm/vt-tech-info`                  |
 | Description          | Destination of the downloaded VT technical information. |
 
 ### vt-tech-info-url
 
 | Name                 | Value                                                      |
 | -------------------- |------------------------------------------------------------|
-| CLI Argument         | `--notus-url`                                              |
+| CLI Argument         | `--vt-tech-info-url`                                       |
 | Config Variable      | vt-tech-info-url                                           |
 | Environment Variable | `GREENBONE_FEED_SYNC_VT_TECH_INFO_URL`                     |
 | Default Value        | `$FEED_URL/vulnerability-feed/$FEED_VERSION/vt-tech-info/` |
