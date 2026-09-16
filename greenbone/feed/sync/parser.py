@@ -44,7 +44,6 @@ def feed_type(value: str) -> str:
         "report-formats",
         "port-lists",
         "scan-configs",
-        "web-application-vts",
     ):
         return value[:-1]
 
