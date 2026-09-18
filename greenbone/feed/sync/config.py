@@ -48,6 +48,7 @@ DEFAULT_NASL_PATH = "openvas/plugins"
 DEFAULT_NOTUS_PATH = "notus"
 DEFAULT_SCAP_DATA_PATH = "gvm/scap-data"
 DEFAULT_CERT_DATA_PATH = "gvm/cert-data"
+DEFAULT_AGENT_PATH = "agent"
 
 DEFAULT_GVMD_LOCK_FILE_PATH = "gvm/feed-update.lock"
 DEFAULT_OPENVAS_LOCK_FILE_PATH = "openvas/feed-update.lock"
@@ -266,6 +267,57 @@ _DEPENDENT_SETTINGS = (
         "GREENBONE_FEED_SYNC_CERT_DATA_URL",
         lambda values: (
             f"{values['feed-url']}/vulnerability-feed/{values['feed-release']}/cert-data/"
+        ),
+        str,
+    ),
+    DependentSetting(
+        "agent-app-destination",
+        "GREENBONE_FEED_SYNC_AGENT_APP_DESTINATION",
+        lambda values: (
+            f"{values['destination-prefix']}/{DEFAULT_AGENT_PATH}/agent-app"
+        ),
+        Path,
+    ),
+    DependentSetting(
+        "agent-app-url",
+        "GREENBONE_FEED_SYNC_AGENT_APP_URL",
+        lambda values: (
+            f"{values['feed-url']}/vulnerability-feed/"
+            f"{values['feed-release']}/agent-app/"
+        ),
+        str,
+    ),
+    DependentSetting(
+        "agent-updater-destination",
+        "GREENBONE_FEED_SYNC_AGENT_UPDATER_DESTINATION",
+        lambda values: (
+            f"{values['destination-prefix']}/{DEFAULT_AGENT_PATH}/agent-updater"
+        ),
+        Path,
+    ),
+    DependentSetting(
+        "agent-updater-url",
+        "GREENBONE_FEED_SYNC_AGENT_UPDATER_URL",
+        lambda values: (
+            f"{values['feed-url']}/vulnerability-feed/"
+            f"{values['feed-release']}/agent-updater/"
+        ),
+        str,
+    ),
+    DependentSetting(
+        "agent-installer-destination",
+        "GREENBONE_FEED_SYNC_AGENT_INSTALLER_DESTINATION",
+        lambda values: (
+            f"{values['destination-prefix']}/{DEFAULT_AGENT_PATH}/agent-installer"
+        ),
+        Path,
+    ),
+    DependentSetting(
+        "agent-installer-url",
+        "GREENBONE_FEED_SYNC_AGENT_INSTALLER_URL",
+        lambda values: (
+            f"{values['feed-url']}/vulnerability-feed/"
+            f"{values['feed-release']}/agent-installer/"
         ),
         str,
     ),
