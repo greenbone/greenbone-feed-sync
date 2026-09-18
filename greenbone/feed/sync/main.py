@@ -92,11 +92,12 @@ async def feed_sync(console: Console, error_console: Console) -> int:
     else:
         verbose = DEFAULT_VERBOSITY if args.verbose is None else args.verbose
 
-    if is_root() and verbose >= 1:
-        console.print(
-            f"Running as root. Switching to user '{args.user}' and "
-            f"group '{args.group}'."
-        )
+    if is_root():
+        if verbose >= 1:
+            console.print(
+                f"Running as root. Switching to user '{args.user}' and "
+                f"group '{args.group}'."
+            )
         change_user_and_group(args.user, args.group)
 
     rsync = Rsync(
