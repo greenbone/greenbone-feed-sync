@@ -5,6 +5,7 @@
 
 # pylint: disable=protected-access
 
+import asyncio
 import errno
 import unittest
 from io import StringIO
@@ -23,6 +24,40 @@ from greenbone.feed.sync.helper import (
 
 
 class FlockTestCase(unittest.IsolatedAsyncioTestCase):
+    async def test_lock_released_after_exception(self):
+        with temp_directory() as temp_dir:
+            lock_file = temp_dir / "file.lock"
+            error = RuntimeError("Sync failed")
+
+            with self.assertRaises(RuntimeError) as cm:
+                async with flock_wait(lock_file):
+                    raise error
+
+            self.assertIs(cm.exception, error)
+            async with flock_wait(lock_file, wait_interval=None):
+                pass
+
+    async def test_lock_released_after_cancellation(self):
+        with temp_directory() as temp_dir:
+            lock_file = temp_dir / "file.lock"
+            acquired = asyncio.Event()
+
+            async def hold_lock():
+                async with flock_wait(lock_file):
+                    acquired.set()
+                    await asyncio.Event().wait()
+
+            task = asyncio.create_task(hold_lock())
+            try:
+                await asyncio.wait_for(acquired.wait(), timeout=5)
+            finally:
+                task.cancel()
+                with self.assertRaises(asyncio.CancelledError):
+                    await task
+
+            async with flock_wait(lock_file, wait_interval=None):
+                pass
+
     async def test_locking(self):
         with temp_directory() as temp_dir:
             lock_file = temp_dir / "file.lock"
@@ -206,6 +241,19 @@ class IsRootTestCase(unittest.TestCase):
 
 
 class ChangeUserAndGroupTestCase(unittest.TestCase):
+    @patch("greenbone.feed.sync.helper.shutil", autospec=True)
+    @patch("greenbone.feed.sync.helper.os", autospec=True)
+    def test_change_with_numeric_ids(
+        self, os_mock: MagicMock, shutil_mock: MagicMock
+    ):
+        change_user_and_group(123, 456)
+
+        self.assertEqual(
+            os_mock.mock_calls, [call.setegid(456), call.seteuid(123)]
+        )
+        shutil_mock._get_uid.assert_not_called()
+        shutil_mock._get_gid.assert_not_called()
+
     @patch("greenbone.feed.sync.helper.os", autospec=True)
     def test_change(self, os_mock: MagicMock):
         # root user should exist on all systems

@@ -176,6 +176,12 @@ scap-data-destination = "/usr/lib/scap-data"
 scap-data-url = "rsync://foo.bar/scap-data"
 cert-data-destination = "/usr/lib/cert-data"
 cert-data-url = "rsync://foo.bar/cert-data"
+agent-app-destination = "/usr/lib/agent-app"
+agent-app-url = "rsync://foo.bar/agent-app"
+agent-updater-destination = "/usr/lib/agent-updater"
+agent-updater-url = "rsync://foo.bar/agent-updater"
+agent-installer-destination = "/usr/lib/agent-installer"
+agent-installer-url = "rsync://foo.bar/agent-installer"
 report-formats-destination = "/usr/lib/report-formats"
 report-formats-url = "rsync://foo.bar/report-formats"
 scan-configs-destination = "/usr/lib/scan-configs"
@@ -225,6 +231,16 @@ feed-release = "1.2.3"
             values["cert-data-destination"], Path("/usr/lib/cert-data")
         )
         self.assertEqual(values["cert-data-url"], "rsync://foo.bar/cert-data")
+        for agent_name in ("app", "updater", "installer"):
+            with self.subTest(agent=agent_name):
+                self.assertEqual(
+                    values[f"agent-{agent_name}-destination"],
+                    Path(f"/usr/lib/agent-{agent_name}"),
+                )
+                self.assertEqual(
+                    values[f"agent-{agent_name}-url"],
+                    f"rsync://foo.bar/agent-{agent_name}",
+                )
         self.assertEqual(
             values["report-formats-destination"],
             Path("/usr/lib/report-formats"),
@@ -367,6 +383,12 @@ feed-url = "rsync://foo.bar"
             "GREENBONE_FEED_SYNC_SCAP_DATA_URL": "rsync://foo.bar/scap-data",
             "GREENBONE_FEED_SYNC_CERT_DATA_DESTINATION": "/usr/lib/cert-data",
             "GREENBONE_FEED_SYNC_CERT_DATA_URL": "rsync://foo.bar/cert-data",
+            "GREENBONE_FEED_SYNC_AGENT_APP_DESTINATION": "/usr/lib/agent-app",
+            "GREENBONE_FEED_SYNC_AGENT_APP_URL": "rsync://foo.bar/agent-app",
+            "GREENBONE_FEED_SYNC_AGENT_UPDATER_DESTINATION": "/usr/lib/agent-updater",
+            "GREENBONE_FEED_SYNC_AGENT_UPDATER_URL": "rsync://foo.bar/agent-updater",
+            "GREENBONE_FEED_SYNC_AGENT_INSTALLER_DESTINATION": "/usr/lib/agent-installer",
+            "GREENBONE_FEED_SYNC_AGENT_INSTALLER_URL": "rsync://foo.bar/agent-installer",
             "GREENBONE_FEED_SYNC_REPORT_FORMATS_DESTINATION": "/usr/lib/report-formats",
             "GREENBONE_FEED_SYNC_REPORT_FORMATS_URL": "rsync://foo.bar/report-formats",
             "GREENBONE_FEED_SYNC_SCAN_CONFIGS_DESTINATION": "/usr/lib/scan-configs",
@@ -391,6 +413,17 @@ feed-url = "rsync://foo.bar"
     )
     def test_environment(self):
         values = Config.load()
+
+        for agent_name in ("app", "updater", "installer"):
+            with self.subTest(agent=agent_name):
+                self.assertEqual(
+                    values[f"agent-{agent_name}-destination"],
+                    Path(f"/usr/lib/agent-{agent_name}"),
+                )
+                self.assertEqual(
+                    values[f"agent-{agent_name}-url"],
+                    f"rsync://foo.bar/agent-{agent_name}",
+                )
 
         self.assertEqual(values["destination-prefix"], Path("/opt/lib"))
         self.assertEqual(values["feed-url"], "rsync://lorem.ipsum")
@@ -466,6 +499,12 @@ feed-url = "rsync://foo.bar"
             "GREENBONE_FEED_SYNC_SCAP_DATA_URL": "rsync://foo.bar/scap-data",
             "GREENBONE_FEED_SYNC_CERT_DATA_DESTINATION": "/usr/lib/cert-data",
             "GREENBONE_FEED_SYNC_CERT_DATA_URL": "rsync://foo.bar/cert-data",
+            "GREENBONE_FEED_SYNC_AGENT_APP_DESTINATION": "/usr/lib/agent-app",
+            "GREENBONE_FEED_SYNC_AGENT_APP_URL": "rsync://foo.bar/agent-app",
+            "GREENBONE_FEED_SYNC_AGENT_UPDATER_DESTINATION": "/usr/lib/agent-updater",
+            "GREENBONE_FEED_SYNC_AGENT_UPDATER_URL": "rsync://foo.bar/agent-updater",
+            "GREENBONE_FEED_SYNC_AGENT_INSTALLER_DESTINATION": "/usr/lib/agent-installer",
+            "GREENBONE_FEED_SYNC_AGENT_INSTALLER_URL": "rsync://foo.bar/agent-installer",
             "GREENBONE_FEED_SYNC_REPORT_FORMATS_DESTINATION": "/usr/lib/report-formats",
             "GREENBONE_FEED_SYNC_REPORT_FORMATS_URL": "rsync://foo.bar/report-formats",
             "GREENBONE_FEED_SYNC_SCAN_CONFIGS_DESTINATION": "/usr/lib/scan-configs",
@@ -499,6 +538,12 @@ scap-data-destination = "/root/scap-data"
 scap-data-url = "rsync://bar.foo/scap-data"
 cert-data-destination = "/root/cert-data"
 cert-data-url = "rsync://bar.foo/cert-data"
+agent-app-destination = "/root/agent-app"
+agent-app-url = "rsync://bar.foo/agent-app"
+agent-updater-destination = "/root/agent-updater"
+agent-updater-url = "rsync://bar.foo/agent-updater"
+agent-installer-destination = "/root/agent-installer"
+agent-installer-url = "rsync://bar.foo/agent-installer"
 report-formats-destination = "/root/report-formats"
 report-formats-url = "rsync://bar.foo/report-formats"
 scan-configs-destination = "/root/scan-configs"
@@ -521,6 +566,17 @@ feed-release = "2.3.4"
         path_mock.read_text.return_value = content
 
         values = Config.load(path_mock)
+
+        for agent_name in ("app", "updater", "installer"):
+            with self.subTest(agent=agent_name):
+                self.assertEqual(
+                    values[f"agent-{agent_name}-destination"],
+                    Path(f"/usr/lib/agent-{agent_name}"),
+                )
+                self.assertEqual(
+                    values[f"agent-{agent_name}-url"],
+                    f"rsync://foo.bar/agent-{agent_name}",
+                )
 
         self.assertEqual(values["destination-prefix"], Path("/opt/lib"))
         self.assertEqual(values["feed-url"], "rsync://lorem.ipsum")

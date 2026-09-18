@@ -98,12 +98,13 @@ async def feed_sync(console: Console, error_console: Console) -> int:
                 f"Running as root. Switching to user '{args.user}' and "
                 f"group '{args.group}'."
             )
-            change_user_and_group(args.user, args.group)
+        change_user_and_group(args.user, args.group)
 
     rsync = Rsync(
         private_subdir=args.private_directory,
         verbose=verbose >= 3,
         compression_level=args.compression_level,
+        timeout=args.rsync_timeout,
         ssh_key=args.greenbone_enterprise_feed_key,
         change_permissions=not args.no_permission_change,
     )
