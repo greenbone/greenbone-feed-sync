@@ -98,7 +98,7 @@ async def feed_sync(console: Console, error_console: Console) -> int:
                 f"Running as root. Switching to user '{args.user}' and "
                 f"group '{args.group}'."
             )
-        change_user_and_group(args.user, args.group)
+            change_user_and_group(args.user, args.group)
 
     rsync = Rsync(
         private_subdir=args.private_directory,
