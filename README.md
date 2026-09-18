@@ -39,6 +39,12 @@ and types.
   - [scap-data-url](#scap-data-url)
   - [cert-data-destination](#cert-data-destination)
   - [cert-data-url](#cert-data-url)
+  - [agent-app-destination](#agent-app-destination)
+  - [agent-app-url](#agent-app-url)
+  - [agent-updater-destination](#agent-updater-destination)
+  - [agent-updater-url](#agent-updater-url)
+  - [agent-installer-destination](#agent-installer-destination)
+  - [agent-installer-url](#agent-installer-url)
   - [report-formats-destination](#report-formats-destination)
   - [report-formats-url](#report-formats-url)
   - [scan-configs-destination](#scan-configs-destination)
@@ -269,13 +275,13 @@ is only required for experts and testing purposes.
 
 ### type
 
-| Name                 | Value                                                                                                                                                                                                                                              |
-| -------------------- |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| CLI Argument         | `--type`                                                                                                                                                                                                                                           |
-| Config Variable      |                                                                                                                                                                                                                                                    |
-| Environment Variable |                                                                                                                                                                                                                                                    |
-| Default Value        | all                                                                                                                                                                                                                                                |
-| Description          | Specifies which feed data should be downloaded. Possible values are `all`, `nvt`/`nvts`, `gvmd-data`, `scap`, `cert`, `notus`, `nasl`, `report-format`/`report-formats`, `scan-config`/`scan-configs`, `port-list`/`port-lists` or `vt-tech-info`. |
+| Name                 | Value                                                                                                                                                                                                                              |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CLI Argument         | `--type`                                                                                                                                                                                                                           |
+| Config Variable      |                                                                                                                                                                                                                                    |
+| Environment Variable |                                                                                                                                                                                                                                    |
+| Default Value        | all                                                                                                                                                                                                                                |
+| Description          | Specifies which feed data should be downloaded. Possible values are `all`, `all-enterprise`, `nvt`/`nvts`, `gvmd-data`, `scap`, `cert`, `notus`, `nasl`, `agent`, `report-format`/`report-formats`, `scan-config`/`scan-configs`, `port-list`/`port-lists` or `vt-tech-info`. |
 
 ### feed-url
 
@@ -426,6 +432,66 @@ is only required for experts and testing purposes.
 | Environment Variable | `GREENBONE_FEED_SYNC_CERT_DATA_URL`                    |
 | Default Value        | `$FEED_URL/vulnerability-feed/$FEED_VERSION/cert-data` |
 | Description          | URL to download the CERT data from.                    |
+
+### agent-app-destination
+
+| Name                 | Value                                      |
+| -------------------- | ------------------------------------------ |
+| CLI Argument         | `--agent-app-destination`                  |
+| Config Variable      | agent-app-destination                      |
+| Environment Variable | `GREENBONE_FEED_SYNC_AGENT_APP_DESTINATION` |
+| Default Value        | `$DESTINATION_PREFIX/agent/agent-app`      |
+| Description          | Destination of the downloaded agent app data. |
+
+### agent-app-url
+
+| Name                 | Value                                      |
+| -------------------- | ------------------------------------------ |
+| CLI Argument         | `--agent-app-url`                          |
+| Config Variable      | agent-app-url                              |
+| Environment Variable | `GREENBONE_FEED_SYNC_AGENT_APP_URL`        |
+| Default Value        | `$FEED_URL/vulnerability-feed/$FEED_VERSION/agent-app/` |
+| Description          | URL to download the agent app data from.    |
+
+### agent-updater-destination
+
+| Name                 | Value                                      |
+| -------------------- | ------------------------------------------ |
+| CLI Argument         | `--agent-updater-destination`              |
+| Config Variable      | agent-updater-destination                  |
+| Environment Variable | `GREENBONE_FEED_SYNC_AGENT_UPDATER_DESTINATION` |
+| Default Value        | `$DESTINATION_PREFIX/agent/agent-updater`  |
+| Description          | Destination of the downloaded agent updater data. |
+
+### agent-updater-url
+
+| Name                 | Value                                      |
+| -------------------- | ------------------------------------------ |
+| CLI Argument         | `--agent-updater-url`                      |
+| Config Variable      | agent-updater-url                          |
+| Environment Variable | `GREENBONE_FEED_SYNC_AGENT_UPDATER_URL`    |
+| Default Value        | `$FEED_URL/vulnerability-feed/$FEED_VERSION/agent-updater/` |
+| Description          | URL to download the agent updater data from. |
+
+### agent-installer-destination
+
+| Name                 | Value                                      |
+| -------------------- | ------------------------------------------ |
+| CLI Argument         | `--agent-installer-destination`            |
+| Config Variable      | agent-installer-destination                |
+| Environment Variable | `GREENBONE_FEED_SYNC_AGENT_INSTALLER_DESTINATION` |
+| Default Value        | `$DESTINATION_PREFIX/agent/agent-installer` |
+| Description          | Destination of the downloaded agent installer data. |
+
+### agent-installer-url
+
+| Name                 | Value                                      |
+| -------------------- | ------------------------------------------ |
+| CLI Argument         | `--agent-installer-url`                    |
+| Config Variable      | agent-installer-url                        |
+| Environment Variable | `GREENBONE_FEED_SYNC_AGENT_INSTALLER_URL`  |
+| Default Value        | `$FEED_URL/vulnerability-feed/$FEED_VERSION/agent-installer/` |
+| Description          | URL to download the agent installer data from. |
 
 ### report-formats-destination
 
