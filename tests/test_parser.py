@@ -157,6 +157,30 @@ class CliParserTestCase(unittest.TestCase):
             f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/cert-data/",
         )
         self.assertEqual(
+            args.agent_app_destination,
+            Path(DEFAULT_DESTINATION_PREFIX) / "agent" / "agent-app",
+        )
+        self.assertEqual(
+            args.agent_app_url,
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/agent-app/",
+        )
+        self.assertEqual(
+            args.agent_updater_destination,
+            Path(DEFAULT_DESTINATION_PREFIX) / "agent" / "agent-updater",
+        )
+        self.assertEqual(
+            args.agent_updater_url,
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/agent-updater/",
+        )
+        self.assertEqual(
+            args.agent_installer_destination,
+            Path(DEFAULT_DESTINATION_PREFIX) / "agent" / "agent-installer",
+        )
+        self.assertEqual(
+            args.agent_installer_url,
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/agent-installer/",
+        )
+        self.assertEqual(
             args.report_formats_destination,
             Path(DEFAULT_DESTINATION_PREFIX)
             / "gvm"
@@ -654,6 +678,11 @@ wait-interval = 100
         args = parser.parse_arguments(["--type", "VT-TeCh-InFo"])
         self.assertEqual(args.type, "vt-tech-info")
 
+        args = parser.parse_arguments(["--type", "agent"])
+        self.assertEqual(args.type, "agent")
+        args = parser.parse_arguments(["--type", "AGENT"])
+        self.assertEqual(args.type, "agent")
+
         args = parser.parse_arguments(["--type", "scap"])
         self.assertEqual(args.type, "scap")
         args = parser.parse_arguments(["--type", "SCAP"])
@@ -674,6 +703,11 @@ wait-interval = 100
         self.assertEqual(args.type, "all")
         args = parser.parse_arguments(["--type", "AlL"])
         self.assertEqual(args.type, "all")
+
+        args = parser.parse_arguments(["--type", "all-enterprise"])
+        self.assertEqual(args.type, "all-enterprise")
+        args = parser.parse_arguments(["--type", "ALL_ENTERPRISE"])
+        self.assertEqual(args.type, "all-enterprise")
 
         args = parser.parse_arguments(["--type", "report-format"])
         self.assertEqual(args.type, "report-format")

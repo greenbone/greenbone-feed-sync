@@ -126,6 +126,113 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
         )
 
     @patch("greenbone.feed.sync.main.Rsync", autospec=True)
+    async def test_sync_agents_with_enterprise_feed(
+        self, rsync_mock: MagicMock
+    ):
+        console = MagicMock()
+        rsync_mock_instance = rsync_mock.return_value
+
+        with (
+            temp_directory() as temp_dir,
+            patch.dict(
+                "os.environ",
+                {
+                    "GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir),
+                    "GREENBONE_FEED_SYNC_ENTERPRISE_FEED_KEY": str(
+                        temp_dir / "enterprise.key"
+                    ),
+                },
+            ),
+            patch.object(
+                sys,
+                "argv",
+                ["greenbone-feed-sync", "--type", "agent"],
+            ),
+        ):
+            (temp_dir / "enterprise.key").write_text(
+                "user@feed.example\n", encoding="utf-8"
+            )
+            ret = await feed_sync(console=console, error_console=console)
+
+        self.assertEqual(ret, 0)
+        rsync_mock_instance.sync.assert_has_awaits(
+            [
+                call(
+                    url=(
+                        "ssh://user@feed.example/enterprise/vulnerability-feed/"
+                        f"{DEFAULT_FEED_RELEASE}/agent-app/"
+                    ),
+                    destination=temp_dir / "agent" / "agent-app",
+                ),
+                call(
+                    url=(
+                        "ssh://user@feed.example/enterprise/vulnerability-feed/"
+                        f"{DEFAULT_FEED_RELEASE}/agent-updater/"
+                    ),
+                    destination=temp_dir / "agent" / "agent-updater",
+                ),
+                call(
+                    url=(
+                        "ssh://user@feed.example/enterprise/vulnerability-feed/"
+                        f"{DEFAULT_FEED_RELEASE}/agent-installer/"
+                    ),
+                    destination=temp_dir / "agent" / "agent-installer",
+                ),
+            ]
+        )
+
+    @patch("greenbone.feed.sync.main.Rsync", autospec=True)
+    async def test_sync_agents_without_enterprise_feed_key(
+        self, rsync_mock: MagicMock
+    ):
+        console = MagicMock()
+        with (
+            temp_directory() as temp_dir,
+            patch.dict(
+                "os.environ",
+                {
+                    "GREENBONE_FEED_SYNC_DESTINATION_PREFIX": str(temp_dir),
+                    "GREENBONE_FEED_SYNC_ENTERPRISE_FEED_KEY": str(
+                        temp_dir / "missing-gsf.key"
+                    ),
+                },
+            ),
+            patch.object(
+                sys,
+                "argv",
+                ["greenbone-feed-sync", "--type", "agent"],
+            ),
+        ):
+            ret = await feed_sync(console=console, error_console=console)
+
+        self.assertEqual(ret, 0)
+        rsync_mock.return_value.sync.assert_has_awaits(
+            [
+                call(
+                    url=(
+                        "rsync://feed.community.greenbone.net/community/"
+                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/agent-app/"
+                    ),
+                    destination=temp_dir / "agent" / "agent-app",
+                ),
+                call(
+                    url=(
+                        "rsync://feed.community.greenbone.net/community/"
+                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/agent-updater/"
+                    ),
+                    destination=temp_dir / "agent" / "agent-updater",
+                ),
+                call(
+                    url=(
+                        "rsync://feed.community.greenbone.net/community/"
+                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/agent-installer/"
+                    ),
+                    destination=temp_dir / "agent" / "agent-installer",
+                ),
+            ]
+        )
+
+    @patch("greenbone.feed.sync.main.Rsync", autospec=True)
     async def test_no_permission_change(self, rsync_mock: MagicMock):
         console = MagicMock()
 

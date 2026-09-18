@@ -161,7 +161,7 @@ class FlockTestCase(unittest.IsolatedAsyncioTestCase):
             some_other_file = temp_dir / "some_other_file"
             with self.assertRaisesRegex(
                 PermissionError,
-                f"^\[Errno 13\] Permission denied: '{some_other_file.absolute()}'$",  # type: ignore
+                rf"^\[Errno 13\] Permission denied: '{some_other_file.absolute()}'$",  # type: ignore
             ):
                 async with flock_wait(
                     lock_file,
