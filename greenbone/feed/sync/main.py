@@ -92,13 +92,12 @@ async def feed_sync(console: Console, error_console: Console) -> int:
     else:
         verbose = DEFAULT_VERBOSITY if args.verbose is None else args.verbose
 
-    if is_root():
-        if verbose >= 1:
-            console.print(
-                f"Running as root. Switching to user '{args.user}' and "
-                f"group '{args.group}'."
-            )
-            change_user_and_group(args.user, args.group)
+    if is_root() and verbose >= 1:
+        console.print(
+            f"Running as root. Switching to user '{args.user}' and "
+            f"group '{args.group}'."
+        )
+        change_user_and_group(args.user, args.group)
 
     rsync = Rsync(
         private_subdir=args.private_directory,
@@ -113,15 +112,37 @@ async def feed_sync(console: Console, error_console: Console) -> int:
         args.type,
         Sync(
             name="Notus files",
-            types=("notus", "nvt", "all"),
+            types=("notus", "nvt", "all", "all-enterprise"),
             url=args.notus_url,
             destination=args.notus_destination,
         ),
         Sync(
             name="NASL files",
-            types=("nasl", "nvt", "all"),
+            types=("nasl", "nvt", "all", "all-enterprise"),
             url=args.nasl_url,
             destination=args.nasl_destination,
+        ),
+    )
+    agent_syncs = filter_syncs(
+        args.openvas_lock_file,
+        args.type,
+        Sync(
+            name="Agent app files",
+            types=("agent", "all-enterprise"),
+            url=args.agent_app_url,
+            destination=args.agent_app_destination,
+        ),
+        Sync(
+            name="Agent updater files",
+            types=("agent", "all-enterprise"),
+            url=args.agent_updater_url,
+            destination=args.agent_updater_destination,
+        ),
+        Sync(
+            name="Agent installer files",
+            types=("agent", "all-enterprise"),
+            url=args.agent_installer_url,
+            destination=args.agent_installer_destination,
         ),
     )
     gvmd_syncs = filter_syncs(
@@ -129,19 +150,19 @@ async def feed_sync(console: Console, error_console: Console) -> int:
         args.type,
         Sync(
             name="SCAP data",
-            types=("scap", "all"),
+            types=("scap", "all", "all-enterprise"),
             url=args.scap_data_url,
             destination=args.scap_data_destination,
         ),
         Sync(
             name="CERT-Bund data",
-            types=("cert", "all"),
+            types=("cert", "all", "all-enterprise"),
             url=args.cert_data_url,
             destination=args.cert_data_destination,
         ),
         Sync(
             name="gvmd data",
-            types=("gvmd-data", "all"),
+            types=("gvmd-data", "all", "all-enterprise"),
             url=args.gvmd_data_url,
             destination=args.gvmd_data_destination,
         ),
@@ -174,7 +195,7 @@ async def feed_sync(console: Console, error_console: Console) -> int:
     has_error = False
     wait_interval = None if args.no_wait else args.wait_interval
 
-    for sync_list in (openvas_syncs, gvmd_syncs):
+    for sync_list in (openvas_syncs, agent_syncs, gvmd_syncs):
         if not sync_list.syncs:
             continue
 
