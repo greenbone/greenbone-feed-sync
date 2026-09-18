@@ -406,6 +406,52 @@ class CliParserTestCase(unittest.TestCase):
         )
         self.assertEqual(args.cert_data_url, "rsync://foo.bar/cert-data")
 
+    def test_agent_app_destination(self):
+        parser = CliParser()
+        args = parser.parse_arguments(["--agent-app-destination", "foo/app"])
+        self.assertEqual(args.agent_app_destination, Path("foo/app"))
+
+    def test_agent_app_url(self):
+        parser = CliParser()
+        args = parser.parse_arguments(
+            ["--agent-app-url", "rsync://foo.bar/agent-app"]
+        )
+        self.assertEqual(args.agent_app_url, "rsync://foo.bar/agent-app")
+
+    def test_agent_updater_destination(self):
+        parser = CliParser()
+        args = parser.parse_arguments(
+            ["--agent-updater-destination", "foo/updater"]
+        )
+        self.assertEqual(args.agent_updater_destination, Path("foo/updater"))
+
+    def test_agent_updater_url(self):
+        parser = CliParser()
+        args = parser.parse_arguments(
+            ["--agent-updater-url", "rsync://foo.bar/agent-updater"]
+        )
+        self.assertEqual(
+            args.agent_updater_url, "rsync://foo.bar/agent-updater"
+        )
+
+    def test_agent_installer_destination(self):
+        parser = CliParser()
+        args = parser.parse_arguments(
+            ["--agent-installer-destination", "foo/installer"]
+        )
+        self.assertEqual(
+            args.agent_installer_destination, Path("foo/installer")
+        )
+
+    def test_agent_installer_url(self):
+        parser = CliParser()
+        args = parser.parse_arguments(
+            ["--agent-installer-url", "rsync://foo.bar/agent-installer"]
+        )
+        self.assertEqual(
+            args.agent_installer_url, "rsync://foo.bar/agent-installer"
+        )
+
     def test_report_formats_destination(self):
         parser = CliParser()
         args = parser.parse_arguments(
