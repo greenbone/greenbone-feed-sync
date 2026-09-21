@@ -109,7 +109,10 @@ class Rsync:
                 "-e",
                 f"ssh {DEFAULT_RSYNC_SSH_OPTS} -p {port} -i '{self.ssh_key}'",
             ]
-            url = f"{splitted_url.netloc}:{splitted_url.path}"
+            host = splitted_url.netloc
+            if splitted_url.port is not None:
+                host = host.rsplit(":", 1)[0]
+            url = f"{host}:{splitted_url.path}"
         else:
             rsync_ssh_options = []
 
