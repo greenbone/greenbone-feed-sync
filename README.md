@@ -33,6 +33,8 @@ and types.
   - [notus-url](#notus-url)
   - [nasl-destination](#nasl-destination)
   - [nasl-url](#nasl-url)
+  - [skiron-destination](#skiron-destination)
+  - [skiron-url](#skiron-url)
   - [vt-tech-info-destination](#vt-tech-info-destination)
   - [vt-tech-info-url](#vt-tech-info-url)
   - [scap-data-destination](#scap-data-destination)
@@ -281,7 +283,7 @@ is only required for experts and testing purposes.
 | Config Variable      |                                                                                                                                                                                                                                    |
 | Environment Variable |                                                                                                                                                                                                                                    |
 | Default Value        | all                                                                                                                                                                                                                                |
-| Description          | Specifies which feed data should be downloaded. Possible values are `all`, `all-enterprise`, `nvt`/`nvts`, `gvmd-data`, `scap`, `cert`, `notus`, `nasl`, `agent`, `report-format`/`report-formats`, `scan-config`/`scan-configs`, `port-list`/`port-lists` or `vt-tech-info`. |
+| Description          | Specifies which feed data should be downloaded. Possible values are `all`, `all-enterprise`, `nvt`/`nvts`, `gvmd-data`, `scap`, `cert`, `notus`, `nasl`, `skiron`, `agent`, `report-format`/`report-formats`, `scan-config`/`scan-configs`, `port-list`/`port-lists` or `vt-tech-info`. |
 
 ### feed-url
 
@@ -373,6 +375,28 @@ is only required for experts and testing purposes.
 | Default Value        | `$FEED_URL/vulnerability-feed/$FEED_VERSION/vt-data/nasl/` |
 | Description          | URL to download the nasl data from.                        |
 
+### skiron-destination
+
+| Name                 | Value                                      |
+| -------------------- | ------------------------------------------ |
+| CLI Argument         | `--skiron-destination`                     |
+| Config Variable      | skiron-destination                         |
+| Environment Variable | `GREENBONE_FEED_SYNC_SKIRON_DESTINATION`    |
+| Default Value        | `$DESTINATION_PREFIX/skiron`               |
+| Description          | Destination of the downloaded Skiron data. |
+
+### skiron-url
+
+| Name                 | Value                                                       |
+| -------------------- | ----------------------------------------------------------- |
+| CLI Argument         | `--skiron-url`                                              |
+| Config Variable      | skiron-url                                                  |
+| Environment Variable | `GREENBONE_FEED_SYNC_SKIRON_URL`                             |
+| Default Value        | `$FEED_URL/vulnerability-feed/$FEED_RELEASE/skiron/`          |
+| Description          | URL to download the Skiron data from.                       |
+
+Download this feed with `greenbone-feed-sync --type skiron`.
+
 ### vt-tech-info-destination
 
 | Name                 | Value                                                   |
@@ -440,7 +464,7 @@ is only required for experts and testing purposes.
 | CLI Argument         | `--agent-app-destination`                  |
 | Config Variable      | agent-app-destination                      |
 | Environment Variable | `GREENBONE_FEED_SYNC_AGENT_APP_DESTINATION` |
-| Default Value        | `$DESTINATION_PREFIX/agent/agent-app`      |
+| Default Value        | `$GVMD_DATA_DESTINATION/agent-app`         |
 | Description          | Destination of the downloaded agent app data. |
 
 ### agent-app-url
@@ -450,7 +474,7 @@ is only required for experts and testing purposes.
 | CLI Argument         | `--agent-app-url`                          |
 | Config Variable      | agent-app-url                              |
 | Environment Variable | `GREENBONE_FEED_SYNC_AGENT_APP_URL`        |
-| Default Value        | `$FEED_URL/vulnerability-feed/$FEED_VERSION/agent-app/` |
+| Default Value        | `$FEED_URL/data-feed/$FEED_RELEASE/scan-agent-app/` |
 | Description          | URL to download the agent app data from.    |
 
 ### agent-updater-destination
@@ -460,7 +484,7 @@ is only required for experts and testing purposes.
 | CLI Argument         | `--agent-updater-destination`              |
 | Config Variable      | agent-updater-destination                  |
 | Environment Variable | `GREENBONE_FEED_SYNC_AGENT_UPDATER_DESTINATION` |
-| Default Value        | `$DESTINATION_PREFIX/agent/agent-updater`  |
+| Default Value        | `$GVMD_DATA_DESTINATION/agent-updater`     |
 | Description          | Destination of the downloaded agent updater data. |
 
 ### agent-updater-url
@@ -470,7 +494,7 @@ is only required for experts and testing purposes.
 | CLI Argument         | `--agent-updater-url`                      |
 | Config Variable      | agent-updater-url                          |
 | Environment Variable | `GREENBONE_FEED_SYNC_AGENT_UPDATER_URL`    |
-| Default Value        | `$FEED_URL/vulnerability-feed/$FEED_VERSION/agent-updater/` |
+| Default Value        | `$FEED_URL/data-feed/$FEED_RELEASE/scan-agent-updater/` |
 | Description          | URL to download the agent updater data from. |
 
 ### agent-installer-destination
@@ -480,7 +504,7 @@ is only required for experts and testing purposes.
 | CLI Argument         | `--agent-installer-destination`            |
 | Config Variable      | agent-installer-destination                |
 | Environment Variable | `GREENBONE_FEED_SYNC_AGENT_INSTALLER_DESTINATION` |
-| Default Value        | `$DESTINATION_PREFIX/agent/agent-installer` |
+| Default Value        | `$GVMD_DATA_DESTINATION/agent-installer`   |
 | Description          | Destination of the downloaded agent installer data. |
 
 ### agent-installer-url
@@ -490,7 +514,7 @@ is only required for experts and testing purposes.
 | CLI Argument         | `--agent-installer-url`                    |
 | Config Variable      | agent-installer-url                        |
 | Environment Variable | `GREENBONE_FEED_SYNC_AGENT_INSTALLER_URL`  |
-| Default Value        | `$FEED_URL/vulnerability-feed/$FEED_VERSION/agent-installer/` |
+| Default Value        | `$FEED_URL/data-feed/$FEED_RELEASE/agent-installers/` |
 | Description          | URL to download the agent installer data from. |
 
 ### report-formats-destination

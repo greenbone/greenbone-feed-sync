@@ -12,7 +12,6 @@ from unittest.mock import MagicMock, patch
 from pontos.testing import temp_file
 
 from greenbone.feed.sync.config import (
-    DEFAULT_AGENT_PATH,
     DEFAULT_DESTINATION_PREFIX,
     DEFAULT_ENTERPRISE_KEY_PATH,
     DEFAULT_FEED_RELEASE,
@@ -35,7 +34,16 @@ class ConfigTestCase(unittest.TestCase):
     def test_defaults(self):
         values = Config.load()
 
-        self.assertEqual(len(values), 40)
+        self.assertEqual(len(values), 42)
+        self.assertEqual(
+            values["skiron-destination"],
+            Path(DEFAULT_DESTINATION_PREFIX) / "skiron",
+        )
+        self.assertEqual(
+            values["skiron-url"],
+            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/"
+            f"{DEFAULT_FEED_RELEASE}/skiron/",
+        )
         self.assertEqual(
             values["destination-prefix"], Path(DEFAULT_DESTINATION_PREFIX)
         )
@@ -88,17 +96,23 @@ class ConfigTestCase(unittest.TestCase):
             values["cert-data-url"],
             f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/cert-data/",
         )
-        for agent_name in ("app", "updater", "installer"):
+        for agent_name, feed_path in (
+            ("app", "scan-agent-app"),
+            ("updater", "scan-agent-updater"),
+            ("installer", "agent-installers"),
+        ):
             self.assertEqual(
                 values[f"agent-{agent_name}-destination"],
                 Path(DEFAULT_DESTINATION_PREFIX)
-                / DEFAULT_AGENT_PATH
+                / "gvm"
+                / "data-objects"
+                / "gvmd"
                 / f"agent-{agent_name}",
             )
             self.assertEqual(
                 values[f"agent-{agent_name}-url"],
-                f"{DEFAULT_RSYNC_URL}/vulnerability-feed/"
-                f"{DEFAULT_FEED_RELEASE}/agent-{agent_name}/",
+                f"{DEFAULT_RSYNC_URL}/data-feed/"
+                f"{DEFAULT_FEED_RELEASE}/{feed_path}/",
             )
         self.assertEqual(
             values["report-formats-destination"],

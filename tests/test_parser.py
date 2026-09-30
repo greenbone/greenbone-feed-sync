@@ -158,27 +158,30 @@ class CliParserTestCase(unittest.TestCase):
         )
         self.assertEqual(
             args.agent_app_destination,
-            Path(DEFAULT_DESTINATION_PREFIX) / "agent" / "agent-app",
+            Path(DEFAULT_DESTINATION_PREFIX)
+            / "gvm/data-objects/gvmd/agent-app",
         )
         self.assertEqual(
             args.agent_app_url,
-            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/agent-app/",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/scan-agent-app/",
         )
         self.assertEqual(
             args.agent_updater_destination,
-            Path(DEFAULT_DESTINATION_PREFIX) / "agent" / "agent-updater",
+            Path(DEFAULT_DESTINATION_PREFIX)
+            / "gvm/data-objects/gvmd/agent-updater",
         )
         self.assertEqual(
             args.agent_updater_url,
-            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/agent-updater/",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/scan-agent-updater/",
         )
         self.assertEqual(
             args.agent_installer_destination,
-            Path(DEFAULT_DESTINATION_PREFIX) / "agent" / "agent-installer",
+            Path(DEFAULT_DESTINATION_PREFIX)
+            / "gvm/data-objects/gvmd/agent-installer",
         )
         self.assertEqual(
             args.agent_installer_url,
-            f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/agent-installer/",
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/agent-installers/",
         )
         self.assertEqual(
             args.report_formats_destination,
@@ -405,6 +408,22 @@ class CliParserTestCase(unittest.TestCase):
             ["--cert-data-url", "rsync://foo.bar/cert-data"]
         )
         self.assertEqual(args.cert_data_url, "rsync://foo.bar/cert-data")
+
+    def test_skiron_overrides(self):
+        parser = CliParser()
+        args = parser.parse_arguments(
+            [
+                "--type",
+                "skiron",
+                "--skiron-destination",
+                "foo/skiron",
+                "--skiron-url",
+                "rsync://foo.bar/skiron",
+            ]
+        )
+        self.assertEqual(args.type, "skiron")
+        self.assertEqual(args.skiron_destination, Path("foo/skiron"))
+        self.assertEqual(args.skiron_url, "rsync://foo.bar/skiron")
 
     def test_agent_app_destination(self):
         parser = CliParser()

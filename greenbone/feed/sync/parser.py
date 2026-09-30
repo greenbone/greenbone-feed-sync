@@ -117,6 +117,7 @@ class CliParser:
                 "cert",
                 "notus",
                 "nasl",
+                "skiron",
                 "agent",
                 "report-format",
                 "scan-config",
@@ -161,6 +162,16 @@ class CliParser:
         vts_url_group.add_argument(
             "--notus-url",
             help="URL to download the notus data from. (Default: %(default)s)",
+        )
+        vts_destination_group.add_argument(
+            "--skiron-destination",
+            type=Path,
+            help="Destination of the downloaded Skiron data. "
+            "(Default: %(default)s)",
+        )
+        vts_url_group.add_argument(
+            "--skiron-url",
+            help="URL to download the Skiron data from. (Default: %(default)s)",
         )
         agent_destination_group = parser.add_argument_group()
         agent_destination_group.add_argument(

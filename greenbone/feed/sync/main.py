@@ -130,21 +130,27 @@ async def feed_sync(console: Console, error_console: Console) -> int:
         args.type,
         Sync(
             name="Agent app files",
-            types=("agent", "all-enterprise"),
+            types=("agent"),
             url=args.agent_app_url,
             destination=args.agent_app_destination,
         ),
         Sync(
             name="Agent updater files",
-            types=("agent", "all-enterprise"),
+            types=("agent"),
             url=args.agent_updater_url,
             destination=args.agent_updater_destination,
         ),
         Sync(
             name="Agent installer files",
-            types=("agent", "all-enterprise"),
+            types=("agent"),
             url=args.agent_installer_url,
             destination=args.agent_installer_destination,
+        ),
+        Sync(
+            name="Skiron files",
+            types=("skiron", "all-enterprise"),
+            url=args.skiron_url,
+            destination=args.skiron_destination,
         ),
     )
     gvmd_syncs = filter_syncs(

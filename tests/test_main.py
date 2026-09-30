@@ -78,6 +78,49 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
     @patch("greenbone.feed.sync.main.do_selftest", autospec=True)
     @patch("greenbone.feed.sync.main.is_root", return_value=False)
     @patch("greenbone.feed.sync.main.Rsync", autospec=True)
+    async def test_sync_skiron(
+        self,
+        rsync_mock: MagicMock,
+        is_root_mock: MagicMock,
+        selftest_mock: MagicMock,
+    ):
+        with (
+            temp_directory() as temp_dir,
+            patch.dict(
+                "os.environ",
+                {
+                    "GREENBONE_FEED_SYNC_URL": "rsync://feed.example/community",
+                    "GREENBONE_FEED_SYNC_ENTERPRISE_FEED_KEY": str(
+                        temp_dir / "missing.key"
+                    ),
+                },
+                clear=True,
+            ),
+            patch.object(
+                sys,
+                "argv",
+                [
+                    "greenbone-feed-sync",
+                    "--type",
+                    "skiron",
+                    "--feed-release",
+                    "25.0",
+                    "--destination-prefix",
+                    str(temp_dir),
+                ],
+            ),
+        ):
+            ret = await feed_sync(MagicMock(), MagicMock())
+
+        self.assertEqual(ret, 0)
+        rsync_mock.return_value.sync.assert_awaited_once_with(
+            url="rsync://feed.example/community/vulnerability-feed/25.0/skiron/",
+            destination=temp_dir / "skiron",
+        )
+
+    @patch("greenbone.feed.sync.main.do_selftest", autospec=True)
+    @patch("greenbone.feed.sync.main.is_root", return_value=False)
+    @patch("greenbone.feed.sync.main.Rsync", autospec=True)
     async def test_rsync_timeout_forwarded(
         self,
         rsync_mock: MagicMock,
@@ -312,24 +355,26 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
             [
                 call(
                     url=(
-                        "ssh://user@feed.example/enterprise/vulnerability-feed/"
-                        f"{DEFAULT_FEED_RELEASE}/agent-app/"
+                        "ssh://user@feed.example/enterprise/data-feed/"
+                        f"{DEFAULT_FEED_RELEASE}/scan-agent-app/"
                     ),
-                    destination=temp_dir / "agent" / "agent-app",
+                    destination=temp_dir / "gvm/data-objects/gvmd/agent-app",
                 ),
                 call(
                     url=(
-                        "ssh://user@feed.example/enterprise/vulnerability-feed/"
-                        f"{DEFAULT_FEED_RELEASE}/agent-updater/"
+                        "ssh://user@feed.example/enterprise/data-feed/"
+                        f"{DEFAULT_FEED_RELEASE}/scan-agent-updater/"
                     ),
-                    destination=temp_dir / "agent" / "agent-updater",
+                    destination=temp_dir
+                    / "gvm/data-objects/gvmd/agent-updater",
                 ),
                 call(
                     url=(
-                        "ssh://user@feed.example/enterprise/vulnerability-feed/"
-                        f"{DEFAULT_FEED_RELEASE}/agent-installer/"
+                        "ssh://user@feed.example/enterprise/data-feed/"
+                        f"{DEFAULT_FEED_RELEASE}/agent-installers/"
                     ),
-                    destination=temp_dir / "agent" / "agent-installer",
+                    destination=temp_dir
+                    / "gvm/data-objects/gvmd/agent-installer",
                 ),
             ]
         )
@@ -377,16 +422,8 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
                     destination=temp_dir / "openvas/plugins",
                 ),
                 call(
-                    url=f"{vulnerability_url}/agent-app/",
-                    destination=temp_dir / "agent/agent-app",
-                ),
-                call(
-                    url=f"{vulnerability_url}/agent-updater/",
-                    destination=temp_dir / "agent/agent-updater",
-                ),
-                call(
-                    url=f"{vulnerability_url}/agent-installer/",
-                    destination=temp_dir / "agent/agent-installer",
+                    url=f"{vulnerability_url}/skiron/",
+                    destination=temp_dir / "skiron",
                 ),
                 call(
                     url=f"{vulnerability_url}/scap-data/",
@@ -433,23 +470,25 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
                 call(
                     url=(
                         "rsync://feed.community.greenbone.net/community/"
-                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/agent-app/"
+                        f"data-feed/{DEFAULT_FEED_RELEASE}/scan-agent-app/"
                     ),
-                    destination=temp_dir / "agent" / "agent-app",
+                    destination=temp_dir / "gvm/data-objects/gvmd/agent-app",
                 ),
                 call(
                     url=(
                         "rsync://feed.community.greenbone.net/community/"
-                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/agent-updater/"
+                        f"data-feed/{DEFAULT_FEED_RELEASE}/scan-agent-updater/"
                     ),
-                    destination=temp_dir / "agent" / "agent-updater",
+                    destination=temp_dir
+                    / "gvm/data-objects/gvmd/agent-updater",
                 ),
                 call(
                     url=(
                         "rsync://feed.community.greenbone.net/community/"
-                        f"vulnerability-feed/{DEFAULT_FEED_RELEASE}/agent-installer/"
+                        f"data-feed/{DEFAULT_FEED_RELEASE}/agent-installers/"
                     ),
-                    destination=temp_dir / "agent" / "agent-installer",
+                    destination=temp_dir
+                    / "gvm/data-objects/gvmd/agent-installer",
                 ),
             ]
         )
