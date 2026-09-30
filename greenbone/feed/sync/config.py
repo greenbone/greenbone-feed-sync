@@ -280,7 +280,7 @@ _DEPENDENT_SETTINGS = (
         "GREENBONE_FEED_SYNC_SKIRON_URL",
         lambda values: (
             f"{values['feed-url']}/vulnerability-feed/"
-            f"{values['feed-release']}/skiron/"
+            f"{values['feed-release']}/vt-data/skiron/"
         ),
         str,
     ),

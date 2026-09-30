@@ -42,7 +42,7 @@ class ConfigTestCase(unittest.TestCase):
         self.assertEqual(
             values["skiron-url"],
             f"{DEFAULT_RSYNC_URL}/vulnerability-feed/"
-            f"{DEFAULT_FEED_RELEASE}/skiron/",
+            f"{DEFAULT_FEED_RELEASE}/vt-data/skiron/",
         )
         self.assertEqual(
             values["destination-prefix"], Path(DEFAULT_DESTINATION_PREFIX)

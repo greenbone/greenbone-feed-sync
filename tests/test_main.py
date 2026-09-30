@@ -114,7 +114,10 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
 
         self.assertEqual(ret, 0)
         rsync_mock.return_value.sync.assert_awaited_once_with(
-            url="rsync://feed.example/community/vulnerability-feed/25.0/skiron/",
+            url=(
+                "rsync://feed.example/community/vulnerability-feed/"
+                "25.0/vt-data/skiron/"
+            ),
             destination=temp_dir / "skiron",
         )
 
@@ -422,7 +425,7 @@ class FeedSyncTestCase(unittest.IsolatedAsyncioTestCase):
                     destination=temp_dir / "openvas/plugins",
                 ),
                 call(
-                    url=f"{vulnerability_url}/skiron/",
+                    url=f"{vulnerability_url}/vt-data/skiron/",
                     destination=temp_dir / "skiron",
                 ),
                 call(
