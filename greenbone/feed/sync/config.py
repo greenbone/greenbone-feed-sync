@@ -270,6 +270,66 @@ _DEPENDENT_SETTINGS = (
         str,
     ),
     DependentSetting(
+        "skiron-destination",
+        "GREENBONE_FEED_SYNC_SKIRON_DESTINATION",
+        lambda values: f"{values['destination-prefix']}/skiron",
+        Path,
+    ),
+    DependentSetting(
+        "skiron-url",
+        "GREENBONE_FEED_SYNC_SKIRON_URL",
+        lambda values: (
+            f"{values['feed-url']}/vulnerability-feed/"
+            f"{values['feed-release']}/vt-data/skiron/"
+        ),
+        str,
+    ),
+    DependentSetting(
+        "agent-app-destination",
+        "GREENBONE_FEED_SYNC_AGENT_APP_DESTINATION",
+        lambda values: f"{values['gvmd-data-destination']}/agent-app",
+        Path,
+    ),
+    DependentSetting(
+        "agent-app-url",
+        "GREENBONE_FEED_SYNC_AGENT_APP_URL",
+        lambda values: (
+            f"{values['feed-url']}/data-feed/"
+            f"{values['feed-release']}/scan-agent-app/"
+        ),
+        str,
+    ),
+    DependentSetting(
+        "agent-updater-destination",
+        "GREENBONE_FEED_SYNC_AGENT_UPDATER_DESTINATION",
+        lambda values: f"{values['gvmd-data-destination']}/agent-updater",
+        Path,
+    ),
+    DependentSetting(
+        "agent-updater-url",
+        "GREENBONE_FEED_SYNC_AGENT_UPDATER_URL",
+        lambda values: (
+            f"{values['feed-url']}/data-feed/"
+            f"{values['feed-release']}/scan-agent-updater/"
+        ),
+        str,
+    ),
+    DependentSetting(
+        "agent-installer-destination",
+        "GREENBONE_FEED_SYNC_AGENT_INSTALLER_DESTINATION",
+        lambda values: f"{values['gvmd-data-destination']}/agent-installer",
+        Path,
+    ),
+    DependentSetting(
+        "agent-installer-url",
+        "GREENBONE_FEED_SYNC_AGENT_INSTALLER_URL",
+        lambda values: (
+            f"{values['feed-url']}/data-feed/"
+            f"{values['feed-release']}/agent-installers/"
+        ),
+        str,
+    ),
+    DependentSetting(
         "report-formats-destination",
         "GREENBONE_FEED_SYNC_REPORT_FORMATS_DESTINATION",
         lambda values: f"{values['gvmd-data-destination']}/report-formats",

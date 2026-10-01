@@ -157,6 +157,33 @@ class CliParserTestCase(unittest.TestCase):
             f"{DEFAULT_RSYNC_URL}/vulnerability-feed/{DEFAULT_FEED_RELEASE}/cert-data/",
         )
         self.assertEqual(
+            args.agent_app_destination,
+            Path(DEFAULT_DESTINATION_PREFIX)
+            / "gvm/data-objects/gvmd/agent-app",
+        )
+        self.assertEqual(
+            args.agent_app_url,
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/scan-agent-app/",
+        )
+        self.assertEqual(
+            args.agent_updater_destination,
+            Path(DEFAULT_DESTINATION_PREFIX)
+            / "gvm/data-objects/gvmd/agent-updater",
+        )
+        self.assertEqual(
+            args.agent_updater_url,
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/scan-agent-updater/",
+        )
+        self.assertEqual(
+            args.agent_installer_destination,
+            Path(DEFAULT_DESTINATION_PREFIX)
+            / "gvm/data-objects/gvmd/agent-installer",
+        )
+        self.assertEqual(
+            args.agent_installer_url,
+            f"{DEFAULT_RSYNC_URL}/data-feed/{DEFAULT_FEED_RELEASE}/agent-installers/",
+        )
+        self.assertEqual(
             args.report_formats_destination,
             Path(DEFAULT_DESTINATION_PREFIX)
             / "gvm"
@@ -381,6 +408,68 @@ class CliParserTestCase(unittest.TestCase):
             ["--cert-data-url", "rsync://foo.bar/cert-data"]
         )
         self.assertEqual(args.cert_data_url, "rsync://foo.bar/cert-data")
+
+    def test_skiron_overrides(self):
+        parser = CliParser()
+        args = parser.parse_arguments(
+            [
+                "--type",
+                "skiron",
+                "--skiron-destination",
+                "foo/skiron",
+                "--skiron-url",
+                "rsync://foo.bar/skiron",
+            ]
+        )
+        self.assertEqual(args.type, "skiron")
+        self.assertEqual(args.skiron_destination, Path("foo/skiron"))
+        self.assertEqual(args.skiron_url, "rsync://foo.bar/skiron")
+
+    def test_agent_app_destination(self):
+        parser = CliParser()
+        args = parser.parse_arguments(["--agent-app-destination", "foo/app"])
+        self.assertEqual(args.agent_app_destination, Path("foo/app"))
+
+    def test_agent_app_url(self):
+        parser = CliParser()
+        args = parser.parse_arguments(
+            ["--agent-app-url", "rsync://foo.bar/agent-app"]
+        )
+        self.assertEqual(args.agent_app_url, "rsync://foo.bar/agent-app")
+
+    def test_agent_updater_destination(self):
+        parser = CliParser()
+        args = parser.parse_arguments(
+            ["--agent-updater-destination", "foo/updater"]
+        )
+        self.assertEqual(args.agent_updater_destination, Path("foo/updater"))
+
+    def test_agent_updater_url(self):
+        parser = CliParser()
+        args = parser.parse_arguments(
+            ["--agent-updater-url", "rsync://foo.bar/agent-updater"]
+        )
+        self.assertEqual(
+            args.agent_updater_url, "rsync://foo.bar/agent-updater"
+        )
+
+    def test_agent_installer_destination(self):
+        parser = CliParser()
+        args = parser.parse_arguments(
+            ["--agent-installer-destination", "foo/installer"]
+        )
+        self.assertEqual(
+            args.agent_installer_destination, Path("foo/installer")
+        )
+
+    def test_agent_installer_url(self):
+        parser = CliParser()
+        args = parser.parse_arguments(
+            ["--agent-installer-url", "rsync://foo.bar/agent-installer"]
+        )
+        self.assertEqual(
+            args.agent_installer_url, "rsync://foo.bar/agent-installer"
+        )
 
     def test_report_formats_destination(self):
         parser = CliParser()
@@ -654,6 +743,11 @@ wait-interval = 100
         args = parser.parse_arguments(["--type", "VT-TeCh-InFo"])
         self.assertEqual(args.type, "vt-tech-info")
 
+        args = parser.parse_arguments(["--type", "agent"])
+        self.assertEqual(args.type, "agent")
+        args = parser.parse_arguments(["--type", "AGENT"])
+        self.assertEqual(args.type, "agent")
+
         args = parser.parse_arguments(["--type", "scap"])
         self.assertEqual(args.type, "scap")
         args = parser.parse_arguments(["--type", "SCAP"])
@@ -674,6 +768,11 @@ wait-interval = 100
         self.assertEqual(args.type, "all")
         args = parser.parse_arguments(["--type", "AlL"])
         self.assertEqual(args.type, "all")
+
+        args = parser.parse_arguments(["--type", "all-enterprise"])
+        self.assertEqual(args.type, "all-enterprise")
+        args = parser.parse_arguments(["--type", "ALL_ENTERPRISE"])
+        self.assertEqual(args.type, "all-enterprise")
 
         args = parser.parse_arguments(["--type", "report-format"])
         self.assertEqual(args.type, "report-format")

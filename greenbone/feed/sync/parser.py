@@ -103,19 +103,22 @@ class CliParser:
         parser.add_argument(
             "--compression-level",
             type=int,
-            choices=range(0, 10),
+            choices=range(10),
             help="Rsync compression level (0-9). (Default: %(default)s)",
         )
         parser.add_argument(
             "--type",
             choices=[
                 "all",
+                "all-enterprise",
                 "nvt",
                 "gvmd-data",
                 "scap",
                 "cert",
                 "notus",
                 "nasl",
+                "skiron",
+                "agent",
                 "report-format",
                 "scan-config",
                 "port-list",
@@ -159,6 +162,51 @@ class CliParser:
         vts_url_group.add_argument(
             "--notus-url",
             help="URL to download the notus data from. (Default: %(default)s)",
+        )
+        vts_destination_group.add_argument(
+            "--skiron-destination",
+            type=Path,
+            help="Destination of the downloaded Skiron data. "
+            "(Default: %(default)s)",
+        )
+        vts_url_group.add_argument(
+            "--skiron-url",
+            help="URL to download the Skiron data from. (Default: %(default)s)",
+        )
+        agent_destination_group = parser.add_argument_group()
+        agent_destination_group.add_argument(
+            "--agent-app-destination",
+            type=Path,
+            help="Destination of the downloaded agent app data. "
+            "(Default: %(default)s)",
+        )
+        agent_url_group = parser.add_argument_group()
+        agent_url_group.add_argument(
+            "--agent-app-url",
+            help="URL to download the agent app data from. "
+            "(Default: %(default)s)",
+        )
+        agent_destination_group.add_argument(
+            "--agent-updater-destination",
+            type=Path,
+            help="Destination of the downloaded agent updater data. "
+            "(Default: %(default)s)",
+        )
+        agent_url_group.add_argument(
+            "--agent-updater-url",
+            help="URL to download the agent updater data from. "
+            "(Default: %(default)s)",
+        )
+        agent_destination_group.add_argument(
+            "--agent-installer-destination",
+            type=Path,
+            help="Destination of the downloaded agent installer data. "
+            "(Default: %(default)s)",
+        )
+        agent_url_group.add_argument(
+            "--agent-installer-url",
+            help="URL to download the agent installer data from. "
+            "(Default: %(default)s)",
         )
         vts_destination_group.add_argument(
             "--nasl-destination",
