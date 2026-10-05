@@ -234,7 +234,7 @@ wheels = [
 
 [[package]]
 name = "greenbone-feed-sync"
-version = "25.4.3.dev1"
+version = "25.5.0"
 source = { editable = "." }
 dependencies = [
     { name = "rich" },
