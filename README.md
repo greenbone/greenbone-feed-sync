@@ -699,7 +699,7 @@ no-wait = true
 **greenbone-feed-sync** uses [uv] for its own dependency management and
 build process.
 
-First install poetry via pipx
+First install uv via pipx
 
 ```sh
 python3 -m pipx install uv
