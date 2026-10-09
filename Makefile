@@ -1,6 +1,6 @@
 .PHONY: lint format test coverage fix
 
-RUN = poetry run
+RUN = uv run
 
 lint:
 	$(RUN) ruff check
