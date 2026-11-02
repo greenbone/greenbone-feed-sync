@@ -13,11 +13,11 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - "3.10"
           - "3.11"
           - "3.12"
           - "3.13"
           - "3.14"
+          - "3.15"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Check and lint python packages
@@ -35,11 +35,11 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - "3.10"
           - "3.11"
           - "3.12"
           - "3.13"
           - "3.14"
+          - "3.15"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Set up Python ${{ matrix.python-version }}
@@ -58,7 +58,7 @@ jobs:
       - name: Install and calculate and upload coverage to codecov.io
         uses: greenbone/actions/coverage-python@v3
         with:
-          python-version: "3.10"
+          python-version: "3.11"
           package-manager: uv
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -74,3 +74,14 @@ jobs:
       - name: Run mypy
         run: |
           uv run mypy
+
+  all-python-ci-jobs-passed:
+    name: All Python CI jobs passed
+    needs: [linting, test, codecov, mypy]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require all CI jobs to succeed
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+        run: jq -e 'all(.[]; .result == "success")' <<<"$NEEDS"
