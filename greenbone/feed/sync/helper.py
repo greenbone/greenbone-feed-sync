@@ -34,7 +34,7 @@ async def flock_wait(
     path: str | Path,
     *,
     console: Console | None = None,
-    wait_interval: int | float | None = DEFAULT_FLOCK_WAIT_INTERVAL,
+    wait_interval: float | None = DEFAULT_FLOCK_WAIT_INTERVAL,
 ) -> AsyncGenerator[None, None]:
     """
     Try to lock a file and wait if it is already locked

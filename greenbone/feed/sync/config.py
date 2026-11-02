@@ -4,6 +4,7 @@
 #
 
 import os
+import tomllib
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from pathlib import Path
@@ -21,11 +22,6 @@ from greenbone.feed.sync.rsync import (
     DEFAULT_RSYNC_COMPRESSION_LEVEL,
     DEFAULT_RSYNC_URL,
 )
-
-try:
-    import tomllib
-except ImportError:
-    import tomli as tomllib  # type: ignore[no-redef]
 
 
 def maybe_int(value: str | None) -> int | str | None:
